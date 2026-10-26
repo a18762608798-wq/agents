@@ -1,5 +1,6 @@
 ---
 name: skill-creator
+disable-model-invocation: true
 description: 创建新 skill，修改和改进已有 skill，以及衡量 skill 性能。当用户希望从头创建 skill、编辑或优化已有 skill、运行评估测试 skill、通过方差分析 benchmark skill 性能，或优化 skill 的 description 以获得更好的触发准确率时使用。
 ---
 

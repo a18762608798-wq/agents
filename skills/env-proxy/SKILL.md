@@ -1,5 +1,6 @@
 ---
 name: env-proxy
+disable-model-invocation: true
 description: 设置、测试和关闭本地代理环境变量。当用户提到代理、proxy、设置代理、配置代理、开代理、关代理、翻墙、科学上网，或访问 Google/GitHub/PyPI/npm 等网络超时失败需要走代理时使用此 skill。
 ---
 

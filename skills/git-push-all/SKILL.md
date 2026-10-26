@@ -1,5 +1,6 @@
 ---
 name: git-push-all
+disable-model-invocation: true
 description: 批量推送当前目录下所有 git 仓库（含当前目录本身），自动 git add、中文 commit、git push。仅在用户明确指定本 skill（说出 git-push-all、要求调用该 skill）或明确下令批量推送全部仓库时触发；日常单个仓库的 commit/push、含糊的同步请求一律不得触发。
 ---
 

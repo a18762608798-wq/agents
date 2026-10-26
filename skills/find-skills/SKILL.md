@@ -1,5 +1,6 @@
 ---
 name: find-skills
+disable-model-invocation: true
 description: 当用户提出"怎么实现 X"、"帮我找一个 X 的技能"、"有没有能做 X 的技能"等问题，或表达想要扩展能力的意图时，帮助用户发现和安装 agent 技能。当用户寻找可能以可安装技能形式存在的功能时，应使用此 skill。安装前，根据硬编码的技能路径选择物理安装目录。如果没有明确的目录要求，优先选择 OpenCode，其次 Claude Code。
 ---
 

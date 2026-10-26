@@ -1,5 +1,6 @@
 ---
 name: hp-smart-tank-linux
+disable-model-invocation: true
 description: 在 Linux Mint/Ubuntu 上安装调试 HP Smart Tank 750/755（含打印队列、HPLIP 插件、ipp-usb、SANE 扫描），以及用命令行扫描单页/ADF 批量多页并合成 PDF。当用户提到 HP Smart Tank、755/750、HPLIP、hp-setup、scanimage、airscan、eSCL、文档扫描仪连不上、hpaio I/O 错误、批量扫描合成 PDF 时使用此 skill。
 ---
 
