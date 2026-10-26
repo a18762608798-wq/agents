@@ -1,0 +1,87 @@
+schema_version: "1.0"
+
+preset:
+  id: "scientific-computing"
+  name: "Scientific Computing & Experiments"
+  version: "0.4.0"
+  description: "面向科学计算与数值实验 feature 的 Spec-Driven Development 工作流。"
+  author: "YOUR_NAME"
+
+requires:
+  speckit_version: ">=0.6.0"
+
+provides:
+  templates:
+    # Templates
+    - type: "template"
+      name: "constitution-template"
+      file: "templates/constitution-template.md"
+      description: "科学计算项目 Constitution"
+      replaces: "constitution-template"
+
+    - type: "template"
+      name: "spec-template"
+      file: "templates/spec-template.md"
+      description: "科学计算 feature specification"
+      replaces: "spec-template"
+
+    - type: "template"
+      name: "plan-template"
+      file: "templates/plan-template.md"
+      description: "科学计算实现计划"
+      replaces: "plan-template"
+
+    - type: "template"
+      name: "tasks-template"
+      file: "templates/tasks-template.md"
+      description: "精简 implementation 与 validation 任务列表"
+      replaces: "tasks-template"
+
+    # Commands
+    - type: "command"
+      name: "speckit.specify"
+      file: "commands/speckit.specify.md"
+      description: "创建或更新科学计算 feature specification"
+      replaces: "speckit.specify"
+
+    - type: "command"
+      name: "speckit.clarify"
+      file: "commands/speckit.clarify.md"
+      description: "澄清影响科学语义的关键歧义"
+      replaces: "speckit.clarify"
+
+    - type: "command"
+      name: "speckit.plan"
+      file: "commands/speckit.plan.md"
+      description: "根据 specification 生成实现计划"
+      replaces: "speckit.plan"
+
+    - type: "command"
+      name: "speckit.tasks"
+      file: "commands/speckit.tasks.md"
+      description: "根据 spec 和 plan 生成可执行任务"
+      replaces: "speckit.tasks"
+
+    - type: "command"
+      name: "speckit.analyze"
+      file: "commands/speckit.analyze.md"
+      description: "检查 spec、plan 与 tasks 的一致性"
+      replaces: "speckit.analyze"
+
+    - type: "command"
+      name: "speckit.implement"
+      file: "commands/speckit.implement.md"
+      description: "实施、验证并连续执行正式实验"
+      replaces: "speckit.implement"
+
+    - type: "command"
+      name: "speckit.converge"
+      file: "commands/speckit.converge.md"
+      description: "审计实际实现并将剩余工作收敛回 tasks"
+      replaces: "speckit.converge"
+
+tags:
+  - "scientific"
+  - "numerical"
+  - "research"
+  - "workflow"

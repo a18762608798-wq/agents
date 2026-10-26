@@ -1,0 +1,100 @@
+%% PRA template for REVTeX 4.2
+%%
+%% Source: official APS files from the REVTeX 4.2 distribution
+%% (local copy: /usr/share/texlive/texmf-dist/doc/latex/revtex/sample/aps/apstemplate.tex).
+%% journals.aps.org/revtex blocks direct fetching; this file is derived
+%% from that official template with PRA as the default journal.
+%%
+%% Usage: copy to docs/paper/main.tex and fill in.
+%% Compile with pdflatex + bibtex (paper-compilation) or
+%% latexmk -xelatex -bibtex (paper-latex-compile-qa gate).
+%
+% PRA default: reprint (two-column final-layout approximation).
+% Use preprint only for single-column review drafts.
+% Figures default to single column (\columnwidth); use figure* only for
+% large composites illegible in one column (e.g. 2x2 panels).
+% Use superscriptaddress for long author lists / many overlapping affiliations.
+\documentclass[aps,pra,reprint,groupedaddress]{revtex4-2}
+%\documentclass[aps,pra,reprint,superscriptaddress]{revtex4-2}
+%\documentclass[aps,pra,preprint,groupedaddress]{revtex4-2}
+%\documentclass[aps,pra,preprint,superscriptaddress]{revtex4-2}
+
+% Figures live in figures/ next to this file (docs/paper layout).
+\graphicspath{{figures/}}
+
+% Choosing the journal automatically selects the APS BibTeX style,
+% so leave this commented unless overriding.
+%\bibliographystyle{apsrev4-2}
+
+\begin{document}
+
+% Local institutional report number (upper right of title page, preprint mode).
+%\preprint{}
+
+\title{}
+
+% repeat \author .. \affiliation etc. as needed
+% \email, \thanks, \homepage, \altaffiliation apply to the current author.
+\author{}
+%\email[]{Your e-mail address}
+%\homepage[]{Your web page}
+%\thanks{}
+%\altaffiliation{}
+\affiliation{}
+
+\date{\today}
+
+\begin{abstract}
+% insert abstract here
+\end{abstract}
+
+%\keywords{}
+
+%\maketitle must follow title, authors, abstract, and keywords
+\maketitle
+
+% body of paper here - Use proper section commands
+% References with \cite, \ref, \label
+\section{Introduction}
+%\section{\label{sec:intro}}
+
+\section{Theory}
+
+\section{Results}
+
+\section{Conclusion}
+
+% If in two-column mode, this environment switches to single-column
+% so long equations can be displayed. Use sparingly.
+%\begin{widetext}
+% put long equation here
+%\end{widetext}
+
+% Figures as floats; figure* spans the full page width in two-column.
+% \begin{figure}
+% \includegraphics[width=\columnwidth]{fig1}%
+% \caption{\label{fig:fig1}}
+% \end{figure}
+
+% Tables as floats; ruledtabular adds doubled rules.
+% \begin{table}
+% \caption{\label{tab:tab1}}
+% \begin{ruledtabular}
+% \begin{tabular}{cc}
+% \end{tabular}
+% \end{ruledtabular}
+% \end{table}
+
+% Appendices (use \appendix* for a single appendix).
+%\appendix
+%\section{}
+
+% Acknowledgments get a proper section head.
+%\begin{acknowledgments}
+% put your acknowledgments here.
+%\end{acknowledgments}
+
+% BibTeX database: docs/paper/references.bib
+\bibliography{references}
+
+\end{document}

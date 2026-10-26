@@ -1,0 +1,9 @@
+{
+  "id": "context7",
+  "label": "context7",
+  "description": "Context7 库文档查询（官方远程 MCP，resolve-library-id / query-docs）",
+  "transport": "http",
+  "url": "https://mcp.context7.com/mcp",
+  "headers": {},
+  "env": {}
+}

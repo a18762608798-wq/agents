@@ -1,0 +1,35 @@
+{
+  "skill_name": "scientific-package-development",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "我要做一个别人能using SpectralOperators的Julia库，提供网格、离散算子以及apply!/assemble接口，之后可能注册。请给出结构和API骨架。",
+      "expected_output": "标准Julia package布局；一个顶层SpectralOperators module；types/operators/assembly等通过include进入同一namespace；设计小而稳定的export/public API，使用domain types、generic functions和multiple dispatch；test/runtests.jl覆盖用户行为。",
+      "files": []
+    },
+    {
+      "id": 1,
+      "prompt": "这个Julia库现在Model、Solver、Boundary、Diagnostics每个文件都是一个module，主模块里using .Model再大量re-export。外部API希望尽量不变。请重构。",
+      "expected_output": "识别module-per-file为不必要namespace；优先flatten到单一package module并通过include组织文件；保留必要兼容层/弃用路径减少breaking changes；不因拆文件重新创建submodule。",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "我有三个求解器类型，想先建AbstractSolver再让所有未来算法继承它。现在它们唯一共同点是都有solve循环。这样设计Julia API好吗？",
+      "expected_output": "不因循环相似创建AbstractSolver；先从稳定语义操作和下游扩展需求设计generic function；只有真实类型族/extension point时再引入abstract type；优先functions+dispatch。",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "我的Julia package核心只做数值算子，但用户有时会配合Makie和CUDA。现在我把两者都放进核心依赖并在主模块using了。帮我调整依赖结构。",
+      "expected_output": "保持核心依赖最小；把真正可选的Makie/CUDA集成隔离到适当的extension/optional boundary；核心API不依赖绘图；测试核心与可选集成；避免所有用户承担可选生态的加载和依赖成本。",
+      "files": []
+    },
+    {
+      "id": 4,
+      "prompt": "我要改一个已经有人依赖的Julia库：以前用户直接读solution.internal_cache字段，现在我想重构内部表示。应该怎么做？",
+      "expected_output": "先判断该字段是否已成为事实/文档化API；优先提供稳定accessor/operation并迁移调用方，必要时提供兼容/弃用路径；内部重构与公开行为分离，并用测试锁定兼容性。",
+      "files": []
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "evals": [
+    {
+      "expected_output": "PAPER_STATUS.html + EXPERIMENT_STATUS.html in the project root; every Dxx / Sxx card color-coded 已完成 / 进行中 / 未开始 / 阻塞 with a relative link to the owning specs/<feature>/spec.md and (for completed items with definitive figures) a direct image-file link; one mainline SVG per file; no markdown tables, no evidence paths, no 去哪看 section, no external dependencies, no JS",
+      "files": [],
+      "id": 1,
+      "prompt": "用 scientific-project-status 生成项目总览。这是一个 Spec Kit 管理的量子多体精确对角化项目，已有 doc/paper-outline.md、doc/expriment-map.md 和 specs/ 下若干 feature。",
+      "expectations": [
+        "生成 PAPER_STATUS.html 与 EXPERIMENT_STATUS.html 两个文件，均在项目根",
+        "PAPER_STATUS.html 以 doc/paper-outline.md 的章节为主线组织 Dxx 卡片",
+        "EXPERIMENT_STATUS.html 以 doc/expriment-map.md 的 shared-xx / expXX 为主线组织卡片",
+        "每个 Dxx / Sxx 都有四色状态之一，且状态由 tasks.md 勾选 + data/figs 产物双重判定（判定在内部完成，卡片上不打印证据路径）",
+        "每张卡都有指向 owning feature 的 spec.md 的相对链接；已完成且有确定图片的卡附图片文件直链",
+        "两个文件均无去哪看一节",
+        "每个文件至少 1 个手写内联 SVG，且不含 mermaid",
+        "不含任何 Markdown 表格，无 CDN / 外链 / JS"
+      ]
+    },
+    {
+      "expected_output": "Both files still render with mostly 未开始 / 进行中 states; missing artifacts never marked 已完成; no invented Dxx IDs, sections, or feature names; dead links avoided",
+      "files": [],
+      "id": 2,
+      "prompt": "项目路径下一个只有极简 spec、几乎没有任何实验数据的科学计算项目。请生成 PAPER_STATUS.html 与 EXPERIMENT_STATUS.html，缺产物处必须标 未开始 / 进行中，禁止编造数据编号与完成状态。",
+      "expectations": [
+        "未把任何缺产物的条目标为 已完成",
+        "未编造 paper-outline / expriment-map 中不存在的 Dxx / Sxx 编号",
+        "未生成指向不存在 spec.md 的死链",
+        "两个文件均自包含可离线打开",
+        "未声称任何数值结论已验证"
+      ]
+    },
+    {
+      "expected_output": "Tasks checked but artifacts missing is downgraded to 阻塞 or 进行中 rather than 已完成; the blocked state is shown by badge only, with no evidence paths or validation output lines printed; no historical bug or superseded 口径 is narrated",
+      "files": [],
+      "id": 3,
+      "prompt": "某 feature 的 tasks.md 全部勾选，但 data/ 下产物缺失且 scripts/verify_*.jl 报 FAIL。请生成 EXPERIMENT_STATUS.html，必须如实反映阻塞状态。",
+      "expectations": [
+        "该 feature 未标为 已完成（标 阻塞 或 进行中）",
+        "卡片上不打印任何证据路径、脚本名与验证输出",
+        "未叙述已修复的 bug 或已作废口径的历史",
+        "状态色板使用规定的四色十六进制值",
+        "卡片仍链接到该 feature 的 spec.md"
+      ]
+    }
+  ],
+  "skill_name": "scientific-project-status"
+}

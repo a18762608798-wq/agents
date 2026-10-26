@@ -1,0 +1,3 @@
+interface:
+  display_name: "Julia Package Development"
+  short_description: "Idiomatic Julia libraries with small stable APIs and sane module boundaries."

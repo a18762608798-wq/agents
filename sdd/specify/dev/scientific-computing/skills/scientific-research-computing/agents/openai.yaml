@@ -1,0 +1,3 @@
+interface:
+  display_name: "Julia Scientific Computing"
+  short_description: "Reproducible Julia research code with Python only for plotting."

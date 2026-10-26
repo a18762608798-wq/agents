@@ -1,0 +1,35 @@
+{
+  "skill_name": "scientific-research-computing",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "帮我做一个二维Poisson方程的Julia研究项目，用五点差分做网格收敛研究。不是发布库，只是论文计算。Python只画误差和收敛图。",
+      "expected_output": "按research/application组织，不引入package API或module-per-file；使用Project.toml和可复现环境，Julia完成离散、求解、误差和收敛数据，run脚本只编排；Python只读取结果绘图。",
+      "files": []
+    },
+    {
+      "id": 1,
+      "prompt": "我的Julia脚本现在在顶层定义很多全局参数，然后直接跑10万个时间步，solver里还调用Plots.jl保存图片。帮我整理成适合长期做数值实验的结构。",
+      "expected_output": "把性能关键计算放入函数，将变化参数显式传入或放入domain/options结构；把绘图移到Python或至少数值核外；run脚本负责配置和编排；不为了拆文件创建额外module。",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "同一个课题里有不可压Navier-Stokes时间推进和一个参数反演任务。两个循环看起来相似。请设计Julia目录，考虑是否抽AbstractSolver和SharedNumerics。",
+      "expected_output": "保持两个科学任务局部内聚，可用目录/文件区分但不自动做子模块；不因循环相似创建AbstractSolver或SharedNumerics；仅抽取语义稳定且有多个真实消费者的数值原语。",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "我有一套论文复现实验，包含随机初值、参数扫描和多个网格。希望三个月后别人还能准确复现结果。Julia算，Python出图。",
+      "expected_output": "强调Project.toml/Manifest.toml、Julia版本、显式RNG/seed、配置与输入来源、结果元数据和不可混淆的输出组织；Julia生成所有科学结果，Python仅可视化。",
+      "files": []
+    },
+    {
+      "id": 4,
+      "prompt": "这个研究项目里Model.jl、Solver.jl、Boundary.jl、Diagnostics.jl每个文件都有一个module，run.jl里using .Model等。没有外部用户。帮我简化。",
+      "expected_output": "识别module-per-file为多余namespace plumbing；优先flatten为普通included files或直接由run脚本include；保持函数/struct科学边界，不因为文件拆分继续创建module。",
+      "files": []
+    }
+  ]
+}

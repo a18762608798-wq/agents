@@ -1,0 +1,17 @@
+{
+  "skill_name": "scientific-figure-style",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "对比两条失谐曲线的Rabi对比度，x为失谐(MHz)，y为对比度，统一figure风格并PDF矢量导出",
+      "expected_output": "apply_figure_style、DEFAULT_PALETTE+两种线型、曲线1.0-1.5pt、fig PDF+300dpi PNG、figure style check报告",
+      "files": []
+    },
+    {
+      "id": 1,
+      "prompt": "把一个jet配色、细线小字的存量matplotlib图改成色盲友好的统一风格，保证灰度可读",
+      "expected_output": "换viridis/DEFAULT_PALETTE、线宽字体达标、说明灰度fallback（线型/marker区分），不涉及栏宽/caption",
+      "files": []
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "id": "zotero",
+  "label": "zotero",
+  "description": "Zotero 文献库管理、检索、PDF 与元数据",
+  "transport": "stdio",
+  "command": "/home/mintusr/.local/bin/zotero-mcp",
+  "args": [],
+  "env": {
+    "ZOTERO_LOCAL": "true",
+    "ZOTERO_MCP_TOOLSETS": "libraries,search-admin,pdf-geometry,discovery",
+    "FASTMCP_CHECK_FOR_UPDATES": "off",
+    "NO_PROXY": "127.0.0.1,localhost"
+  }
+}

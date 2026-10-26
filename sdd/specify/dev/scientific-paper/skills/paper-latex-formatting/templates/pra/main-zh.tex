@@ -1,0 +1,59 @@
+%% PRA 中文版模板 (REVTeX 4.2 + xeCJK)
+%%
+%% 与 templates/pra/main.tex 同结构，共用 figures/ 与 references.bib。
+%% 必须用 xelatex 编译 (latexmk -xelatex -bibtex)；pdflatex 不支持 CJK。
+%% 用途：归档 / 内读；投稿用英文版 main.tex。
+\documentclass[aps,pra,preprint,groupedaddress]{revtex4-2}
+\usepackage{graphicx}
+\usepackage{xeCJK}
+\setCJKmainfont{Noto Serif CJK SC}
+
+\graphicspath{{figures/}}
+
+\begin{document}
+
+\title{}
+
+\author{}
+\affiliation{}
+
+\date{\today}
+
+\begin{abstract}
+% 中文摘要
+\end{abstract}
+
+\maketitle
+
+\section{引言}
+%\section{\label{}}
+
+\section{理论}
+
+\section{结果}
+
+\section{结论}
+
+% \begin{figure}
+% \includegraphics[width=\columnwidth]{}%
+% \caption{\label{}}
+% \end{figure}
+
+% \begin{table}
+% \caption{\label{}}
+% \begin{ruledtabular}
+% \begin{tabular}{}
+% \end{tabular}
+% \end{ruledtabular}
+% \end{table}
+
+%\appendix
+%\section{}
+
+%\begin{acknowledgments}
+%\end{acknowledgments}
+
+% 与英文版共用文献库
+\bibliography{references}
+
+\end{document}

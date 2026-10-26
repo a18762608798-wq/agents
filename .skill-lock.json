@@ -1,0 +1,179 @@
+{
+  "version": 3,
+  "skills": {
+    "find-skills": {
+      "source": "vercel-labs/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/skills.git",
+      "skillPath": "skills/find-skills/SKILL.md",
+      "skillFolderHash": "76a98a285cb0434f3d39e1a873823556330e398b",
+      "installedAt": "2026-07-20T08:11:29.073Z",
+      "updatedAt": "2026-07-20T08:11:43.339Z"
+    },
+    "humanize-academic-writing": {
+      "source": "momo2young/humanize-academic-writing",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/momo2young/humanize-academic-writing.git",
+      "skillPath": "SKILL.md",
+      "skillFolderHash": "5ced86855fd804234af120412ae62d8757a7236f",
+      "installedAt": "2026-07-20T09:15:36.760Z",
+      "updatedAt": "2026-07-20T09:15:36.760Z"
+    },
+    "bib-search-citation": {
+      "source": "bahayonghang/academic-writing-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/bahayonghang/academic-writing-skills.git",
+      "skillPath": "academic-writing-skills/bib-search-citation/SKILL.md",
+      "skillFolderHash": "4bdb164f82e639fcfbab417179c99e20009673ce",
+      "installedAt": "2026-07-20T09:15:43.425Z",
+      "updatedAt": "2026-07-20T09:15:43.425Z"
+    },
+    "cover-letter": {
+      "source": "bahayonghang/academic-writing-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/bahayonghang/academic-writing-skills.git",
+      "skillPath": "academic-writing-skills/cover-letter/SKILL.md",
+      "skillFolderHash": "fce204e142ddad200d3fdf4125a6246dfb48829a",
+      "installedAt": "2026-07-20T09:15:43.428Z",
+      "updatedAt": "2026-07-20T09:15:43.428Z"
+    },
+    "latex-paper-en": {
+      "source": "bahayonghang/academic-writing-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/bahayonghang/academic-writing-skills.git",
+      "skillPath": "academic-writing-skills/latex-paper-en/SKILL.md",
+      "skillFolderHash": "18273300f6c3d799c824ffd11e16721ff920a15e",
+      "installedAt": "2026-07-20T09:15:43.429Z",
+      "updatedAt": "2026-07-20T09:15:43.429Z"
+    },
+    "latex-thesis-zh": {
+      "source": "bahayonghang/academic-writing-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/bahayonghang/academic-writing-skills.git",
+      "skillPath": "academic-writing-skills/latex-thesis-zh/SKILL.md",
+      "skillFolderHash": "bcdcece88a7ac3947564c9ba2df19cf23fbd0775",
+      "installedAt": "2026-07-20T09:15:43.430Z",
+      "updatedAt": "2026-07-20T09:15:43.430Z"
+    },
+    "paper-audit": {
+      "source": "bahayonghang/academic-writing-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/bahayonghang/academic-writing-skills.git",
+      "skillPath": "academic-writing-skills/paper-audit/SKILL.md",
+      "skillFolderHash": "87b527bdbabc70c5dcf2aea83cbe739412cdb4c0",
+      "installedAt": "2026-07-20T09:15:43.432Z",
+      "updatedAt": "2026-07-20T09:15:43.432Z"
+    },
+    "typst-paper": {
+      "source": "bahayonghang/academic-writing-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/bahayonghang/academic-writing-skills.git",
+      "skillPath": "academic-writing-skills/typst-paper/SKILL.md",
+      "skillFolderHash": "7fa279edc66f7b09dba36e70f49894ab0d6d1d95",
+      "installedAt": "2026-07-20T09:15:43.433Z",
+      "updatedAt": "2026-07-20T09:15:43.433Z"
+    },
+    "agent-browser": {
+      "source": "vercel-labs/agent-browser",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-browser.git",
+      "skillPath": "skills/agent-browser/SKILL.md",
+      "skillFolderHash": "82def67855a0d2aad7794207951820fa5422fdb0",
+      "installedAt": "2026-09-15T13:10:33.033Z",
+      "updatedAt": "2026-09-15T13:10:33.033Z"
+    },
+    "paper-assembly": {
+      "source": "lingzhi227/agent-research-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lingzhi227/agent-research-skills.git",
+      "skillPath": "skills/paper-assembly/SKILL.md",
+      "skillFolderHash": "8684dbfbe70a2f28b44eaf49fafa3d2d01e88b71",
+      "installedAt": "2026-10-05T09:49:49.187Z",
+      "updatedAt": "2026-10-05T09:49:49.187Z"
+    },
+    "latex-compile-qa": {
+      "source": "willoscar/research-units-pipeline-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/willoscar/research-units-pipeline-skills.git",
+      "skillPath": ".claude/skills/latex-compile-qa/SKILL.md",
+      "skillFolderHash": "",
+      "installedAt": "2026-10-05T09:50:32.761Z",
+      "updatedAt": "2026-10-05T09:50:32.761Z"
+    },
+    "related-work-writing": {
+      "source": "lingzhi227/agent-research-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lingzhi227/agent-research-skills.git",
+      "skillPath": "skills/related-work-writing/SKILL.md",
+      "skillFolderHash": "d6e2eb0cdae9f5cb5a48da799c534f39f714344d",
+      "installedAt": "2026-10-05T09:50:55.838Z",
+      "updatedAt": "2026-10-05T09:50:55.838Z"
+    },
+    "paper-compilation": {
+      "source": "lingzhi227/agent-research-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lingzhi227/agent-research-skills.git",
+      "skillPath": "skills/paper-compilation/SKILL.md",
+      "skillFolderHash": "927fec556c67b0adeeaa8bcaceead89c4b4db01e",
+      "installedAt": "2026-10-05T09:56:09.624Z",
+      "updatedAt": "2026-10-05T09:56:09.624Z"
+    },
+    "latex-formatting": {
+      "source": "lingzhi227/agent-research-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lingzhi227/agent-research-skills.git",
+      "skillPath": "skills/latex-formatting/SKILL.md",
+      "skillFolderHash": "34182e1842349c5ffeeffbee3a99fe3c7823bece",
+      "installedAt": "2026-10-05T09:56:19.452Z",
+      "updatedAt": "2026-10-05T09:56:19.452Z"
+    },
+    "citation-management": {
+      "source": "lingzhi227/agent-research-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lingzhi227/agent-research-skills.git",
+      "skillPath": "skills/citation-management/SKILL.md",
+      "skillFolderHash": "c59e739552d267359003f8269a078b0753a41d0e",
+      "installedAt": "2026-10-05T09:57:00.912Z",
+      "updatedAt": "2026-10-05T09:57:00.912Z"
+    },
+    "paper-revision": {
+      "source": "lingzhi227/agent-research-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lingzhi227/agent-research-skills.git",
+      "skillPath": "skills/paper-revision/SKILL.md",
+      "skillFolderHash": "c94ff4312548eba8ea36a568f3d981d8d8fb28ef",
+      "installedAt": "2026-10-05T09:59:03.047Z",
+      "updatedAt": "2026-10-05T09:59:03.047Z"
+    },
+    "self-review": {
+      "source": "lingzhi227/agent-research-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lingzhi227/agent-research-skills.git",
+      "skillPath": "skills/self-review/SKILL.md",
+      "skillFolderHash": "42d2d6694ea9ef6b759ebcb4f53fbdceb7d8053e",
+      "installedAt": "2026-10-05T10:08:23.919Z",
+      "updatedAt": "2026-10-05T10:08:23.919Z"
+    },
+    "latex-figure-table-layout": {
+      "source": "dw-dengwei/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/dw-dengwei/skills.git",
+      "skillPath": "latex-figure-table-layout/SKILL.md",
+      "skillFolderHash": "3ef853b024c171170c21fb0e01d556bde160f17d",
+      "installedAt": "2026-10-05T10:31:54.952Z",
+      "updatedAt": "2026-10-05T10:31:54.952Z"
+    },
+    "paper-writing-section": {
+      "source": "lingzhi227/agent-research-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lingzhi227/agent-research-skills.git",
+      "skillPath": "skills/paper-writing-section/SKILL.md",
+      "skillFolderHash": "be136abc6d6f88268857a1d89eedaefe1e37f63f",
+      "installedAt": "2026-10-05T10:46:31.174Z",
+      "updatedAt": "2026-10-05T10:46:31.174Z"
+    }
+  },
+  "dismissed": {
+    "findSkillsPrompt": true
+  }
+}
