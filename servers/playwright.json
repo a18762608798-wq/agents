@@ -3,7 +3,7 @@
   "label": "playwright",
   "description": "浏览器自动化（chromium，headless）",
   "transport": "stdio",
-  "command": "/home/mintusr/.nvm/versions/node/v24.20.0/bin/node",
-  "args": ["/home/mintusr/.nvm/versions/node/v24.20.0/lib/node_modules/@playwright/mcp/cli.js", "--browser", "chromium", "--headless"],
+  "command": "/home/dell/.local/share/pi-node/current/bin/node",
+  "args": ["/home/dell/.local/share/pi-node/current/lib/node_modules/@playwright/mcp/cli.js", "--browser", "chromium", "--headless"],
   "env": {}
 }

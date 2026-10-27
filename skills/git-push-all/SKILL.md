@@ -83,10 +83,10 @@ python3 <skill-path>/scripts/push_all.py --root <当前目录绝对路径>
 
 | 仓库 | 结果 | 说明 |
 |------|------|------|
-| `/home/mintusr` | 已推送 | 更新: 同步 Neovim 与 opencode 配置（共 12 个文件） |
-| `/home/mintusr/sync/foo` | 跳过 | 工作区干净 |
-| `/home/mintusr/tmp/bar` | 跳过 | 无远程仓库，无需 push |
-| `/home/mintusr/sync/baz` | 失败 | push 被拒绝：...（首行错误） |
+| `/home/dell` | 已推送 | 更新: 同步 Neovim 与 opencode 配置（共 12 个文件） |
+| `/home/dell/sync/foo` | 跳过 | 工作区干净 |
+| `/home/dell/tmp/bar` | 跳过 | 无远程仓库，无需 push |
+| `/home/dell/sync/baz` | 失败 | push 被拒绝：...（首行错误） |
 
 最后给出总数：成功 X / 跳过 Y / 失败 Z。失败仓库给出下一步建议（先 pull、解决冲突、检查 SSH），不要擅自修复后强推。
 

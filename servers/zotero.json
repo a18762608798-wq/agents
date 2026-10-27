@@ -3,7 +3,7 @@
   "label": "zotero",
   "description": "Zotero 文献库管理、检索、PDF 与元数据",
   "transport": "stdio",
-  "command": "/home/mintusr/.local/bin/zotero-mcp",
+  "command": "/home/dell/.local/bin/zotero-mcp",
   "args": [],
   "env": {
     "ZOTERO_LOCAL": "true",

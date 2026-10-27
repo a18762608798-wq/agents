@@ -62,7 +62,7 @@ sudo lpadmin -d Smart_Tank_750   # 设默认，免每次选
 单页平板到 PDF：
 
 ```bash
-timeout 60 scanimage -d "airscan:e0:HP Smart Tank 750 series [F8AC5C] (USB)" --source Flatbed --mode Color --resolution 300 --format=png > /tmp/scan.png 2>/tmp/scan.log && python3 -c "from PIL import Image; im=Image.open('/tmp/scan.png'); im.save('/home/mintusr/scan.pdf','PDF')" && ls -lh ~/scan.pdf
+timeout 60 scanimage -d "airscan:e0:HP Smart Tank 750 series [F8AC5C] (USB)" --source Flatbed --mode Color --resolution 300 --format=png > /tmp/scan.png 2>/tmp/scan.log && python3 -c "from PIL import Image; im=Image.open('/tmp/scan.png'); im.save('/home/dell/scan.pdf','PDF')" && ls -lh ~/scan.pdf
 ```
 
 单页 ADF（单面）同上，把 `--source Flatbed` 改 `--source ADF`。文字稿分辨率用 150，图片用 300。输出路径写绝对路径，避免相对路径存到别的 cwd。
@@ -70,7 +70,7 @@ timeout 60 scanimage -d "airscan:e0:HP Smart Tank 750 series [F8AC5C] (USB)" --s
 连续批量（进稿器叠好，空了停，页数不定）：
 
 ```bash
-rm -f /tmp/p-*.png; timeout 300 scanimage -d "airscan:e0:HP Smart Tank 750 series [F8AC5C] (USB)" --source ADF --mode Color --resolution 300 --format png --batch=/tmp/p-%d.png 2>/tmp/batch.log; echo EXIT:$?; ls /tmp/p-*.png; python3 -c "import glob; from PIL import Image; f=sorted(glob.glob('/tmp/p-*.png')); im=[Image.open(x) for x in f]; im[0].save('/home/mintusr/scan.pdf',save_all=True,append_images=im[1:] if len(im)>1 else []); print(len(f),'pages ok')"; ls -lh ~/scan.pdf
+rm -f /tmp/p-*.png; timeout 300 scanimage -d "airscan:e0:HP Smart Tank 750 series [F8AC5C] (USB)" --source ADF --mode Color --resolution 300 --format png --batch=/tmp/p-%d.png 2>/tmp/batch.log; echo EXIT:$?; ls /tmp/p-*.png; python3 -c "import glob; from PIL import Image; f=sorted(glob.glob('/tmp/p-*.png')); im=[Image.open(x) for x in f]; im[0].save('/home/dell/scan.pdf',save_all=True,append_images=im[1:] if len(im)>1 else []); print(len(f),'pages ok')"; ls -lh ~/scan.pdf
 ```
 
 固定 N 页（到数即停，不等空）：加 `--batch-count=N`，合并把通配改固定序号。空稿退出非零是正常的，合并用 `;` 不用 `&&`。
