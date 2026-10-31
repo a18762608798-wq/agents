@@ -1,0 +1,8 @@
+{
+  "description": "Bind rework controls to the actual Codex session and enforce scoped writes before execution.",
+  "hooks": {
+    "SessionStart": [{ "hooks": [{ "type": "command", "command": "node \"${PLUGIN_ROOT}/scripts/hook.mjs\"", "timeout": 10, "additionalContextLimit": 2500 }] }],
+    "UserPromptSubmit": [{ "hooks": [{ "type": "command", "command": "node \"${PLUGIN_ROOT}/scripts/hook.mjs\"", "timeout": 10, "additionalContextLimit": 2500 }] }],
+    "PreToolUse": [{ "hooks": [{ "type": "command", "command": "node \"${PLUGIN_ROOT}/scripts/hook.mjs\"", "timeout": 10, "additionalContextLimit": 2500 }] }]
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "speckit-rework",
+  "version": "1.0.1",
+  "description": "Spec Kit rework state machine with seven MCP control tools and synchronous write-policy hooks."
+}

@@ -1,2 +1,5 @@
 __pycache__/
 *.pyc
+
+# Skill generated and maintained by CCGUI
+skills/ccgui-plugin-creator/

@@ -1,0 +1,9 @@
+{
+  "name": "speckit-rework",
+  "version": "1.0.3",
+  "description": "Spec Kit rework state machine and pre-execution write-policy hooks.",
+  "hooks": "./hooks/hooks.json",
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": { "displayName": "Spec Kit rework", "shortDescription": "Impact, stage, scope and checklist gates" }
+}

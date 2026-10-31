@@ -1,0 +1,14 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
+  "mcpServers": {
+    "speckit_rework": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["./scripts/mcp-server.mjs"],
+      "cwd": ".",
+      "env_vars": ["CODEX_HOME"],
+      "startup_timeout_sec": 30,
+      "tool_timeout_sec": 30
+    }
+  }
+}

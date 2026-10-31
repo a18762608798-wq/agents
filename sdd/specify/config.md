@@ -57,6 +57,16 @@ your-project/
 
 已有项目接 Spec Kit：先提交干净，再 `--here`，先写 `constitution` 描述现有架构约束，再逐个 feature 纳入。
 
+## 项目局部返工插件（可选，手动安装）
+
+`specify init` 不会自动部署自定义返工门禁。需要时在初始化后，按
+[`plugins/speckit-rework/README.md`](plugins/speckit-rework/README.md)
+安装当前宿主的版本：Pi / OpenCode 使用项目插件目录；Codex 使用项目
+`.codex/config.toml` 启用共享 marketplace 中的插件，不全局开启。
+
+三种实现的 canonical source 均位于 `~/.agents/sdd/specify/plugins/speckit-rework/`。
+公式规则仍是全局插件，不与此返工门禁混装。
+
 ## 验证
 
 ```bash
