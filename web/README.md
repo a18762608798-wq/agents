@@ -1,84 +1,34 @@
-# README
+# T3 Code：Codex Web 前端
 
-这里我们主要使用 `Agent of Empires`.
+这里使用 **T3 Code** 作为 Codex 的 Web 前端。它通过 Codex App Server 调用本机或远程机器上的 Codex，提供聊天、项目文件浏览、Markdown／公式预览和 HTML 页面预览。
 
-AoE（Agent of Empires）官方提供一键安装脚本，Linux 和 macOS 都支持。
+- 项目：<https://github.com/pingdotgg/t3code>
+- 下载：<https://github.com/pingdotgg/t3code/releases/latest>
+- 官方安装文档：<https://github.com/pingdotgg/t3code/blob/main/docs/user/install.md>
+- 日常命令、关闭方式、SSH 和公式设置：[usage.md](./usage.md)
 
-### 1. 安装 AoE
+## 本机安装
 
-**Ubuntu / Linux：**
+本机 `0.1.6`，Linux x64 官方独立可执行文件，手动下载 Release 安装，未改 Node.js 环境：
 
-先安装必要依赖：
+| 项目 | 路径／状态 |
+| --- | --- |
+| 命令入口 | `~/.local/bin/t3`，是指向实际程序的软链接 |
+| 实际程序 | `~/.t3/runtime/versions/0.1.6/t3` |
+| 数据目录 | `~/.t3/`，项目、会话和设置主要在 `~/.t3/userdata/` |
 
-```bash
-sudo apt update
-sudo apt install -y tmux curl
-```
-
-然后执行官方安装命令：
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/agent-of-empires/agent-of-empires/main/scripts/install.sh | bash
-```
-
-**macOS（Homebrew）：**
+安装步骤（以 `0.1.6` 为例）：
 
 ```bash
-brew install aoe
+grep '  t3-0.1.6-linux-x64.tar.gz$' SHA256SUMS | sha256sum --check --strict
 ```
 
-以上均为官方提供的安装方式。[Agent of Empires](https://www.agent-of-empires.com/docs/installation/?utm_source=chatgpt.com)
-
-### 2. 验证安装
+校验通过后保留压缩包内目录结构，解压到 `~/.t3/runtime/versions/0.1.6/`，再建立软链接：
 
 ```bash
-aoe --version
+ln -s ~/.t3/runtime/versions/0.1.6/t3 ~/.local/bin/t3
+command -v t3
+t3 --version
 ```
 
-启动 TUI 界面：
-
-```bash
-aoe
-```
-
-### 3. 使用 Codex
-
-在你的项目目录执行：
-
-```bash
-aoe add --cmd codex
-```
-
-也可以直接在 AoE 的 TUI 中创建 Codex 会话。
-
-### 4. 启动 Web 界面
-
-```bash
-aoe serve --daemon
-```
-
-查看 Web 地址：
-
-```bash
-aoe url
-```
-
-如果你通过 SSH 远程连接，默认端口为 `8080`，可以在本地执行：
-
-```bash
-ssh -N -L 8080:127.0.0.1:8080 user@remote-host
-```
-
-随后使用浏览器访问 AoE 提供的本地地址。
-
-### 5. 更新 AoE
-
-以后更新只需要：
-
-```bash
-aoe update
-```
-
-官方文档：[AoE 安装指南](https://www.agent-of-empires.com/docs/installation/?utm_source=chatgpt.com)
-
-**建议先用 `aoe` 体验 TUI，再启动 `aoe serve --daemon` 体验 Web 界面。** 这两种界面可以管理同一批会话，不需要分别创建 Agent。
+日常启动、配对、Codex 登录检查见 [usage.md](./usage.md)。
