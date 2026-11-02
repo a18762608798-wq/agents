@@ -25,7 +25,8 @@ Post-Implement Review 任务落实编译后的 self-review 与改文循环，
 
 ## Format
 
-- [ ] T005 ...（`paper-latex-formatting` 套 venue 模板 + 投前检查）
+- [ ] T005 ...（`paper-latex-formatting` 套 venue 模板 + 投前检查；核对
+  `docs/README.md` 的路径约定、中文字体目录及 LICENSE、图片与文档链接）
 
 ## Post-Implement Review
 

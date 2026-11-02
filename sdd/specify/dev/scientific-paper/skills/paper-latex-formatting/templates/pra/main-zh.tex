@@ -6,7 +6,11 @@
 \documentclass[aps,pra,preprint,groupedaddress]{revtex4-2}
 \usepackage{graphicx}
 \usepackage{xeCJK}
-\setCJKmainfont{Noto Serif CJK SC}
+% 从 docs/paper/ 编译；字体与 LICENSE 固定保存在项目 assets/fonts/。
+\setCJKmainfont[Path=../../assets/fonts/noto-serif-cjk/,
+  BoldFont=NotoSerifCJKsc-Bold.otf,
+  ItalicFont=NotoSerifCJKsc-Regular.otf]{NotoSerifCJKsc-Regular.otf}
+\setCJKmonofont[Path=../../assets/fonts/noto-serif-cjk/]{NotoSerifCJKsc-Regular.otf}
 
 \graphicspath{{figures/}}
 

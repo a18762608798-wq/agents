@@ -20,10 +20,34 @@ No column widths, no captions, no REVTeX. Size is caller-controlled.
 
 ## 2. Fonts and text
 
-- One serif family per figure set: `Times New Roman, STIXGeneral, DejaVu Serif`.
-- Sizes: `font.size=13`, labels 15pt, titles 16pt, ticks 13pt, legend 14pt.
-  Rationale: APS requires the smallest letter/number to be >= 2 mm at
-  final printed size (single column 8.6 cm), i.e. ~8 pt effective.
+- One serif family per figure set: `Times New Roman, STIXGeneral, DejaVu Serif`
+  (serif stack compatible with the paper). Times New Roman is the formal
+  plotting target. User-supplied local fonts live in `assets/fonts/times-new-roman/`
+  as `times.ttf`, `timesbd.ttf`, `timesi.ttf`, `timesbi.ttf`; the helper registers
+  these four faces per process and prefers them over same-name system fonts.
+  No OS installation is required. Discovery is helper-relative; `font_dir=...`
+  is an optional explicit override. Incomplete local assets or wrong families
+  must fail rather than silently change font. With no local directory, generic
+  projects retain the legacy system fallback.
+  Before formal export call the helper, then verify every face's resolved path
+  with `fallback_to_default=False`; disclose preview-only fallback.
+- Project paths follow `docs/README.md`: figures in `figs/<feature>/`,
+  CJK paper fonts plus LICENSE in `assets/fonts/noto-serif-cjk/`, local plotting
+  fonts with original licensing notes in `assets/fonts/times-new-roman/`.
+  The scientific-computing preset includes all four TTFs and their original
+  licensing notes; install them with `scripts/install-fonts.sh <project-root>`.
+  The paper preset similarly supplies CJK OTFs and LICENSE. CJK paper fonts
+  do not replace plotting serif/math fonts.
+- Drawn sizes (`font.size=13`, labels 15pt, titles 16pt, ticks 13pt,
+  legend 14pt) are **placeholders only**. The final printed text is uniform:
+  after all drawing call `uniform_text(fig, font_pt_for(fig, printed_width_pt))`
+  (`PRINT_COL_PT` = single column, `PRINT_TEXT_PT` = full width,
+  `CAPTION_PT = 9.0`) so every text object prints at caption size 9 pt.
+  Never hand-tune individual `fontsize=` for the final size.
+- Panel identifiers `(a)`, `(b)` … are `ax.text` in axes-fraction coordinates
+  **inside** the frame corner (default upper-left `(0.035, 0.93)`,
+  `va="top"`, `ha="left"`), colored for contrast against the panel
+  background; `uniform_text` normalizes their size.
 - Effective size shrinks with the canvas:
   `effective_pt = drawn_pt × target_width_mm / drawn_width_mm`.
   At the 86 mm single column a 163 mm canvas scales by 0.53 (13 pt ticks →
@@ -40,7 +64,7 @@ No column widths, no captions, no REVTeX. Size is caller-controlled.
   string, e.g. `r"$a_1$"`, `r"$\alpha > \beta$"`. Bare `a_1` renders
   literally and is forbidden. Units stay outside math:
   `r"$a_1$ (ms)"`. `text.usetex` stays `False`; full LaTeX is out of scope.
-  Math font is `stix` to match the serif stack.
+  Math font is `stix` to match the serif stack and actual helper settings.
 
 ## 3. Lines, markers, axes
 
@@ -52,22 +76,11 @@ No column widths, no captions, no REVTeX. Size is caller-controlled.
 - Heatmap ticks by printed width:
   - standalone single-column heatmap (≈86 mm): **5 ticks per axis**;
   - one panel of a 2×2 block (≈41 mm each): **3 ticks per axis**, at
-    min / mid / max (`0, 0.5, 1`; `-3, 0, 3`), with drawn text 17-18 pt so
-    the effective size stays >= 8 pt.
+    min / mid / max (`0, 0.5, 1`; `-3, 0, 3`).
   The **colorbar uses the same count** as the axes (5 or 3) and the same
   size floor; never give the colorbar more ticks than the coordinate axes.
   Reducing tick count is the correct response to a cramped panel; shrinking
-  the font is not.
-- Colorbar placement (heatmaps): vertical bar on the right, hugging the
-  heatmap (`pad=0.005`), shortened at the top (`shrink=0.9`, bottom-anchored
-  with `anchor=(1.0, 0.0)`) so the bar bottom aligns with the axes bottom.
-  The quantity name goes **horizontally at the top-left of the bar**
-  (`cbar.ax.set_title(title, fontsize=22, pad=12, loc="left")`, left edge
-  aligned with the bar's left edge). No rotated side label, and the quantity
-  name is not repeated as an axes title.
-- 2×2 multi-panel heatmaps (composition done in LaTeX): axis labels live
-  only on the outer edges — x label on the bottom row, y label on the left
-  column; every panel keeps its own ticks and colorbar.
+  the font is not (`uniform_text` keeps the printed size at 9 pt regardless).
 - Heatmaps: cell-edge convention. A heatmap value is a bin, not a point:
   compute edges with `cell_edges(centers, lo=..., hi=...)` (interior edges at
   midpoints, outer edges pinned to the plotted range), draw with
@@ -78,10 +91,12 @@ No column widths, no captions, no REVTeX. Size is caller-controlled.
 - Spines: all four on (closed box), 1.0pt. No half-open frames.
 - OO API: `fig, ax = plt.subplots()`. One Axes = one panel.
 - Axis labels carry units in parentheses: `t (ms)`, `R (10^3 Ω)`.
-- Legend: frameless (`frameon=False`, no box) and always **inside** the axes.
-  Choose `loc` so it avoids data; if space is tight, lower the legend font
-  size, shorten labels, or split into `ncol=2`. Never place it outside the
-  axes bounding box. Never covers data.
+- Legend: frameless (`frameon=False`, no box), default **inside** the axes at a
+  `loc` that avoids data. When every inside spot covers data (multi-panel
+  shared series), use one shared figure-level legend **below the axes in a
+  single row** (`fig.legend(..., loc="lower center", ncol=<n series>)`) and
+  reserve bottom margin with `fig.subplots_adjust(bottom=...)`. Figure-level
+  legends are normalized by `uniform_text` like everything else.
 - Default image cmap is `viridis`.
 
 ## 4. Export

@@ -7,6 +7,9 @@
 >
 > 两部分必须一致；若存在冲突，应先澄清并修正 spec。
 
+> 项目路径遵循 `docs/README.md`；规划文件统一位于 `docs/planning/`，
+> 成文位于 `docs/paper/`，不另建规划副本或根目录看板。
+
 ## Part I — Paper Description
 
 ### 1. Objective
@@ -23,12 +26,12 @@
 
 列出本 feature 消费的上游产物，引用其稳定 ID：
 
-- 论文架构：`docs/paper-map.md` 对应条目（Narrative Spine /
+- 论文架构：`docs/planning/paper-map.md` 对应条目（Narrative Spine /
   Section Architecture / Result Roles）；
 - 实验定义：`specs/expXX/spec.md`（`P##` 流程、关键参数）；
 - 共享输出：`S##`（...）；
 - 数据产物：`D##`（数据集 + `figs/...` 图文件，注明裸图 / 成图）；
-- 内容来源：`docs/paper-outline.md` 对应条目（仅作内容清单，
+- 内容来源：`docs/planning/paper-outline.md` 对应条目（仅作内容清单，
   章节顺序以 paper-map 为准）。
 
 产物不存在或不完全时，不要在这里编造，记入第 5 节缺件表。

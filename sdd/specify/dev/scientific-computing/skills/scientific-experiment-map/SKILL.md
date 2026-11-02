@@ -1,13 +1,16 @@
 ---
 name: scientific-experiment-map
-description: Number paper data products with stable Dxx IDs and split a paper outline into numbered experiments. Use when the user mentions 实验拆分, 拆分实验, experiment map, expriment-map, 把大纲分到实验, 数据编号, 子图编号, 面板命名, 诊断图归属, or wants to assign paper-outline tasks into shared/exp experiments without designing experiment details.
+description: Number paper data products with stable Dxx IDs and split a paper outline into numbered experiments. Use when the user mentions 实验拆分, 拆分实验, experiment map, experiment-map, 把大纲分到实验, 数据编号, 子图编号, 面板命名, 诊断图归属, or wants to assign paper-outline tasks into shared/exp experiments without designing experiment details.
 ---
 
 # Experiment Map
 
 把论文大纲（paper-outline）中的任务分到若干个实验，只定归属，不设计实验细节。
 
-输入：大纲文件（如 `doc/paper-outline.md`）+ 理论目录（如 `doc/theory/`）。输出：实验拆分文件（如 `doc/experiment-map.md`，本仓库历史文件名为 `doc/expriment-map.md`，沿用既有命名不再改）。
+先读 `docs/README.md` 的固定路径约定。输入：
+`docs/planning/paper-outline.md` + `docs/theory/`。
+输出唯一写入 `docs/planning/experiment-map.md`，不在根目录或其他位置创建副本。
+若项目尚无文档导航，按 preset README 的固定布局创建 `docs/README.md`。
 
 输出文件是派生产物，不是口径来源。不要修改大纲、理论档、代码或实验数据，除非用户明确要求。
 
@@ -45,7 +48,7 @@ description: Number paper data products with stable Dxx IDs and split a paper ou
 ## 输出模板
 
 ```markdown
-# expriment-map
+# experiment-map
 
 按 paper-outline.md 拆分实验, 只列任务归属, 不含实验细节. Dxx 为论文数据产品, exp/shared 为实验组织.
 

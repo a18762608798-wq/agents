@@ -7,6 +7,10 @@
 >
 > 两部分必须一致；若存在冲突，应先澄清并修正 spec。
 
+> 项目路径遵循 `docs/README.md`；规划输入为
+> `docs/planning/paper-outline.md` 与 `docs/planning/experiment-map.md`。
+> 本 spec 引用相应条目，不重复定义项目目录或字体规则。
+
 ## Part I — Scientific Description
 
 ### 1. Objective
@@ -48,6 +52,7 @@
 
 记录理解本 feature 所需的引用，例如：
 
+- `docs/planning/paper-outline.md` / `docs/planning/experiment-map.md` 的相关条目；
 - `docs/theory/...`；
 - 文献；
 - 方程或模型来源；

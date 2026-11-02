@@ -17,8 +17,11 @@ Usage:
     finalize_figure(fig, "fig1.pdf")
 """
 
+from pathlib import Path
+
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+from matplotlib import font_manager
 import numpy as np
 
 # Five Okabe-Ito colors meeting 3:1 against white (k-dense subset).
@@ -78,8 +81,50 @@ def cell_edges(centers, lo=None, hi=None):
     return edges
 
 
-def apply_figure_style(palette=None):
-    """Set style-only rcParams. Call before creating figures."""
+def register_project_fonts(font_dir=None):
+    """Register all four local Times New Roman faces, ahead of system copies.
+
+    By default, look for assets/fonts/times-new-roman/ above this helper,
+    so vendored copies work independently of the current working directory.
+    A project without local fonts retains the existing system-font fallback;
+    an explicit or partially populated directory must contain every face.
+    Registration is process-local and must run in each plotting process.
+    """
+    if font_dir is None:
+        for parent in Path(__file__).resolve().parents:
+            candidate = parent / "assets" / "fonts" / "times-new-roman"
+            if candidate.is_dir():
+                font_dir = candidate
+                break
+        else:
+            return ()
+
+    font_dir = Path(font_dir).expanduser().resolve()
+    paths = tuple(font_dir / name for name in (
+        "times.ttf", "timesbd.ttf", "timesi.ttf", "timesbi.ttf",
+    ))
+    missing = [str(path) for path in paths if not path.is_file()]
+    if missing:
+        raise FileNotFoundError("Missing Times New Roman font files: " + ", ".join(missing))
+    for path in paths:
+        family = font_manager.FontProperties(fname=str(path)).get_name()
+        if family != "Times New Roman":
+            raise ValueError(f"Expected Times New Roman, found {family!r}: {path}")
+
+    # Avoid a same-name system font winning a tie against the supplied files.
+    # addfont clears Matplotlib's lookup cache; repeated calls stay idempotent.
+    font_manager.fontManager.ttflist[:] = [
+        entry for entry in font_manager.fontManager.ttflist
+        if entry.name != "Times New Roman"
+    ]
+    for path in paths:
+        font_manager.fontManager.addfont(str(path))
+    return paths
+
+
+def apply_figure_style(palette=None, *, font_dir=None):
+    """Set style and register local fonts. Call before creating figures."""
+    register_project_fonts(font_dir)
     colors = palette or DEFAULT_PALETTE
     mpl.rcParams.update(
         {
@@ -147,7 +192,10 @@ def effective_min_text_pt(fig, target_width_mm):
     Journals specify text size at the *final printed* width, so a figure drawn
     on a wide canvas and shrunk in LaTeX loses points linearly:
     ``effective_pt = drawn_pt * target_width_mm / drawn_width_mm``. Use this to
-    check the 8 pt floor before export (86 mm = APS single column).
+    check the floor (8 pt; project target is caption size 9 pt) before export
+    (86 mm = APS single column). Covers every text artist: ticks, labels,
+    titles, in-axes texts (panel tags, annotations), colorbar labels,
+    figure texts and figure-level legends.
     """
     scale = float(target_width_mm) / (fig.get_figwidth() * 25.4)
     sizes = []
@@ -160,10 +208,67 @@ def effective_min_text_pt(fig, target_width_mm):
         sizes.extend(t.label1.get_fontsize() for t in ax.yaxis.get_major_ticks())
         if ax.get_title():
             sizes.append(ax.title.get_fontsize())
+        # Titles placed with loc="left"/"right" live in separate artists.
+        for attr in ("_left_title", "_right_title"):
+            title = getattr(ax, attr, None)
+            if title is not None and title.get_text():
+                sizes.append(title.get_fontsize())
         legend = ax.get_legend()
         if legend is not None:
             sizes.extend(text.get_fontsize() for text in legend.get_texts())
+        sizes.extend(text.get_fontsize() for text in ax.texts)
+    sizes.extend(text.get_fontsize() for text in fig.texts)
+    for legend in fig.legends:
+        sizes.extend(text.get_fontsize() for text in legend.get_texts())
     return min(sizes) * scale if sizes else None
+
+
+# Printed widths of the REVTeX two-column layout (measured from the built PDF):
+# single column 245 pt, full text width 508 pt. Journal captions are 9 pt.
+PRINT_COL_PT = 245.0
+PRINT_TEXT_PT = 508.0
+CAPTION_PT = 9.0
+
+
+def font_pt_for(fig, printed_width_pt, target_pt=CAPTION_PT):
+    """Drawn font size that prints at `target_pt` on a `printed_width_pt` canvas."""
+    drawn_pt = fig.get_figwidth() * 72.0
+    return target_pt * drawn_pt / float(printed_width_pt)
+
+
+def uniform_text(fig, fontsize):
+    """Force every text object in `fig` to one font size (ticks, labels,
+    titles, colorbar ticks/titles, legends, annotations, figure legends).
+
+    Call after all drawing and before export when the figure is shrunk into
+    the paper: set ``fontsize = font_pt_for(fig, printed_width_pt)`` so that
+    the printed text matches the caption size.
+    """
+    for ax in fig.axes:
+        ax.tick_params(axis="both", which="both", labelsize=fontsize)
+        ax.xaxis.label.set_fontsize(fontsize)
+        ax.yaxis.label.set_fontsize(fontsize)
+        ax.xaxis.get_offset_text().set_fontsize(fontsize)
+        ax.yaxis.get_offset_text().set_fontsize(fontsize)
+        if ax.get_title():
+            ax.title.set_fontsize(fontsize)
+        # Titles placed with loc="left"/"right" live in separate artists.
+        for attr in ("_left_title", "_right_title"):
+            title = getattr(ax, attr, None)
+            if title is not None and title.get_text():
+                title.set_fontsize(fontsize)
+        legend = ax.get_legend()
+        if legend is not None:
+            for text in legend.get_texts():
+                text.set_fontsize(fontsize)
+        for text in ax.texts:
+            text.set_fontsize(fontsize)
+    for text in fig.texts:
+        text.set_fontsize(fontsize)
+    for legend in fig.legends:
+        for text in legend.get_texts():
+            text.set_fontsize(fontsize)
+    return fontsize
 
 
 def finalize_figure(fig, path, dpi=300, max_ticks=5):

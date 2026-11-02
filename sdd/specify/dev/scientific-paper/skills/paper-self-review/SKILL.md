@@ -38,8 +38,8 @@ Review an academic paper using a structured review form with multiple reviewer p
 
 ### Extract text from PDF
 ```bash
-python .opencode/skills/paper-self-review/scripts/extract_pdf_text.py paper.pdf --output paper_text.txt
-python .opencode/skills/paper-self-review/scripts/extract_pdf_text.py paper.pdf --format markdown
+python .pi/skills/paper-self-review/scripts/extract_pdf_text.py paper.pdf --output paper_text.txt
+python .pi/skills/paper-self-review/scripts/extract_pdf_text.py paper.pdf --format markdown
 ```
 
 Tries pymupdf4llm (best) → pymupdf → pypdf. PyMuPDF is the required
@@ -51,7 +51,7 @@ baseline; the other backends are optional fallbacks. Verify it with:
 
 ### Parse PDF into structured sections
 ```bash
-python .opencode/skills/paper-self-review/scripts/parse_pdf_sections.py \
+python .pi/skills/paper-self-review/scripts/parse_pdf_sections.py \
   --pdf paper.pdf --output sections.json
 ```
 
@@ -121,8 +121,8 @@ Output format:
 
 ## References
 
-- NeurIPS review form, scoring weights, personas, reflection prompts: `.opencode/skills/paper-self-review/references/review-form.md`
-- PDF text extraction: `.opencode/skills/paper-self-review/scripts/extract_pdf_text.py`
+- NeurIPS review form, scoring weights, personas, reflection prompts: `references/review-form.md`
+- PDF text extraction: `scripts/extract_pdf_text.py`
 
 ## Missing Sections Check
 You MUST verify that all required sections are present: Abstract, Introduction, Methods/Approach, Experiments/Results, Discussion/Conclusion. Reduce scores if any are missing.

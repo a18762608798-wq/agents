@@ -15,7 +15,7 @@ Systematically revise papers based on reviewer feedback.
 
 ## References
 
-- Revision workflow and prompts: `.opencode/skills/paper-revision/references/revision-prompts.md`
+- Revision workflow and prompts: `references/revision-prompts.md`
 
 ## Workflow
 

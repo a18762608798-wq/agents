@@ -2,11 +2,32 @@
 
 面向“数值结果 → 正式 LaTeX 论文”的 Spec Kit 模板包。核心主张：**论文的每个主张都绑定上游数据产物，缺件留空不编数，解释性正文问用户要推测并标记待验证**。
 
-依赖上游 `scientific-computing` 产物：`specs/expXX`（实验定义）、`S##`（共享输出）、`D##`（数据集 + `figs/` 图）、`docs/paper-outline.md`（论文大纲）。
+依赖上游 `scientific-computing` 产物：`specs/expXX`（实验定义）、`S##`（共享输出）、`D##`（数据集 + `figs/` 图）、`docs/planning/paper-outline.md`（论文大纲）。
+
+## 固定项目布局
+
+以项目 `docs/README.md` 为目录约定入口；规划统一放在 `docs/planning/`
+（`paper-outline.md`、`experiment-map.md`，以及启用后的 `paper-map.md`）。
+LaTeX 工程保留在 `docs/paper/`，上游规格与图片保留在 `specs/`、`figs/`。
+派生看板为 `docs/status/paper.html` 与 `docs/status/experiments.html`，
+不在项目根目录另建副本。
+
+中文字体和上游许可证统一保存于 `assets/fonts/noto-serif-cjk/`
+（`NotoSerifCJKsc-Regular.otf`、`NotoSerifCJKsc-Bold.otf`、`LICENSE`）。
+中文模板假定从 `docs/paper/` 编译，通过相对路径按文件加载，不依赖系统字体名。
+项目若提供 Times New Roman，四种字形放在 `assets/fonts/times-new-roman/`，
+由绘图 helper 按文件注册，无需系统安装；保留原授权说明，不混用 Noto 的
+SIL OFL。`scientific-paper/assets/fonts/noto-serif-cjk/` 保存中文模板依赖的
+两种 OTF 与 LICENSE；Times New Roman 的四种 TTF 保存在上游
+`scientific-computing/assets/fonts/times-new-roman/`。各自通过随包的
+`scripts/install-fonts.sh` 安装到项目同名目录，不要求系统安装。
+只插入已有嵌入字体的 PDF 不要求另外加载绘图字体。
 
 ## 文件
 
 - `preset.yml` — manifest，声明 id / provides / replaces
+- `assets/fonts/noto-serif-cjk/` — 中文模板依赖的两种原始 OTF 与 LICENSE
+- `scripts/install-fonts.sh` — 安装中文字体依赖到项目 `assets/fonts/`，支持幂等执行且不覆盖内容不同的文件
  - `templates/constitution-template.md` — 论文宪法：spec 权威、证据绑定、数字不编、缺件协议（GAP-DATA 留空 / GAP-INTERP 问用户要推测）、8 个 paper-* skills 分工
 - `templates/spec-template.md` — 论文定义：主张 / 上游输入 / 章节 / 图位 / 引用需求 / 缺件；合同：SEC / FIG / CLM / GAP / CIT
 - `templates/plan-template.md` — 章节→skill 映射、LaTeX 工程结构、编译与评审计划
@@ -29,11 +50,12 @@
 在项目根目录执行一次：
 
 ```bash
-mkdir -p .opencode/skills
-cp -a /path/to/scientific-paper/skills/. .opencode/skills/
+mkdir -p .pi/skills
+cp -a /path/to/scientific-paper/skills/. .pi/skills/
+bash /path/to/scientific-paper/scripts/install-fonts.sh .
 ```
 
-项目局部 `.opencode/skills/` 优先于全局 skills。模板升级后需要人工重新同步；已经被项目
+Pi 自动发现项目 `.pi/skills/`；同名技能冲突时检查启动诊断。模板升级后需要人工重新同步；已经被项目
 定制过的 skill 不要直接覆盖，应先比较 diff。`skills/VERSION` 记录当前 skill 版本。
 
 ## 可选审阅环境
@@ -64,8 +86,9 @@ julia --project=. --startup-file=no \
 ## 安装到项目
 
 ```bash
-specify init --here --integration opencode # 初始化
-specify preset add --dev ~/.config/opencode/sdd/specify/dev/scientific-paper --priority 4
+specify init --here --integration pi --script sh # 初始化
+specify preset add --dev ~/.agents/sdd/specify/dev/scientific-paper --priority 4
+bash .specify/presets/scientific-paper/scripts/install-fonts.sh .
 specify preset resolve spec-template
 ```
 
@@ -74,13 +97,14 @@ specify preset resolve spec-template
 改完源目录后重装：
 
 ```bash
-specify preset update scientific-paper --dev ~/.config/opencode/sdd/specify/dev/scientific-paper --priority 4
-specify integration upgrade opencode --force --script sh
+specify preset update scientific-paper --dev ~/.agents/sdd/specify/dev/scientific-paper --priority 4
+bash .specify/presets/scientific-paper/scripts/install-fonts.sh .
+specify integration upgrade pi --script sh
 ```
 
 修改本 preset 源目录后，先用 `specify preset update` 更新项目中的 preset，
-再用 `specify integration upgrade` 更新 OpenCode 的 `.opencode/commands/` 集成文件。
-不要手工把 preset command 复制到 `.opencode/commands/`；priority 越小越优先，
+再用 `specify integration upgrade` 更新 Pi 的 `.pi/prompts/` 集成文件。
+不要手工把 preset command 复制到 `.pi/prompts/`；priority 越小越优先，
 当前项目通常使用 `scientific-computing` priority 3 管理实验 feature，使用
 `scientific-paper` priority 4 管理论文 feature。需要切换到论文命令时，暂时将
 `scientific-paper` 调整为更高优先级（更小的数字）。

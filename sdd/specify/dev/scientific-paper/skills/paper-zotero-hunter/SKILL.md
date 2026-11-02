@@ -43,7 +43,7 @@ the exact claim at the cite location.
 ### Validate citations (check all cite keys resolve)
 
 ```bash
-python .opencode/skills/paper-zotero-hunter/scripts/validate_citations.py \
+python .pi/skills/paper-zotero-hunter/scripts/validate_citations.py \
   --tex docs/paper/main.tex --bib docs/paper/references.bib --check-figures --figures-dir docs/paper/figures/
 ```
 
@@ -53,7 +53,7 @@ sections, duplicate labels, undefined references, missing figures.
 ### Auto-fix missing citation placeholders
 
 ```bash
-python .opencode/skills/paper-zotero-hunter/scripts/validate_citations.py \
+python .pi/skills/paper-zotero-hunter/scripts/validate_citations.py \
   --tex docs/paper/main.tex --bib docs/paper/references.bib --fix
 ```
 
@@ -63,7 +63,7 @@ citation keys. Placeholders must be replaced by `bind` output before submission.
 ### Harvest fallback (Zotero unreachable only)
 
 ```bash
-python .opencode/skills/paper-zotero-hunter/scripts/harvest_citations.py \
+python .pi/skills/paper-zotero-hunter/scripts/harvest_citations.py \
   --tex docs/paper/main.tex --bib docs/paper/references.bib --output candidates.bib --max-rounds 10 --dry-run
 ```
 

@@ -12,9 +12,13 @@ description: 从论文主线创建或更新 paper feature specification。
 
 ## Workflow
 
-1. 读取项目 live constitution，并遵守其中的全部约束。
+1. 读取项目 live constitution 与 `docs/README.md`，遵守固定路径约定。
+   规划统一放在 `docs/planning/`，成文保留在 `docs/paper/`。
+   新项目首次使用本 preset 时，执行
+   `bash .specify/presets/scientific-paper/scripts/install-fonts.sh .`
+   安装中文模板随包字体依赖；已有同名文件内容冲突时停止，不静默覆盖。
 
-2. 以 `docs/paper-map.md` 为切片依据，检查 `specs/` 下已有 paper feature。
+2. 以 `docs/planning/paper-map.md` 为切片依据，检查 `specs/` 下已有 paper feature。
    - 如果需求属于现有 feature 的自然扩展，更新该 feature。
    - 只有当需求对应 paper-map 中已确认的独立 feature（见 map 的
      Feature Coverage & Decisions）时才创建新的 feature；
@@ -32,7 +36,7 @@ description: 从论文主线创建或更新 paper feature specification。
    - 新建 feature 时以该模板创建 `spec.md`。
    - 更新 feature 时保留已有有效内容，只修改本次需求涉及的部分。
 
-5. 根据用户输入、上游产物（`specs/expXX`、`S##`、`D##`、`figs/`、`docs/paper-outline.md`）
+5. 根据用户输入、上游产物（`specs/expXX`、`S##`、`D##`、`figs/`、`docs/planning/paper-outline.md`）
    填写 `spec.md`。
    - 每条主张写 `CLM-###` 并绑定证据；证据不存在不编，记 `GAP-DATA`。
    - 引用需求记 `CIT-###`，不预填具体文献。

@@ -1,6 +1,6 @@
 # Writing Plan: [FEATURE NAME]
 
-> 章节顺序与论证功能服从已确认的 `docs/paper-map.md`。
+> 章节顺序与论证功能服从已确认的 `docs/planning/paper-map.md`。
 > plan 只落实 map，不重做架构设计。
 
 ## 1. 写作思路
@@ -33,11 +33,20 @@
 
 ## 3. LaTeX 工程结构
 
+路径遵循 `docs/README.md`，不移动既有 `specs/` 或 `figs/`。
+
 - 论文目录：`docs/paper/`（`main.tex` 英文投稿版 + `main-zh.tex` 中文归档版，
   共用 `references.bib` 与 `figures/`；中文版必须 xelatex 编译）
 - 上游图文件引用方式：复制 vs 符号链接进 `figures/`（二选一并写理由）
 - 主文件结构：单文件 `main.tex` 还是 `sections/*.tex` + `\input`
 - 文献库：`references.bib` 由 skill 维护，手写条目禁入
+- 中文字体：从 `../../assets/fonts/noto-serif-cjk/` 加载 Regular / Bold，
+  LICENSE 随字体保存；不依赖系统的同名字体
+- 绘图字体：项目提供时，从 `assets/fonts/times-new-roman/` 按文件注册
+  Regular / Bold / Italic / Bold Italic，无需系统安装；保留原授权说明，
+  TTF 随 `scientific-computing` preset 提供，中文 OTF 与 LICENSE 随本 preset
+  提供，先用各自的 `scripts/install-fonts.sh` 安装依赖。已嵌入字体的 PDF 可直接进文，
+  不因编译论文而要求安装绘图字体
 
 如果某项选择会改变主张、证据指向或 Contract，
 则它不属于 plan，应返回 spec 明确定义。
@@ -49,6 +58,7 @@
 - 评审：`paper-self-review` 打分 → `paper-revision` 按意见改 →
   重编译 → 再打分，直到分数达标或用户喊停
 - 按 spec 中的 `VAL-*` 引用，不重新定义验收标准
+- 检查 LaTeX 字体路径、图片引用与规划 / 状态页链接；不要把旧编译缓存当作有效路径依据
 
 ## 5. 写作层未解决问题 / 延后工作（按需）
 

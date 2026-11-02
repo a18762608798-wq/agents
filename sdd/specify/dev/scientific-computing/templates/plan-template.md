@@ -15,7 +15,16 @@
 
 ## 2. 代码与模块结构
 
-说明准备新增或修改哪些模块 / 文件，以及各自职责。
+说明准备新增或修改哪些模块 / 文件，以及各自职责。路径遵循
+`docs/README.md`；明确输入、`data/<feature>/` 数据输出与
+`figs/<feature>/` 图片输出，不在根目录另放规划文档、状态页或字体。
+涉及绘图时，记录 `scripts/figure_style.py`、字体环境与正式出图前的字体检查；
+若项目提供 Times New Roman，四种字形固定放在
+`assets/fonts/times-new-roman/`，由 helper 按文件注册并优先于系统同名字体，
+不要求系统安装；记录原授权，不把 Noto 的许可证套用于这些字体。
+四种 TTF 随 `scientific-computing` preset 提供，中文 OTF 与 LICENSE 随
+`scientific-paper` preset 提供；使用各 preset 的 `scripts/install-fonts.sh`
+安装到项目同名目录，内容冲突时停止。中文论文从 `assets/fonts/noto-serif-cjk/` 加载。
 
 例如：
 
@@ -61,6 +70,8 @@
 - 数值一致性检查
 - 分片合并一致性检查
 - checkpoint / restart 一致性检查
+- 涉及文档迁移时的相对链接、固定目录与 LaTeX 字体路径检查
+- 涉及正式出图时的实际字体、PDF 字体嵌入和最终有效字号检查
 
 ## 5. 实现层未解决问题 / 延后工作（按需）
 

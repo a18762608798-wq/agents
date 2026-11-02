@@ -3,7 +3,7 @@
 ## I. 科学事实的权威来源是 Exp 层，不是 Paper Spec
 
 上游 `scientific-computing`（`specs/expXX`、`S##`、`D##`、
-`docs/expriment-map.md`）拥有实验定义与结果含义的最终解释权。
+`docs/planning/experiment-map.md`）拥有实验定义与结果含义的最终解释权。
 
 Paper Spec 只负责当前 feature 如何选取、组织和表述已有结果：
 写什么范围、按什么顺序、用什么证据、缺什么。不得擅自改变
@@ -73,8 +73,8 @@ LaTeX 细节（宏包、编译命令）不应无必要进入 spec。
 
 ## VIII. 论文展开规则
 
-以确认后的 `docs/paper-map.md`（由 `paper-map` skill 经架构访谈生成，
-`Dxx` 定义以 `docs/expriment-map.md` 为准）为论文切分依据。
+以确认后的 `docs/planning/paper-map.md`（由 `paper-map` skill 经架构访谈生成，
+`Dxx` 定义以 `docs/planning/experiment-map.md` 为准）为论文切分依据。
 
 - 论文结构由 map 的 Narrative Spine / Section Architecture /
   Result Roles 决定，Constitution 不预设固定三段式。
@@ -105,3 +105,11 @@ LaTeX 细节（宏包、编译命令）不应无必要进入 spec。
 
 编译（`latexmk`）由 agent 直接执行，不经过 skill。
 LaTeX 论文目录约定：`docs/paper/`（`main.tex`、`references.bib`、`figures/`、`output/`）。
+项目固定路径入口为 `docs/README.md`：规划在 `docs/planning/`，
+派生看板在 `docs/status/`，中文字体与 LICENSE 在
+`assets/fonts/noto-serif-cjk/`；不得在根目录另建副本。
+中文版从论文目录通过 `../../assets/fonts/noto-serif-cjk/` 按文件加载字体，
+不依赖系统同名字体。项目提供的 Times New Roman 字形固定在
+`assets/fonts/times-new-roman/`，由绘图 helper 按文件注册，无需系统安装；
+保留原授权说明。中文 OTF 与 LICENSE 随本 preset 提供，绘图 TTF 随
+`scientific-computing` preset 提供，各自通过 `scripts/install-fonts.sh` 安装到项目。

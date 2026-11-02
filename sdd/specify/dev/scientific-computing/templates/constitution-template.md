@@ -19,6 +19,15 @@ Spec 是持续维护的活文档，而不是一次性交付物。
 
 理论不应重复写入 spec，实现细节也不应无必要进入 spec。
 
+固定目录约定由 `docs/README.md` 维护：规划文档放 `docs/planning/`
+（`paper-outline.md`、`experiment-map.md`），派生看板放 `docs/status/`
+（`paper.html`、`experiments.html`），中文论文字体及许可证放
+`assets/fonts/noto-serif-cjk/`。项目提供的 Times New Roman 四种字形放在
+`assets/fonts/times-new-roman/`，由绘图 helper 按文件注册并保留原授权说明；
+字体文件随 `scientific-computing` preset 保存，由其 `scripts/install-fonts.sh`
+安装到项目目录。`docs/theory/`、`docs/paper/`、
+`specs/`、`figs/` 各守原有职责，不在根目录另建副本。
+
 ## III. Feature 边界必须清晰
 
 - 每个 feature 应拥有明确且尽量独立的职责。

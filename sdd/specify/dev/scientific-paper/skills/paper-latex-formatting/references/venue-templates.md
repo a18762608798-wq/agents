@@ -22,11 +22,14 @@
   Copy to `docs/paper/main.tex`, pair with `docs/paper/references.bib`
   (`\bibliography{references}`) and `docs/paper/figures/`.
 - `templates/pra/main-zh.tex` — Chinese twin of the above
-  (REVTeX + xeCJK, `Noto Serif CJK SC`). Copy to
+  (REVTeX + xeCJK, file-based Noto Serif CJK SC). Copy to
   `docs/paper/main-zh.tex`, shares `figures/` and `references.bib`
   with the English version. MUST compile with xelatex
   (`latexmk -xelatex -bibtex`); for archiving/reading, submission
-  stays English-only.
+  stays English-only. Compile from `docs/paper/`; the template loads
+  `../../assets/fonts/noto-serif-cjk/NotoSerifCJKsc-Regular.otf` and
+  `NotoSerifCJKsc-Bold.otf`. Keep the upstream SIL OFL `LICENSE` alongside
+  the fonts. Do not depend on an installed CJK family name or root-level OTFs.
   The `revtex4-2.cls` class and `apsrev4-2.bst` style ship with TeX Live,
   no download needed (`kpsewhich revtex4-2.cls` to verify).
 - Other venues above are spec rows only (page/column/style checklist);
@@ -34,8 +37,19 @@
 
 ## Standard Project Structure
 
+Read `docs/README.md` for the project path contract. Planning files live in
+`docs/planning/`, dashboards in `docs/status/`, and bundled CJK fonts with
+LICENSE in `assets/fonts/noto-serif-cjk/`. Do not create duplicate planning
+files, HTML pages, or font files in the root. User-supplied Times New Roman
+plotting faces live in `assets/fonts/times-new-roman/` and are registered by
+the plotting helper without OS installation. Keep original licensing notes
+separate from Noto's SIL OFL. The paper preset bundles CJK OTFs and LICENSE;
+scientific-computing bundles the four Times New Roman TTFs. Use the respective
+preset's `scripts/install-fonts.sh <project-root>` before setting up templates.
+Existing embedded-font PDFs do not require plotting fonts just to compile the paper.
+
 ```
-paper/
+docs/paper/
 ├── main.tex
 ├── references.bib
 ├── sections/

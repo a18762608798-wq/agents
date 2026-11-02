@@ -11,6 +11,8 @@ description: 找书和讲义并入库 Zotero。当用户说找书、加书、把
 
 - Zotero desktop 运行中。`zotero-mcp` 无法连接（`Connection refused` / 超时 / 工具不可用）时优先停下来向用户报告连接问题，等用户确认后再继续，不擅自硬读本地 `~/Zotero/zotero.sqlite` 绕过。只有用户明确要求应急盘点时，才可只读该文件做盘点，且入库动作必须等桌面端在线。
 - 网络下载失败或超时时加载 `env-proxy` skill 走代理重试，不自己拼代理参数。
+- API、`curl` 等静态手段优先；需要网页交互、动态内容或页面核实时默认使用 `agent-browser`。先加载其 skill，读取 `agent-browser skills get core`，并确认 `agent-browser doctor --offline --quick` 无 fail。每次任务使用独立命名会话（如 `book-hunter-<任务唯一ID>`），每条命令显式传入同一个 `--session`；不依赖单次 Bash 中的 `export` 跨调用保留。页面变化后重新 snapshot，任务完成后仅关闭本任务会话。
+- Playwright MCP 仅用于用户明确指定或确需 Playwright API、跨浏览器验证等专项能力的任务；跨浏览器验证先确认对应浏览器已安装、已配置。agent-browser 失败时先诊断，不自动切换；确需换后端时先说明原因并确认登录状态、标签页和进度的迁移方式。
 
 ## 流程
 
@@ -29,7 +31,7 @@ description: 找书和讲义并入库 Zotero。当用户说找书、加书、把
 
 ### 2. 正式书：ISBN 入库
 
-- 用户只给书名时先 `websearch` 查官方 ISBN（出版社页优先，如 Cambridge），不要编 ISBN。
+- 用户只给书名时先查官方 ISBN（出版社页优先，如 Cambridge），不要编 ISBN。静态页面优先用 `curl`；有明确可用的通用网页搜索工具时可用于发现出版社页，没有则用 agent-browser 访问搜索网站或出版社官网。`websearch` 只是能力称呼，不保证有同名工具；`tool_search`（工具发现）和 Context7（库文档）都不是通用网页搜索。
 - `zotero_add_by_isbn(isbn, collections=[目标key], if_exists='file', tags=['textbook'])`。`if_exists` 永远用 `file`。
 - 无免费 PDF 的书（如 Nielsen-Chuang）先留条目，然后从 `https://z-library.biz/` 等非官方网站获取；或用户自己有文件时按第 4 步挂附件。
 
@@ -46,8 +48,8 @@ description: 找书和讲义并入库 Zotero。当用户说找书、加书、把
 2. 用户本地文件（`~/下载/` 等）：先验后挂。
 3. `zotero_attach_file(url=...)` 直挂（常被服务端拒绝，被拒就走第 4 步）。
 4. `curl` 下到 `/tmp/opencode/`，`file` 验明是 PDF，再 `pdftotext` 读前 3 页，标题与目标条目对不上就丢弃，不许挂错附件。对上则 `zotero_attach_file(file_path=...)`，成功后删临时文件。
-5. 以上全失败，且该书确定有合法在线来源但需 JS 渲染（如出版社动态页、图书馆馆藏页、Google Books 预览）：用浏览器后端取，优先 Playwright MCP（`browser_navigate`+`browser_snapshot`）；MCP 不行才加载 `agent-browser` skill 按其规范取（独立命名会话，`agent-browser doctor` 无 fail 先行）。
-6. 依然没有pdf源可以尝试用浏览器后端（优先 MCP）从 `https://z-library.biz/` 获取.
+5. 以上全失败，且该书确定有合法在线来源但需 JS 渲染（如出版社动态页、图书馆馆藏页、Google Books 预览）：按前置条件用 agent-browser 获取页面及附件线索，不因失败自动切换到 Playwright MCP。
+6. 依然没有pdf源可以尝试用 agent-browser 从 `https://z-library.biz/` 获取（用户明确指定其他后端时按前置条件处理）.
 7. 遇到“相同 MD5 已存在”提示即停，不重复上传。
 
 ### 5. 修元数据
@@ -81,7 +83,7 @@ description: 找书和讲义并入库 Zotero。当用户说找书、加书、把
 ## 可调用的其他 skills
 
 - `env-proxy`：下载/PDF 直挂失败且疑似网络问题时加载。
-- 浏览器（Playwright MCP 优先，`agent-browser` 备选）：仅第 4.5 步用，即静态手段取不到合法来源时。用于突破登录墙、付费墙、验证码。
+- `agent-browser`：第 2 步发现/核实 ISBN，或第 4.5、4.6 步静态手段无法完成时使用。Playwright MCP 的专项使用条件见前置条件；不要把切换后端当作解决登录失效、访问限制或验证码的办法。
 - 不要调用 `zotero-paper-hunter`（那是论文链路，判重标签体系不同，混用会污染 `agent-crawled/unreviewed`）。
 
 ## 禁止事项

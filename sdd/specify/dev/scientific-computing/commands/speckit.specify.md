@@ -12,7 +12,13 @@ description: 从自然语言需求创建或更新科学计算 feature specificat
 
 ## Workflow
 
-1. 读取项目 live constitution，并遵守其中的全部约束。
+1. 读取项目 live constitution 与 `docs/README.md` 的固定路径约定。
+   若尚无文档导航，按 preset README 的布局创建；规划输入固定为
+   `docs/planning/paper-outline.md`、`docs/planning/experiment-map.md`。
+   遵守其中的全部约束，不在根目录另建规划文档、看板或字体。
+   新项目首次使用本 preset 时，执行
+   `bash .specify/presets/scientific-computing/scripts/install-fonts.sh .`
+   安装随模板提供的字体依赖；已有同名文件内容冲突时停止，不静默覆盖。
 
 2. 检查 `specs/` 下已有 feature。
    - 如果需求属于现有 feature 的自然扩展，更新该 feature。

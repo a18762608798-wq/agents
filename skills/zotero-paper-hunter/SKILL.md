@@ -1,6 +1,6 @@
 ---
 name: zotero-paper-hunter
-description: 根据任务描述为 Zotero 文库查缺补漏找论文并自动入库。当用户说找文献、搜论文、补参考文献、查缺某个方向的论文、给研究任务配文献、把论文入库 Zotero,或给出一段研究任务描述要配齐相关文献时使用。流程是经 arXiv/OpenAlex API 优先发现候选(API 不可用时回退 websearch+浏览器，Scholar 只做补充),开放获取直接取 PDF,无开放获取先过校园订阅门禁(校园网内才试机构订阅下载,目前只支持APS),再取条目元数据走 sci-hub 拉全文,经 zotero-mcp 以去重方式入库到<主题>/paper/inbox 并打上 agent-crawled + unreviewed 标签。不用于单纯的库内检索(那用语义搜索即可),不用于非学术内容,找书/教材/讲义入库走 zotero-book-hunter。
+description: 根据任务描述为 Zotero 文库查缺补漏找论文并自动入库。当用户说找文献、搜论文、补参考文献、查缺某个方向的论文、给研究任务配文献、把论文入库 Zotero,或给出一段研究任务描述要配齐相关文献时使用。流程是经 arXiv/OpenAlex API 优先发现候选(API 不可用时回退可用的网页搜索工具或 agent-browser，Scholar 只做补充),开放获取直接取 PDF,无开放获取先过校园订阅门禁(校园网内才试机构订阅下载,目前只支持APS),再取条目元数据走 sci-hub 拉全文,经 zotero-mcp 以去重方式入库到<主题>/paper/inbox 并打上 agent-crawled + unreviewed 标签。不用于单纯的库内检索(那用语义搜索即可),不用于非学术内容,找书/教材/讲义入库走 zotero-book-hunter。
 ---
 
 # zotero-paper-hunter:任务驱动的文献查缺与自动入库
@@ -9,15 +9,9 @@ description: 根据任务描述为 Zotero 文库查缺补漏找论文并自动�
 
 ## 前置条件
 
-- 浏览器后端二选一，优先 Playwright MCP（`browser_*` 工具已连接即用：开页、取快照，页面变化后必须重新 snapshot）。MCP 不可用或失败时才用 `agent-browser` CLI：`agent-browser doctor` 无 fail，每次任务使用独立命名会话，禁止用默认会话：
-
-```bash
-export AGENT_BROWSER_SESSION="$(agent-browser session id --scope worktree --prefix hunter)"
-```
-
-出发前先加载其工作流（`agent-browser skills get core`），遵守 snapshot-and-ref 规范。
-
-- 后端命令对照（第 3、4 步遇到 agent-browser 方言时按此翻译）：开页→`browser_navigate`，`snapshot`→`browser_snapshot`，截图→`browser_take_screenshot`，`keyboard type` 真实按键输入→`browser_type`（慢速逐字），frame 上下文 JS→`browser_evaluate`（指定 frame）。
+- 文献发现优先学术 API 与 `curl`，需要页面交互、动态内容或页面核实时默认使用 `agent-browser` CLI。先加载 `agent-browser` skill，再读取 `agent-browser skills get core`；启动前 `agent-browser doctor --offline --quick` 必须无 fail。
+- 每次任务生成并记住独立会话名（如 `paper-hunter-<任务唯一ID>`），每条浏览器命令显式传入同一个 `--session`，禁止用默认会话。单次 Bash 调用中的 `export` 不保证在后续工具调用中保留。遵守 snapshot-and-ref 规范：页面变化后重新 snapshot，任务完成后仅关闭本任务会话。
+- Playwright MCP 仅用于用户明确指定或确需 Playwright API、跨浏览器验证等专项能力的任务；跨浏览器验证先确认对应浏览器已安装、已配置。agent-browser 失败时先诊断，不自动切换；确需换后端时先说明原因并确认登录状态、标签页和进度的迁移方式。第 3、4 步默认按 agent-browser 方言执行；专项任务改用 MCP 时先核实实际工具参数，不照搬 CLI 参数。
 
 - zotero-mcp 可用(Zotero desktop 运行中)。任何 `Connection refused` 先提示用户开启 Zotero,不硬闯。
 - 结果解析:zotero-mcp 工具返回的是人类可读文本,不是 JSON(如 `Collection key: \`XXXXXXXX\``,`Item key: \`XXXXXXXX\``)。不许 `JSON.parse` 整个结果,key 一律用文本匹配(如 `key: ([A-Z0-9]{8})`)提取;取不到 key 就把原文贴出来人工看,不许猜 key。
@@ -43,16 +37,16 @@ export AGENT_BROWSER_SESSION="$(agent-browser session id --scope worktree --pref
 
 判重结论只有两种:`已有`(给 key)或`缺失`。`缺失`的才进入第 3 步。
 
-### 3. 发现候选:API 先行,websearch/浏览器只做补充
+### 3. 发现候选:API 先行,网页检索/浏览器只做补充
 
 三层按顺序用,上一层可用就不再往下挖,够数即停:
 
 - Layer 1——学术 API(首选,无 key,结构化元数据,一次请求多条,比浏览器逐页开销小一个量级):
-  - arXiv:`http://export.arxiv.org/api/query?search_query=all:<关键词>&sortBy=submittedDate&sortOrder=descending&max_results=<N>`(经 `webfetch`/`curl` 取 Atom,记得跟 301 跳转如 `curl -L`;多词用 `all:"短语"`)。请求之间至少间隔 3 秒(arXiv 官方要求);遇 429/503 退避等待,不硬刷。`max_results` 按需 10~15。
+  - arXiv:`http://export.arxiv.org/api/query?search_query=all:<关键词>&sortBy=submittedDate&sortOrder=descending&max_results=<N>`(经 `curl -L` 取 Atom 并跟随重定向;多词用 `all:"短语"`)。请求之间至少间隔 3 秒(arXiv 官方要求);遇 429/503 退避等待,不硬刷。`max_results` 按需 10~15。
   - OpenAlex:`https://api.openalex.org/works?search=<关键词>&sort=cited_by_count:desc&per-page=<N>`(要被引/热度时用);要最新改 `sort=publication_date:desc`,可加 `filter=from_publication_date:<年>-01-01` 限年份。每条自带 DOI、OA 直链、被引数,直接记下供第 4 步用。注意 `search` 是宽泛匹配,取回后必须按标题/摘要相关性人工筛一遍,不对口就收窄关键词或回 arXiv/Layer 2,不要把高被引但不相关的经典文献当候选。
   - 分工:要最新 → arXiv;要被引/热度/DOI 全 → OpenAlex。任一失败/限流切另一个;两个都不可用才降级 Layer 2。
-- Layer 2——`websearch` 补广度:出版商页、综述、GitHub paper-list 等 API 覆盖不到的。对每条记录标题、作者、年份、出版物、有无 arXiv ID/DOI。
-- Layer 3——浏览器核实:只抽查(arXiv 摘要页或出版商页);只有需要看 `[PDF]` 直链或引用列表时才上 Google Scholar。Scholar 在 headless 下几乎必触发"异常流量"限流:一旦触发立刻停手,不许绕过验证码硬刷。不要把 Scholar/浏览器作为第一来源。
+- Layer 2——网页检索补广度:出版商页、综述、GitHub paper-list 等 API 覆盖不到的。只有当前会话明确提供了通用网页搜索工具时才调用；`websearch` 是能力称呼，不保证有同名工具。没有该工具就用 agent-browser 访问搜索网站或相关官网，不把 `tool_search`（工具发现）或 Context7（库文档）当网页搜索。对每条记录标题、作者、年份、出版物、有无 arXiv ID/DOI。
+- Layer 3——页面核实:静态页面优先用 `curl`，需要交互或动态内容才用 agent-browser；只抽查(arXiv 摘要页或出版商页);只有需要看 `[PDF]` 直链或引用列表时才上 Google Scholar。Scholar 在 headless 下几乎必触发"异常流量"限流:一旦触发立刻停手,不许绕过验证码硬刷。不要把 Scholar/浏览器作为第一来源。
 - 记录优先顺序不变:arXiv 条目记 arXiv ID(后续走 `add_by_url` 最稳);有 DOI 的走 `add_by_doi`;有 `[PDF]` 直链的记下待第 4 步直取;只有引用信息、既无 PDF 又无 DOI 的排最后。API 返回的 DOI/标题可直接用于第 2 步判重比对。
 
 ### 4. 取全文

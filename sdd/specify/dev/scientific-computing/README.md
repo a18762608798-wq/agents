@@ -16,7 +16,41 @@
 - `commands/speckit.analyze.md` — 只读检查 spec / plan / tasks 的完整性、一致性与 constitution 符合度
 - `commands/speckit.implement.md` — 实现、验证，验证通过后连续执行正式实验
 - `commands/speckit.converge.md` — 审计实现与结果是否满足 spec / plan / tasks，剩余工作补回 tasks
-- `skills/` — 随 preset 源维护的 scientific skills bundle；项目使用时同步到局部 `.opencode/skills/`
+- `skills/` — 随 preset 源维护的 scientific skills bundle；项目使用时同步到局部 `.pi/skills/`
+- `assets/fonts/times-new-roman/` — 绘图模板依赖的四种原始 TTF 与授权说明
+- `scripts/install-fonts.sh` — 将随包字体依赖安装到项目 `assets/fonts/`；支持重复执行，不覆盖内容不同的文件
+
+## 固定项目布局
+
+目录约定的项目入口为 `docs/README.md`；初始化时创建或更新该导航，
+后续模板与 skills 引用它，不各自发明路径。
+
+```text
+assets/fonts/noto-serif-cjk/    # Regular / Bold OTF + 上游 LICENSE
+assets/fonts/times-new-roman/   # 随 computing preset 提供的四种 TTF + 原授权说明
+docs/README.md                 # 导航与固定路径约定
+docs/planning/                 # paper-outline.md、experiment-map.md
+docs/status/                   # paper.html、experiments.html
+docs/theory/                   # 理论与推导
+docs/paper/                    # LaTeX 工程
+specs/<feature>/               # spec / plan / tasks
+figs/<feature>/                # PDF 主图与 PNG 预览
+```
+
+上述路径均相对于项目根目录。不在根目录再生成
+规划文件、HTML 看板或字体。启用论文 feature 时，`paper-map.md` 也放在
+`docs/planning/`。状态页链接必须相对于 `docs/status/`，例如
+`../planning/experiment-map.md`、`../../specs/<feature>/spec.md`、
+`../../figs/<feature>/...png`；发布地址也应使用新目录。
+
+中文论文通过 `../../assets/fonts/noto-serif-cjk/` 加载字体；
+Times New Roman 的四种本地字形为 `times.ttf`、`timesbd.ttf`、`timesi.ttf`、
+`timesbi.ttf`，由 `apply_figure_style()` 按文件注册并优先于系统同名字体，
+无需系统安装。开发源在 `assets/fonts/times-new-roman/` 保存这四个字体文件，
+安装 preset 后运行 `scripts/install-fonts.sh`，复制到项目同名目录。
+字体保留原授权说明，不与 Noto 的 SIL OFL 混用。
+正式出图须检查实际字体路径，不能把静默回退视为复现一致；PDF 嵌入字体后，
+单纯编译论文不再需要绘图字体。
 
 ## 标识约定
 
@@ -27,8 +61,9 @@
 ## 安装到项目
 
 ```bash
-specify init --here --integration opencode # 初始化
-specify preset add --dev ~/.config/opencode/sdd/specify/dev/scientific-computing --priority 3
+specify init --here --integration pi --script sh # 初始化
+specify preset add --dev ~/.agents/sdd/specify/dev/scientific-computing --priority 3
+bash .specify/presets/scientific-computing/scripts/install-fonts.sh .
 specify preset resolve spec-template
 ```
 
@@ -37,19 +72,25 @@ specify preset resolve spec-template
 改完源目录后重装：
 
 ```bash
-specify preset update scientific-computing --dev ~/.config/opencode/sdd/specify/dev/scientific-computing --priority 3
+specify preset update scientific-computing --dev ~/.agents/sdd/specify/dev/scientific-computing --priority 3
+bash .specify/presets/scientific-computing/scripts/install-fonts.sh .
 ```
+
+字体安装脚本可在任意工作目录调用，参数为项目根目录。重复运行时跳过内容
+相同的文件；目标文件内容不同时先报错，不覆盖项目自定义字体。Noto 中文字体
+由 `scientific-paper` preset 的对应脚本提供。不要只复制模板却遗漏字体依赖。
 
 ## 局部 Skills 安装
 
 `skills/` 是该 preset 配套 skills 的 canonical source。创建或升级项目后，在项目根目录同步到局部目录：
 
 ```bash
-mkdir -p .opencode/skills
-cp -a /path/to/scientific-computing/skills/. .opencode/skills/
+mkdir -p .pi/skills
+cp -a /path/to/scientific-computing/skills/. .pi/skills/
+bash /path/to/scientific-computing/scripts/install-fonts.sh .
 ```
 
-项目局部 `.opencode/skills/` 优先于全局 skills。同步已有项目时，先比较同名目录的 diff；如果项目已经定制过 skill，不要直接覆盖。`skills/VERSION` 记录当前 bundle 版本。
+Pi 自动发现项目 `.pi/skills/`；同名技能冲突时检查启动诊断。同步已有项目时，先比较同名目录的 diff；如果项目已经定制过 skill，不要直接覆盖。`skills/VERSION` 记录当前 bundle 版本。
 
 当前 bundle 包含：
 
