@@ -23,7 +23,7 @@
 `assets/fonts/times-new-roman/`，由 helper 按文件注册并优先于系统同名字体，
 不要求系统安装；记录原授权，不把 Noto 的许可证套用于这些字体。
 四种 TTF 随 `scientific-computing` preset 提供，中文 OTF 与 LICENSE 随
-`scientific-paper` preset 提供；使用各 preset 的 `scripts/install-fonts.sh`
+`scientific-paper` 独立技能包提供；使用各自的 `scripts/install-fonts.sh`
 安装到项目同名目录，内容冲突时停止。中文论文从 `assets/fonts/noto-serif-cjk/` 加载。
 
 例如：

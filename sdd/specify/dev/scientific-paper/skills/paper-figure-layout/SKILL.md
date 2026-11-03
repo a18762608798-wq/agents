@@ -1,10 +1,11 @@
 ---
 name: paper-figure-layout
 description: Professional LaTeX figure and table positioning. Handle float placement, subfigure/subtable layouts, side-by-side arrangements, and cross-column figures. Does NOT adjust sizes, widths, or scaling.
-version: 1.0.0
-author: User
 license: Apache-2.0
-tags: [LaTeX, Figures, Tables, Positioning, Layout, Float]
+metadata:
+  version: 1.0.0
+  author: User
+  tags: [LaTeX, Figures, Tables, Positioning, Layout, Float]
 ---
 
 # LaTeX Figure and Table Layout

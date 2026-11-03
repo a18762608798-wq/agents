@@ -1,74 +1,24 @@
 ---
 name: paper-revision
-description: Revise papers based on reviewer feedback. Map reviewer concerns to specific sections, apply targeted edits, run additional experiments if needed, and verify improvements. Use after receiving peer review with revision requests.
-argument-hint: [reviews-or-draft]
+description: 根据作者或审稿意见修改论文，定位受影响段落、补充经过核验的文献、调整论证和结构并核对改动。新增实验或改变结果含义时返回 Exp 层，不自动实施实验；无需 Paper spec 或完整阶段流程。
 ---
 
 # Paper Revision
 
-Systematically revise papers based on reviewer feedback.
+先读 ../paper-writing-section/references/writing-policy.md。
+输入可以是一条修改意见、审稿报告、当前稿件或用户指定段落。
 
-## Input
+## 工作方式
 
-- `$0` — Reviewer comments/feedback
-- `$1` — Current paper draft (main.tex or paper directory)
+1. 提取每条意见的具体问题，定位受影响章节，区分表达、结构、引用、理论依据与实验需求。
+2. 用简短的修改清单说明要做什么；不另建 Paper feature、spec、plan 或 tasks。
+3. 表达和结构修改直接改正文；必要时使用 paper-writing-section。
+4. 文献和理论问题先用 paper-zotero-hunter 阅读并核验来源，再修改论述。
+5. 新实验、新数据处理或改变已有结果含义的意见，列为待返回 Exp 层的事项；
+   不调用实验生成技能替作者实施，也不编造满足审稿意见的数据。
+6. 按需使用 paper-figure-layout 和 paper-latex-formatting，编译由 agent 直接执行。
+7. 对照原意见核验实际改动；未解决或不采纳的意见给出理由，不宣称全部解决。
 
-## References
-
-- Revision workflow and prompts: `references/revision-prompts.md`
-
-## Workflow
-
-### Step 1: Parse and Prioritize Concerns
-For each reviewer comment:
-1. Extract the specific concern
-2. Classify: major revision, minor revision, question, suggestion
-3. Map to affected paper section(s)
-4. Prioritize: address major concerns first
-
-### Step 2: Plan Revisions
-Create a revision plan:
-```
-Concern → Affected Section → Required Action → New Content/Experiment
-```
-
-Categories of actions:
-- **Clarification**: Rewrite text for clarity
-- **Additional experiment**: Run new experiment, add results
-- **New analysis**: Add ablation, statistical test, or comparison
-- **Structural change**: Move, merge, or split sections
-- **Citation**: Add missing references
-
-### Step 3: Execute Revisions
-For each planned revision:
-1. Read the current section
-2. Apply targeted edits (preserve surrounding structure)
-3. If new experiments needed: use experiment-code skill
-4. If new figures/tables needed: use figure-generation / table-generation skills
-5. Mark changes (use `\textcolor{blue}{...}` for revised text)
-
-### Step 4: Verify Improvements
-- Re-run self-review skill to check if scores improved
-- Verify all reviewer concerns are addressed
-- Check that revisions don't introduce new issues
-- Ensure page count still fits venue requirements
-
-### Step 5: Write Revision Summary
-Generate a diff summary:
-- List all changes made with section references
-- Note any new experiments, figures, or tables added
-- Cross-reference each change to the reviewer concern it addresses
-
-## Rules
-
-- Address EVERY reviewer concern — do not skip any
-- Preserve paper structure unless structural change is explicitly needed
-- New results must come from actual experiments, not hallucinated
-- Mark all revised text clearly for the reviewers
-- Keep a copy of the previous version before revising
-- Compare new scores vs previous scores after revision
-
-## Related Skills
-- Upstream: [paper-self-review](../paper-self-review/)
-- Downstream: [paper-compilation](../paper-compilation/)
-- See also: [rebuttal-writing](../rebuttal-writing/), [paper-writing-section](../paper-writing-section/)
+输出简洁的“意见、处理、位置、剩余问题”记录。
+仅在用户或 venue 要求时给修订文字着色或制作带标记稿。
+已有 Git 历史可用于比较；需要另存备份时保留用户文件，删除按项目回收站规则处理。

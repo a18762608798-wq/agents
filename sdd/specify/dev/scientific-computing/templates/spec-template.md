@@ -48,17 +48,18 @@
 
 本节说明输出的科学含义；精确的约束与验收条件写入 Part II。
 
-### 4. Theory & References（按需）
+### 4. Experiment Notes & References（按需）
 
 记录理解本 feature 所需的引用，例如：
 
 - `docs/planning/paper-outline.md` / `docs/planning/experiment-map.md` 的相关条目；
-- `docs/theory/...`；
+- `docs/experiment-notes/...`；
 - 文献；
 - 方程或模型来源；
 - benchmark / reference data 来源。
 
-复杂推导和背景应保留在 `docs/theory/`，不要复制到 spec。
+实验所需的公式、推导草稿与计算约定保留在 `docs/experiment-notes/`，不要复制到 spec。
+这些笔记服务 Exp 实现，不是正式论文正文；有约束意义的实验定义仍以本 spec 为准。
 
 ### 5. Open Questions（按需）
 

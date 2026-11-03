@@ -1,144 +1,61 @@
 ---
 name: paper-zotero-hunter
-description: Manage paper citations through Zotero. Hunt missing references per claim, verify relevance by actually reading full text via zotero-mcp, file confirmed papers into a paper-topic collection, bind cites into LaTeX plus .bib, then validate and format. Use when draft citations must be backed by papers you have really read.
-argument-hint: [tex-or-bib-file]
+description: 从论文大纲、拟写章节、理论问题或已有草稿出发，协调 Zotero 文献发现、全文核验与引用绑定。支持正文尚不存在时先核实理论依据；只有已读确认支持具体表述的来源才能写入引文。
 ---
 
 # Paper Zotero Hunter
 
-Full lifecycle of citations, with Zotero as the source of truth.
-Replaces free-form Semantic Scholar harvesting: every cited paper must
-exist in Zotero AND have been read far enough to confirm it supports
-the exact claim at the cite location.
+先读 ../paper-writing-section/references/writing-policy.md。
+接受 harvest、verify、bind、validate、format 操作，也接受直接描述的文献或理论需求。
+输入可以是论文大纲、计划论述、实验笔记、LaTeX/BibTeX 文件或用户的问题；不要求 Paper spec 或草稿已存在。
 
-## Input
+## 来源与入库
 
-- `$0` — Action: `harvest`, `verify`, `bind`, `validate`, `format`
-- `$1` — Path to `.tex` or `.bib` file
-- `$2` — (optional) Target collection path. Omitted = hunter default.
+- 只检索已有文献时，直接调用 Zotero 搜索。
+- 查缺和找论文使用 zotero-paper-hunter；找书、教材、讲义使用 zotero-book-hunter。
+- 按 hunter 的去重、全文、集合与标签约定操作；不另造标签或直接绕过 MCP 读写 Zotero 数据库。
+- Zotero 不可达时明确报告，暂停依赖它的入库和核验；不得以摘要或猜测代替已读证明。
 
-## Preconditions
+发现候选通常进入主题 paper/inbox。论文需要专属引用集合时，沿用用户指定集合；
+新集合名称和归档遵循当前猎取 skill 的约定，不为一次改稿散建多个集合。
+已核验来源可以同时保留在原集合并加入论文引用集合。
 
-- zotero-mcp reachable (Zotero desktop running). On `Connection refused`,
-  stop and ask the user to start Zotero; do not proceed blind.
-- The `zotero-paper-hunter` skill is installed; hunting itself follows
-  its procedure (dedup by DOI then normalized title, `if_exists='file'`,
-  tags `agent-crawled, unreviewed` only — never invent other tags).
+## harvest：从问题或计划论述发现候选
 
-## Collections rule
+1. 读取这一轮要写的理论、背景或方法内容，形成具体的引用需求。
+2. 将“已知理论或定义的来源”“方法出处”“与本工作比较”和“本项目自行推导”区分开。
+3. 对缺失来源调用相应 hunter，得到 Zotero keys 与全文候选。
+4. 记录计划支撑的论述和拟放置的章节；此时不把候选标为已核验，也不绑定正文引用。
 
-- Default (no `$2`): hunter convention — topic `paper/inbox`
-  (e.g. `quant_comp/paper/inbox`); missing chain is created as
-  `physics/<topic>/paper/inbox` and reported.
-- Paper project: create ONE root-level collection named after the paper
-  topic (e.g. `paper-TVC-gravity`) and pass it as `$2`. Papers confirmed
-  relevant in `verify` are additionally filed there, so the cited set
-  for this paper lives in one place. The inbox copy stays (dual filing,
-  same spirit as hunter's inbox + topical archiving).
-- Never scatter entries across ad-hoc collections; one run = the
-  resolved target collection(s) only.
+## verify：先读全文，核实支撑关系
 
-## Scripts (local)
+1. 经 Zotero MCP 获取条目和全文，核对条目与文档身份。
+2. 读取与具体论述相关的章节、定义、定理、方法或公式，不能只读摘要。
+3. 核查前提、适用范围、记号、归一化、边界条件，以及与项目实验的差异。
+4. 给出“确认支持”“仅支持部分范围”“不支持”或“待核验”的结论，并记录原因。
+5. 在论文现有的引用核验记录中保存 Zotero key、页/节/公式位置、
+   支撑的具体论述和必要的短摘录；不把核验状态塞入新的 Zotero 标签。
 
-### Validate citations (check all cite keys resolve)
+没有可读全文的条目，仅能用于其元数据层面的事实，不能据此确认技术内容。
+文献没有直接给出本项目公式时，应明确自己的推导及其基础，
+不能让相近公式或相同关键词看起来构成直接证明。
 
-```bash
-python .pi/skills/paper-zotero-hunter/scripts/validate_citations.py \
-  --tex docs/paper/main.tex --bib docs/paper/references.bib --check-figures --figures-dir docs/paper/figures/
-```
+## bind：写入已经核验的引用
 
-Reports: missing citations, unused bib entries, duplicate keys, duplicate
-sections, duplicate labels, undefined references, missing figures.
+- 依据实际正文再次确认支撑关系；若正文尚未写成，先把核验记录交给写作 skill。
+- BibTeX 字段来自 Zotero 的已核验元数据。优先导出；需生成条目时逐字段溯源，不臆造内容。
+- 保留已有正确 cite key，先按 DOI 或规范化标题查重；无 DOI 的书和讲义用可靠元数据核对。
+- 在准确位置写入引用，说明必要的适用限制；表述实质改变后重新核验。
+- 使用同一份 docs/paper/references.bib，除非项目已明确采用其他布局。
 
-### Auto-fix missing citation placeholders
+## validate / format
 
-```bash
-python .pi/skills/paper-zotero-hunter/scripts/validate_citations.py \
-  --tex docs/paper/main.tex --bib docs/paper/references.bib --fix
-```
+按项目解释器运行 scripts/validate_citations.py，检查引用 key、重复项与交叉引用；
+需要时同时检查图文件。格式检查只证明工程一致性，不能证明文献支撑关系。
+格式调整保持条目身份和现有合法 keys，不能为了消除报错生成虚构字段。
+脚本生成的占位条目不能被当作已核验来源或进入可提交稿。
 
-Generates `references_fixed.bib` with placeholder entries for all missing
-citation keys. Placeholders must be replaced by `bind` output before submission.
+## 输出
 
-### Harvest fallback (Zotero unreachable only)
-
-```bash
-python .pi/skills/paper-zotero-hunter/scripts/harvest_citations.py \
-  --tex docs/paper/main.tex --bib docs/paper/references.bib --output candidates.bib --max-rounds 10 --dry-run
-```
-
-Candidate BibTeX only — still requires `verify`+Zotero filing before citing.
-
-## Action: `harvest` — find what's missing, hunt via Zotero
-
-1. Scan the draft for claims needing citations (especially Introduction /
-   Related Work gaps and method comparisons).
-2. For each gap, run the `zotero-paper-hunter` flow: check library first
-   (semantic + exact search, dedup), then web discovery, fetch full text,
-   file into the target collection with `agent-crawled, unreviewed` tags.
-3. Output: per-gap candidate list with Zotero keys. Do NOT write `\cite`
-   yet — citing happens only in `bind` after verification.
-
-## Action: `verify` — read, then confirm relevance to the cite spot
-
-For each hunted candidate, in order:
-
-1. Open the full text via zotero-mcp (attachment path → read PDF).
-   Entry without retrievable full text is marked `条目-only`, cited only
-   if the claim is metadata-level (existence/year/authors), never for
-   technical content.
-2. Read the sections relevant to the specific claim at the planned cite
-   location (method, theorem, result, number — not just the abstract).
-3. Verdict per candidate: `确认相关` (quote the supporting passage +
-   cite location) or `不相关` (one-line reason, never cited).
-4. Record verdicts in the citation report (below). Relevance evidence
-   lives in the report, NOT in new Zotero tags (tag set is fixed).
-
-## Action: `bind` — write cites + .bib from verified papers only
-
-For each `确认相关` verdict:
-
-1. Pull metadata from the Zotero item, hand-write the BibTeX entry,
-   checking every field against the source.
-2. Key format: `firstAuthorLastNameYearFirstContentWord`
-   (e.g. `vaswani2017attention`). Skip if the key already exists.
-3. Append to `.bib`, insert `\cite{key}` at the exact confirmed location.
-4. Sort `.bib` alphabetically by key when done.
-
-## Action: `validate` — pre-compilation check
-
-Run `validate_citations.py` (above). Fix everything it reports before
-compiling. No placeholders survive to submission.
-
-## Action: `format` — standardize .bib
-
-- Sort entries alphabetically by key
-- Consistent 2-space indentation, no empty fields
-- Protect proper nouns with `{Braces}` in titles
-- Required fields present per entry type
-
-## Citation report (per run, fixed template)
-
-```text
-## 引用报告:<draft路径>
-- 目标collection:<路径>(key)
-- 已确认:N篇
-  1. 标题 — 作者,年份 — Zotero key — 支持位置(章节/行) — 支撑句摘录
-- 不相关(未引):N篇(给一句话原因)
-- 条目-only:N篇(仅用于元数据级论述)
-- 失败:N篇(给原因:无全文/下不到/标题对不上)
-```
-
-## Prohibitions (inherited)
-
-- No citing a paper you have not verified against the cite location.
-- No PDF attached under a mismatched entry (verify title page first).
-- `if_exists` is always `file`; never `duplicate`.
-- No non-academic content as references.
-- Tag set is fixed (`agent-crawled, unreviewed`); no invented tags.
-
-## Related Skills
-
-- Upstream: [paper-writing-section](../paper-writing-section/) (Related Work mode; gaps come from Related Work), [zotero-paper-hunter] (hunting procedure)
-- Downstream: [paper-latex-formatting](../paper-latex-formatting/) (compile by agent directly: latexmk, no skill)
-- See also: [paper-assembly](../paper-assembly/)
+给出本轮引用需求、候选与核验结论、支持位置、正文绑定位置以及仍有的缺件。
+正文尚不存在时使用计划章节和计划论述定位，不要求先编造一份草稿。

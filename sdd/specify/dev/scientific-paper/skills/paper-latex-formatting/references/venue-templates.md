@@ -43,9 +43,9 @@ LICENSE in `assets/fonts/noto-serif-cjk/`. Do not create duplicate planning
 files, HTML pages, or font files in the root. User-supplied Times New Roman
 plotting faces live in `assets/fonts/times-new-roman/` and are registered by
 the plotting helper without OS installation. Keep original licensing notes
-separate from Noto's SIL OFL. The paper preset bundles CJK OTFs and LICENSE;
+separate from Noto's SIL OFL. The independent scientific-paper skill bundle provides CJK OTFs and LICENSE;
 scientific-computing bundles the four Times New Roman TTFs. Use the respective
-preset's `scripts/install-fonts.sh <project-root>` before setting up templates.
+bundle's `scripts/install-fonts.sh <project-root>` before setting up templates.
 Existing embedded-font PDFs do not require plotting fonts just to compile the paper.
 
 ```

@@ -36,7 +36,7 @@ No column widths, no captions, no REVTeX. Size is caller-controlled.
   fonts with original licensing notes in `assets/fonts/times-new-roman/`.
   The scientific-computing preset includes all four TTFs and their original
   licensing notes; install them with `scripts/install-fonts.sh <project-root>`.
-  The paper preset similarly supplies CJK OTFs and LICENSE. CJK paper fonts
+  The independent paper skill bundle supplies CJK OTFs and LICENSE. CJK paper fonts
   do not replace plotting serif/math fonts.
 - Drawn sizes (`font.size=13`, labels 15pt, titles 16pt, ticks 13pt,
   legend 14pt) are **placeholders only**. The final printed text is uniform:

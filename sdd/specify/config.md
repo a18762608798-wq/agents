@@ -1,32 +1,36 @@
-# 配置
+# Codex 项目配置
 
 ## 前提
 
 - 已按 `install.md` 装好 `specify`。
-- 站在你的项目根目录，`git status` 干净（已有项目直接 `--here`，不是重建项目）。
-- 记住两套接口：终端跑 `specify ...`（装工作流），OpenCode 聊天框用 `/speckit.*`（真正干活）。
+- 在项目根目录操作，先检查 `git status` 并保留已有修改。
+- 终端用 `specify ...` 安装和配置；在 Codex 会话中执行对应的 Spec Kit 流程。
 
-## 内容
+## 初始化
 
-初始化（告诉 Spec Kit 按 OpenCode 能识别的格式生成文件）：
+新项目或尚未接入 Spec Kit 的项目：
 
 ```bash
-specify init --here --integration opencode --script sh
+specify init --here --integration codex --script sh
 ```
 
-> SDD 方法论通用：opencode/pi 只需换 `--integration` 关键字（`opencode`→`pi`），流程不变。
+`--here` 使用当前目录，`--script sh` 生成 Linux Mint 使用的脚本。
+非空目录先确认覆盖范围；只有确需覆盖时才加 `--force`。
+已有 Spec Kit 项目改用 Codex 时，使用：
 
-参数说明：
+```bash
+specify integration switch codex --script sh
+```
 
-- `--here`：在当前目录初始化；目录非空需加 `--force`。
-- `--script sh`：Linux Mint 用 `sh`；Windows 用 `ps`，或统一用 `py`。
+更新已安装的 Codex 集成时使用 `specify integration upgrade codex --script sh`，
+不重新初始化整个项目。
 
-实测生成以下文件(**默认工作流**)：
+默认工作流的目录关系：
 
 ```text
 your-project/
 │
-├── .opencode/commands/speckit.{specify,clarify,plan,tasks,implement,...}.md
+├── .agents/skills/speckit-*/SKILL.md   # Codex 的 Spec Kit skills
 ├── .specify/
 │   ├── memory/
 │   │   └── constitution.md      ★ 项目级规则(放跨 cycle 不变的规则)
@@ -38,40 +42,48 @@ your-project/
 └── specs/
     │
     └── 001-user-auth/
-        ├── spec.md              ★ 需求：WHAT / WHY(具体实验细节需求, 本cycle不变的规则)
-        ├── tasks.md             ★ 实现任务(主要是门)
-        ├── plan.md              ○ 技术方案：HOW
-        │
-        ├── research.md          ○ 技术调研/决策
-        ├── data-model.md        ○ 数据模型
-        ├── quickstart.md        ○ 验证/使用场景
-        │
-        ├── contracts/           ○ API/interface contract
-        │   └── ...
-        │
-        └── checklists/
-            └── requirements.md  ★ 需求质量检查(但是一般用不到, 除非有安全问题)
+        ├── spec.md              # 需求或实验定义
+        ├── plan.md              # 实现方案
+        ├── tasks.md             # 实现任务和验证条件
+        └── checklists/          # 需求质量检查
 ```
 
-分工：`.opencode/` 是给 OpenCode 看的操作说明，`.specify/` 是 SDD 引擎（规则+模板+脚本）。`scripts/` 一般不要手工改。
+`.agents/skills/` 提供 Codex 的操作说明；`.specify/` 保存规则、模板和脚本。
+`specs/` 在首次创建 feature 后产生，研究项目也可沿用已有的 `expXX` / `shared-XX` 命名。
 
-已有项目接 Spec Kit：先提交干净，再 `--here`，先写 `constitution` 描述现有架构约束，再逐个 feature 纳入。
+先用 constitution 描述项目长期约束，再逐个 feature 纳入。完整流程见
+[默认用法](usage/default.md)。
 
-## 项目局部返工插件（可选，手动安装）
+## 科研实验 preset 与论文 skills
 
-`specify init` 不会自动部署自定义返工门禁。需要时在初始化后，按
-[`plugins/speckit-rework/README.md`](plugins/speckit-rework/README.md)
-安装当前宿主的版本：Pi / OpenCode 使用项目插件目录；Codex 使用项目
-`.codex/config.toml` 启用共享 marketplace 中的插件，不全局开启。
+实验使用 [scientific-computing preset](dev/scientific-computing/README.md)，
+论文使用依赖 Exp 产物的 [scientific-paper 独立技能包](dev/scientific-paper/README.md)。
+实验沿用 Spec Kit；论文直接维护大纲与正文，无需 Paper spec 或 preset 优先级切换。
+两类领域 skills 按各自说明安装到项目 `.agents/skills/`。
+模板和命令的自定义方式见 [自定义说明](usage/self-define/README.md)。
 
-三种实现的 canonical source 均位于 `~/.agents/sdd/specify/plugins/speckit-rework/`。
-公式规则仍是全局插件，不与此返工门禁混装。
+## 项目工作约定与整体对齐
+
+日常工作方式放在项目根 `AGENTS.md`，实验定义继续由各 feature 的 spec 维护。
+科研项目可合并 [工作约定模板](dev/scientific-computing/templates/project-agents.md)，
+保留项目原有规则。已有 feature 按影响增量维护，新实验走完整 Spec Kit 流程。
+
+使用 scientific-computing preset 时：
+- `$speckit-analyze 全项目` 检查所有 feature 与跨实验的规范关系。
+- `$speckit-converge 全项目 仅检查` 只读核对实现与证据。
+- `$speckit-converge 全项目` 按已存在的规范回填真正缺失的任务。
+- 明确要求修复并对齐时，按问题所在层处理，再复查；证据不足保留“未核验”。
+
+旧返工插件及其 marketplace、hook/MCP 安装配置已退役，项目无需安装返工插件。
 
 ## 验证
 
 ```bash
-ls .opencode/commands
+specify integration status
+ls .agents/skills/speckit-*/SKILL.md
 ls .specify
 ```
 
-在 OpenCode 输入 `/` 能看到 `/speckit.specify` 等命令即成功（以 `/` 补全和 `.opencode/commands/` 下实际文件名为准）。
+从项目根目录启动 Codex，确认可发现生成的 `speckit-*` skills。
+在 Codex 聊天框用 `$speckit-constitution`、`$speckit-specify` 等原生 skill 入口开始流程，
+不要在 shell 中执行这些调用。

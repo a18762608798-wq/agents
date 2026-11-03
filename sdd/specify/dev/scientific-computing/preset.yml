@@ -3,7 +3,7 @@ schema_version: "1.0"
 preset:
   id: "scientific-computing"
   name: "Scientific Computing & Experiments"
-  version: "0.4.0"
+  version: "0.6.0"
   description: "面向科学计算与数值实验 feature 的 Spec-Driven Development 工作流。"
   author: "YOUR_NAME"
 
@@ -65,7 +65,7 @@ provides:
     - type: "command"
       name: "speckit.analyze"
       file: "commands/speckit.analyze.md"
-      description: "检查 spec、plan 与 tasks 的一致性"
+      description: "检查 feature 或全项目规范与跨实验依赖的一致性"
       replaces: "speckit.analyze"
 
     - type: "command"
@@ -77,7 +77,7 @@ provides:
     - type: "command"
       name: "speckit.converge"
       file: "commands/speckit.converge.md"
-      description: "审计实际实现并将剩余工作收敛回 tasks"
+      description: "核验 feature 或全项目实现，支持仅检查与任务收敛"
       replaces: "speckit.converge"
 
 tags:

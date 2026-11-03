@@ -1,117 +1,32 @@
 ---
 name: paper-assembly
-description: Orchestrate the full paper pipeline end-to-end. Manage state propagation between phases (literature → plan → code → experiments → figures → tables → writing → review), support checkpointing and resumption. Use for assembling a complete paper from components.
-argument-hint: [paper-directory]
+description: 按用户当前需要协调已有论文大纲、Exp 产物和独立 Paper skills，检查缺件并推进成文、引文、排版或评审。适用于整篇论文整理和跨章节协调；不创建 Paper spec/plan/tasks 或 Paper feature，也不自动开展实验。
 ---
 
 # Paper Assembly
 
-Orchestrate the entire paper pipeline end-to-end with state management and checkpointing.
+这是可选的协调入口，各 paper-* skills 也可以单独使用。
+先读 ../paper-writing-section/references/writing-policy.md。
 
-## Input
+## 上下文与边界
 
-- `$0` — Paper project directory or paper plan
+读取项目 docs/README.md、唯一的 docs/planning/paper-outline.md、现有稿件，
+以及相关 experiment-map、Exp spec、结果和图。实验笔记只用于理解实际计算约定。
+不创建 paper-map、paper-XX、另一份论文大纲或强制阶段检查点。
 
-## References
+## 推进当前工作
 
-- Orchestration patterns and state management: `references/orchestration-patterns.md`
+1. 根据用户要求和现有稿件，识别这一轮要完成的章节、引用、格式或评审工作。
+2. 对缺件区分：实验数据/图缺失、文献或理论尚未核验、解释尚不能由证据支持。
+   明确影响到哪些段落；缺件不阻止无关内容继续写作。
+3. 理论或背景成文前，安排 paper-zotero-hunter 做文献发现与全文核验；
+   然后由 paper-writing-section 组织论证并核对 Exp 约定。
+4. 按需调用 paper-figure-layout 和 paper-latex-formatting；
+   从真实产物读取图表，不让 Paper 技能自行制造实验结果。
+5. 用户要求评审或当前交付确有需要时，使用 paper-self-review 和 paper-revision。
+   编译直接使用项目已配置工具；不要求调用不存在的编译 skill。
+6. 报告本轮实际完成项、证据位置和仍未解决的缺件。
+   不以“文件存在”或固定阶段计数证明论文已完成。
 
-## Scripts
-
-### Check pipeline completeness
-```bash
-python .pi/skills/paper-assembly/scripts/assembly_checker.py --dir docs/paper/ --output checkpoint.json
-python .pi/skills/paper-assembly/scripts/assembly_checker.py --dir docs/paper/ --verbose
-```
-
-Scans paper directory, checks 9 pipeline phases, reports missing artifacts, suggests next steps.
-
-## Workflow
-
-### Step 1: Assess Current State
-1. Scan the paper directory for existing artifacts
-2. Identify which phases are complete vs pending
-3. Build a dependency graph of remaining work
-
-### Step 2: Execute Pipeline Phases
-Run phases in dependency order:
-
-| Phase | Skill | Input | Output |
-|-------|-------|-------|--------|
-| 1. Literature | literature-search, literature-review | Topic | Knowledge base, BibTeX |
-| 2. Planning | research-planning | Knowledge base | Paper structure, task list |
-| 3. Code | experiment-code | Plan | Training/eval pipeline |
-| 4. Experiments | experiment-design | Code | Results JSON/CSV |
-| 5. Figures | figure-generation | Results | PNG figures |
-| 6. Tables | table-generation | Results | LaTeX tables |
-| 7. Writing | paper-writing-section | All above | main.tex sections |
-| 8. Citations | paper-zotero-hunter | Draft | references.bib |
-| 9. Formatting | paper-latex-formatting | Draft | Formatted LaTeX |
-| 10. Compilation | paper-compilation | All | PDF |
-| 11. Review | self-review | PDF | Review scores |
-
-### Step 3: State Propagation
-After each phase completes:
-1. Save output artifacts to the paper directory
-2. Propagate results to downstream phases
-3. Update the progress checkpoint file
-
-### Step 4: Quality Gates
-Before proceeding to the next phase:
-- Verify all required outputs exist
-- Check for consistency (e.g., all cited keys in .bib)
-- Validate figures/tables match experimental results
-
-### Step 5: Final Assembly
-1. Merge all sections into main.tex
-2. Verify all \includegraphics files exist
-3. Verify all \cite keys exist in .bib
-4. Compile to PDF
-5. Run self-review for quality check
-
-## Orchestration Patterns
-
-### Sequential Pipeline (AI-Scientist)
-```
-generate_ideas → experiments → writeup → review
-```
-
-### Multi-Agent State Broadcasting (AgentLaboratory)
-```python
-# Propagate results to all downstream agents
-set_agent_attr("dataset_code", code)
-set_agent_attr("results", results_json)
-```
-
-### Copilot Mode (AgentLaboratory)
-Human can intervene at any phase boundary for review/correction.
-
-## Checkpoint Format
-
-```json
-{
-  "project": "paper-name",
-  "phases_completed": ["literature", "planning", "code"],
-  "current_phase": "experiments",
-  "artifacts": {
-    "literature": "knowledge_base.json",
-    "plan": "research_plan.json",
-    "code": "experiments/",
-    "results": null
-  },
-  "last_updated": "2024-01-15T10:30:00Z"
-}
-```
-
-## Rules
-
-- Never skip phases — each depends on previous outputs
-- Save checkpoints after every phase completion
-- Human review is recommended at phase boundaries
-- All numbers in the paper must trace to actual experiment logs
-- Re-run downstream phases if upstream changes
-
-## Related Skills
-- Upstream: all other skills (this is the orchestrator)
-- Downstream: [paper-compilation](../paper-compilation/), [paper-self-review](../paper-self-review/)
-- See also: [research-planning](../research-planning/)
+章节顺序、段落和主附录组织可以迭代；只有主线或核心主张变化时才维护大纲。
+新的计算、测量或结果含义变化，整理为 Exp 层待处理事项，不在本技能中执行。

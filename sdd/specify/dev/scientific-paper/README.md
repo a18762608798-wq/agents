@@ -1,110 +1,96 @@
-# scientific-paper preset
+# scientific-paper
 
-面向“数值结果 → 正式 LaTeX 论文”的 Spec Kit 模板包。核心主张：**论文的每个主张都绑定上游数据产物，缺件留空不编数，解释性正文问用户要推测并标记待验证**。
+依赖 Exp 上游产物的独立论文技能包。源继续保留在
+`~/.agents/sdd/specify/dev/scientific-paper/`，按任务直接使用各技能，
+不再作为 Spec Kit preset 安装，也不创建 Paper spec、plan、tasks 或 paper feature。
 
-依赖上游 `scientific-computing` 产物：`specs/expXX`（实验定义）、`S##`（共享输出）、`D##`（数据集 + `figs/` 图）、`docs/planning/paper-outline.md`（论文大纲）。
+## 上游输入与理论成文
 
-## 固定项目布局
+- `docs/planning/paper-outline.md`：唯一论文大纲，说明主线、章节与 Dxx 数据需求。
+- `docs/planning/experiment-map.md`：Exp 的生产归属与依赖，不另建 paper-map。
+- `specs/expXX/`、`specs/shared-XX/` 及真实数据、图：确认实际实验定义和结果。
+- `docs/experiment-notes/`：实验实现所需的模型、公式与计算约定，允许简写，不是正式论文稿。
 
-以项目 `docs/README.md` 为目录约定入口；规划统一放在 `docs/planning/`
-（`paper-outline.md`、`experiment-map.md`，以及启用后的 `paper-map.md`）。
-LaTeX 工程保留在 `docs/paper/`，上游规格与图片保留在 `specs/`、`figs/`。
-派生看板为 `docs/status/paper.html` 与 `docs/status/experiments.html`，
-不在项目根目录另建副本。
+正式理论从拟写问题出发，先找参考文献并阅读相关全文、核验适用条件，
+再独立组织定义、前提与推导，核对 Exp 的符号、参数、归一化和边界条件。
+可以保留正确公式；区分文献结论与项目自己的构造，不以相近文献为项目公式强行背书。
+共同的证据、引用和缺件规则见
+[writing-policy](skills/paper-writing-section/references/writing-policy.md)。
 
-中文字体和上游许可证统一保存于 `assets/fonts/noto-serif-cjk/`
-（`NotoSerifCJKsc-Regular.otf`、`NotoSerifCJKsc-Bold.otf`、`LICENSE`）。
-中文模板假定从 `docs/paper/` 编译，通过相对路径按文件加载，不依赖系统字体名。
-项目若提供 Times New Roman，四种字形放在 `assets/fonts/times-new-roman/`，
-由绘图 helper 按文件注册，无需系统安装；保留原授权说明，不混用 Noto 的
-SIL OFL。`scientific-paper/assets/fonts/noto-serif-cjk/` 保存中文模板依赖的
-两种 OTF 与 LICENSE；Times New Roman 的四种 TTF 保存在上游
-`scientific-computing/assets/fonts/times-new-roman/`。各自通过随包的
-`scripts/install-fonts.sh` 安装到项目同名目录，不要求系统安装。
-只插入已有嵌入字体的 PDF 不要求另外加载绘图字体。
+## 技能
 
-## 文件
+| 技能 | 用途 |
+| --- | --- |
+| `paper-writing-section` | 直接撰写或修改章节与理论论证 |
+| `paper-zotero-hunter` | 从计划论述发现文献，全文核验后绑定引用 |
+| `paper-figure-layout` | LaTeX 图表位置与组合布局 |
+| `paper-latex-formatting` | 模板、格式、字体与编译前检查 |
+| `paper-self-review` | 根据现有大纲、目标 venue 和真实证据评审稿件 |
+| `paper-revision` | 按作者或审稿意见修改并复核 |
+| `paper-assembly` | 可选的整篇协调与缺件检查入口 |
 
-- `preset.yml` — manifest，声明 id / provides / replaces
-- `assets/fonts/noto-serif-cjk/` — 中文模板依赖的两种原始 OTF 与 LICENSE
-- `scripts/install-fonts.sh` — 安装中文字体依赖到项目 `assets/fonts/`，支持幂等执行且不覆盖内容不同的文件
- - `templates/constitution-template.md` — 论文宪法：spec 权威、证据绑定、数字不编、缺件协议（GAP-DATA 留空 / GAP-INTERP 问用户要推测）、8 个 paper-* skills 分工
-- `templates/spec-template.md` — 论文定义：主张 / 上游输入 / 章节 / 图位 / 引用需求 / 缺件；合同：SEC / FIG / CLM / GAP / CIT
-- `templates/plan-template.md` — 章节→skill 映射、LaTeX 工程结构、编译与评审计划
-- `templates/tasks-template.md` — 任务：按 Assemble → Write → Cite → Format → post-implement review 推进
-- `commands/speckit.specify.md` — 从论文主线创建或更新 paper specification
-- `commands/speckit.clarify.md` — 澄清主张口径，向用户要依赖结果的解释推测
-- `commands/speckit.plan.md` — 根据 spec 生成写作计划
-- `commands/speckit.tasks.md` — 根据 spec 和 plan 生成可执行任务列表
-- `commands/speckit.analyze.md` — 只读检查 spec / plan / tasks 的完整性、一致性与 constitution 符合度
-- `commands/speckit.implement.md` — 按 tasks 执行写作与编译；随后由 `paper-self-review` / `paper-revision` skill 完成 post-implement review loop，最后由 converge 审计
-- `commands/speckit.converge.md` — 审计成文是否满足 spec，推测转正或降级，剩余工作补回 tasks
+各技能可以单独调用，无固定阶段流水线。
+普通改稿直接改正文；主线、核心主张或数据需求变化时更新已有大纲。
+Dxx / Sxx 编号不随章节顺序变化。
+缺文献或理论依据时补核验；缺实验数据或需要改变实验含义时返回 Exp，
+不在 Paper 技能内自动开展实验或制造结果。
 
-注意：本 preset 没有 `/speckit.review` 命令。`paper-self-review` 和
-`paper-revision` 是 Implement 完成后的 skill 调用；`/speckit.converge`
-只负责最终审计与收敛。
+## 安装与同步
 
-## 局部 Skills 安装
-
-本 preset 的 `paper-*` skills 随模板仓库维护，不再安装到全局 skills。创建论文项目后，
-在项目根目录执行一次：
+从项目根目录安装到 `.agents/skills/`：
 
 ```bash
-mkdir -p .pi/skills
-cp -a /path/to/scientific-paper/skills/. .pi/skills/
-bash /path/to/scientific-paper/scripts/install-fonts.sh .
+paper_source="$HOME/.agents/sdd/specify/dev/scientific-paper"
+mkdir -p .agents/skills
+for paper_skill_dir in "$paper_source"/skills/paper-*; do
+    cp -a "$paper_skill_dir" .agents/skills/
+done
+bash "$paper_source/scripts/install-fonts.sh" .
 ```
 
-Pi 自动发现项目 `.pi/skills/`；同名技能冲突时检查启动诊断。模板升级后需要人工重新同步；已经被项目
-定制过的 skill 不要直接覆盖，应先比较 diff。`skills/VERSION` 记录当前 skill 版本。
+已有同名技能先比较差异，保留项目定制后再合并；不直接覆盖已有稿件。
+技能包版本记录在 `skills/VERSION`。更新领域技能不切换 Exp preset 优先级，
+也不通过 `specify integration upgrade` 生成 Paper 命令。
 
-## 可选审阅环境
+文献相关任务需要可用的 Zotero MCP 与 `zotero-paper-hunter` /
+`zotero-book-hunter`；库内检索直接使用 Zotero 搜索。
+这些依赖只在对应任务需要时使用，排版等独立任务不要求先完成文献流水线。
 
-如果执行 `paper-self-review` 的 PDF 审阅，项目需要通过 CondaPkg 提供 PyMuPDF。
-在项目根目录的 `CondaPkg.toml` 中加入：
+## 工程与字体
 
-```toml
-[deps]
-pymupdf = ""
-```
+以项目 `docs/README.md` 为路径约定入口；稿件位于 `docs/paper/`，
+规划位于 `docs/planning/`，派生看板位于 `docs/status/`。
+论文看板只反映图与数据的就绪度，不证明正文、引用或正式论证完成。
 
-然后解析项目环境：
+保留 `skills/`、`assets/fonts/`、`scripts/install-fonts.sh` 与 README。
+中文模板位于 `skills/paper-latex-formatting/templates/pra/`，
+字体依赖是 `assets/fonts/noto-serif-cjk/` 中的 Regular / Bold OTF 与上游 LICENSE。
+安装脚本预先检查全部文件，已有文件内容冲突时停止，不静默覆盖。
+
+中文模板从 `docs/paper/` 编译，通过
+`../../assets/fonts/noto-serif-cjk/` 按文件加载，不依赖系统字体名。
+Times New Roman 的四种 TTF 由上游 scientific-computing 提供，
+保留其原授权说明，不与 Noto 的 SIL OFL 混用。
+已有嵌入字体的 PDF 不要求为了编译论文另外安装绘图字体。
+
+## 可选 PDF 审阅环境
+
+使用 PDF 审阅脚本时，按项目的 `scientific-project-environment` 管理解释器。
+项目采用 CondaPkg 时，在 `CondaPkg.toml` 的 `[deps]` 中加入
+`pymupdf = ""`，再运行：
 
 ```bash
 julia --project=. --startup-file=no \
   -e 'using CondaPkg; CondaPkg.resolve()'
 ```
 
-使用 `.CondaPkg/.pixi/envs/default/bin/python` 运行审阅脚本，不创建 `venv`，
-也不使用系统 `pip`。如果 PDF 结构解析无法识别 section，使用纯文本提取回退，
-并在审阅报告中记录该回退。
+使用 `.CondaPkg/.pixi/envs/default/bin/python` 执行审阅脚本。
+结构解析未识别章节时，改用文本提取并对照 LaTeX，不把解析失败当作缺章证据。
 
-## 标识约定
+## 旧安装迁移
 
-`SEC-###` 章节、`FIG-###` 图位、`CLM-###` 主张（绑定 `D##`）、`GAP-###` 缺件（`-DATA` 缺数缺图 / `-INTERP` 待解释）、`CIT-###` 引用需求、`T###` 任务。跨文档用这些 ID 互引，避免同一事实写两份。
-
-## 安装到项目
-
-```bash
-specify init --here --integration pi --script sh # 初始化
-specify preset add --dev ~/.agents/sdd/specify/dev/scientific-paper --priority 4
-bash .specify/presets/scientific-paper/scripts/install-fonts.sh .
-specify preset resolve spec-template
-```
-
-具体的dev会被复制到 `.specify/presets/`
-
-改完源目录后重装：
-
-```bash
-specify preset update scientific-paper --dev ~/.agents/sdd/specify/dev/scientific-paper --priority 4
-bash .specify/presets/scientific-paper/scripts/install-fonts.sh .
-specify integration upgrade pi --script sh
-```
-
-修改本 preset 源目录后，先用 `specify preset update` 更新项目中的 preset，
-再用 `specify integration upgrade` 更新 Pi 的 `.pi/prompts/` 集成文件。
-不要手工把 preset command 复制到 `.pi/prompts/`；priority 越小越优先，
-当前项目通常使用 `scientific-computing` priority 3 管理实验 feature，使用
-`scientific-paper` priority 4 管理论文 feature。需要切换到论文命令时，暂时将
-`scientific-paper` 调整为更高优先级（更小的数字）。
+旧的 `preset.yml`、`commands/`、Paper spec/plan/tasks/constitution 模板、
+`paper-map` 技能和 assembly 固定阶段检查已退役。
+已有项目保留大纲、稿件、引用、数据和图，按上述方式同步独立技能；
+若仍安装了旧 Paper preset，需通过 Spec Kit 的 preset 管理流程退役旧注册，
+保留 scientific-computing 的 Exp 命令，不再切换到 Paper preset。

@@ -1,7 +1,7 @@
 # 自定义 commands / templates
 
 > 只讲自定义，不讲完整 Spec Kit 流程。完整流程看 `../default.md`。
-> 本机实测 `specify 1.0.12`（`specify check` 显示 opencode 可用）。下述命令均已对过 `--help`。
+> 本目录统一使用 Codex 集成；本机 CLI 为 `specify 1.2.5`。项目配置见 [`../../config.md`](../../config.md)。
 
 ## 定位
 
@@ -12,6 +12,9 @@ Templates（spec/plan/tasks 长什么样）      几乎完全可定制
 ```
 
 方法论层面约 90% 自由，框架层仍然是 Spec Kit。
+
+日常工作的增量维护与检查路由放在项目根 `AGENTS.md`；长期科学原则放 constitution。
+需要全项目审计时，可在 commands 中扩展 analyze/converge 的范围与只读模式，保持单 feature 用法兼容。
 
 ## 1. 最轻量：项目内 override
 
@@ -63,6 +66,9 @@ specify preset update <id> --dev /path/to/my-preset # 更新源
 - `spec-template.md`：最终 spec 长什么样。
 - `speckit.specify.md`：AI 怎么理解需求、怎么填 spec。
 
+`commands/` 是 preset 的源文件目录。Codex 集成会把解析后的命令安装为
+项目 `.agents/skills/speckit-*/SKILL.md`；不手工维护另一套宿主命令副本。
+
 只改 Template 不改 Command，会出现“换了输出结构，没换思考方式”（如还在找 user story / actor）。科学计算类改造 **一般两者都要换**。
 
 ## 4. Command 组合方式
@@ -90,10 +96,10 @@ CCC
 ## 5. Constitution 稍特殊
 
 ```text
-constitution-template.md → /speckit.constitution → .specify/memory/constitution.md → 各命令读取
+constitution-template.md → $speckit-constitution → .specify/memory/constitution.md → 各命令读取
 ```
 
-改 preset **不会覆盖**项目现有的 `memory/constitution.md`，需跑 `/speckit.constitution` 重新生成。动手前先定边界：哪些放 Constitution（跨 cycle 不变），哪些放 spec（本 cycle 不变），哪些放 Command。
+改 preset **不会覆盖**项目现有的 `memory/constitution.md`，需调用 `$speckit-constitution` 更新。动手前先定边界：哪些放 Constitution（跨 cycle 不变），哪些放 spec（本 cycle 不变），哪些放 Command。
 
 ## 6. Scripts 也可覆盖
 

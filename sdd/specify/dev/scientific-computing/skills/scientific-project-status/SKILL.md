@@ -20,6 +20,8 @@ Read `docs/README.md` first. All paths below are relative to the project root; a
 
 Create `docs/status/` if needed. Do not generate root-level dashboards or duplicate planning documents. If `docs/README.md` is absent, create the navigation using the preset README's fixed layout.
 
+The paper page reports readiness of the outline's figures and data. It does not report completion of prose, literature verification, or formal theoretical argument. Do not require Paper specs, Paper task lists, or a paper-map to generate it.
+
 Both pages are self-contained HTML (inline CSS and hand-written inline SVG), openable offline. Add navigation to `../README.md` and the sibling dashboard (`paper.html` / `experiments.html`). Old dashboards are not silently removed or duplicated; migration/removal needs an explicit user request, and README / publishing links must then be updated together.
 
 ## The Three Information Sources
@@ -54,7 +56,7 @@ Read what exists; do not invent generic Spec Kit `research.md`, `data-model.md`,
 3. `specs/*/spec.md`, `plan.md`, `tasks.md`.
 4. `data/` and `figs/` as artifact evidence.
 5. `scripts/verify_*.jl`, `test/runtests.jl`, and relevant validation evidence; run cheap checks when appropriate.
-6. `docs/theory/` only for correct terminology, not new derivations.
+6. `docs/experiment-notes/` only for correct terminology, not new derivations.
 7. `git status` and `git log --oneline -20`.
 
 ## Content and Language

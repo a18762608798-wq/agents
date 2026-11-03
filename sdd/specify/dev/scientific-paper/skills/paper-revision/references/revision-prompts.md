@@ -1,145 +1,22 @@
-# Paper Revision Prompts
+# 针对论文修改的检查提示
 
-Extracted from AI-Scientist (perform_improvement) and AgentLaboratory (report_refinement).
+将每条意见落实为具体位置、问题与处理结果；无需 Paper spec 或任务编号。
 
-## Concern Classification
+## 分类
 
-```
-For each reviewer comment, classify as:
+- 写作：定义不清、段落衔接、重复、结构或主附录组织。
+- 来源：引用缺失、未读全文、文献不能支持实际论述、适用前提遗漏。
+- 理论：自己的推导与文献结论混淆、记号转换、归一化或边界条件不一致。
+- 实验：需要新数据、重新分析或改变现有结果含义。
 
-| Type | Description | Priority |
-|------|-------------|----------|
-| Major Revision | Fundamental flaw, missing experiment, wrong methodology | P0 |
-| Minor Revision | Clarity issues, missing details, presentation | P1 |
-| Question | Reviewer seeks clarification | P2 |
-| Suggestion | Nice-to-have improvement | P3 |
-```
+前面三类在证据允许时直接改稿；实验需求返回对应 Exp 工作流，不自动运行。
 
-## Revision Planning Template
+## 修改前后核验
 
-```
-For each concern:
+这条意见到底要求说明、证据还是新实验？
+所引用来源是否经过全文核验，能支持修改后的精确表述？
+修改是否改变了本项目实验的实际定义或报告数字？
+是否引入没有证据的新结论，或隐藏了原有限制？
+若不能解决，是否清楚标出所缺内容和依赖，而非声称已解决？
 
-Concern: [Extracted reviewer concern]
-Type: [Major/Minor/Question/Suggestion]
-Affected Section(s): [Section name(s)]
-Required Action: [Clarification/Experiment/Analysis/Structural/Citation]
-Plan:
-  - Step 1: ...
-  - Step 2: ...
-New Content Needed: [Yes/No - describe if yes]
-```
-
-## Revision Execution (AgentLaboratory)
-
-### Full Pipeline Re-run
-When a major revision requires new experiments:
-```
-1. Save current state:
-   prev_code = current_code
-   prev_results = current_results
-   prev_paper = current_paper
-
-2. Inject reviewer feedback as notes:
-   notes += "Reviewer requested: {concern}"
-
-3. Re-run affected phases:
-   - If new experiment needed: re-run experiment phase
-   - If new analysis needed: re-run analysis phase
-   - Always re-run writing phase for affected sections
-
-4. Compare new vs previous:
-   - Score improvement: new_score - prev_score
-   - Verify concern addressed
-```
-
-## Targeted Edit Prompts
-
-### For Clarification Concerns
-```
-The reviewer found this passage unclear:
-"{original_text}"
-
-Their comment: "{reviewer_comment}"
-
-Rewrite the passage to address the reviewer's concern.
-Keep the same meaning but improve clarity.
-Mark revised text with \textcolor{blue}{...}.
-```
-
-### For Missing Experiment Concerns
-```
-The reviewer requests: "{reviewer_comment}"
-
-Current experimental setup: {current_setup}
-Available resources: {resources}
-
-Design a new experiment to address this concern:
-1. What to test
-2. Expected outcome
-3. How to present results (table/figure)
-```
-
-### For Citation Concerns
-```
-The reviewer suggests citing: "{suggested_area}"
-
-Search for relevant papers and add citations.
-Integrate citations naturally into the text.
-Do not just add a parenthetical — explain the connection.
-```
-
-## Change Marking
-
-```latex
-% Use blue text for all revisions
-\usepackage{xcolor}
-\newcommand{\revision}[1]{\textcolor{blue}{#1}}
-
-% Example usage:
-\revision{We additionally evaluate on the CIFAR-100 dataset
-to address the reviewer's concern about generalization.}
-```
-
-## Revision Verification Checklist
-
-```
-After all revisions:
-[ ] Every reviewer concern has been addressed
-[ ] All revised text is marked in blue
-[ ] New results are from actual experiments (not fabricated)
-[ ] Page count still fits venue requirements
-[ ] No new LaTeX errors introduced
-[ ] All new citations are in .bib file
-[ ] Self-review score improved or maintained
-[ ] Revision summary cross-references every concern
-```
-
-## Revision Summary Template
-
-```
-# Revision Summary
-
-## Changes Overview
-- N sections modified
-- M new experiments added
-- K new figures/tables added
-
-## Detailed Changes
-
-### Reviewer 1, Concern 1 (Major)
-**Concern**: [what they said]
-**Action**: [what we did]
-**Location**: Section X, paragraph Y
-**New content**: [brief description]
-
-### Reviewer 1, Concern 2 (Minor)
-...
-
-## Score Comparison
-| Metric | Before | After |
-|--------|--------|-------|
-| Overall | 5 | 7 |
-| Clarity | 6 | 8 |
-| ...    | ... | ... |
-```
+只有用户或 venue 要求带标记稿时，才统一增加修订标记。

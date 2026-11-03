@@ -8,11 +8,12 @@ description: Number paper data products with stable Dxx IDs and split a paper ou
 把论文大纲（paper-outline）中的任务分到若干个实验，只定归属，不设计实验细节。
 
 先读 `docs/README.md` 的固定路径约定。输入：
-`docs/planning/paper-outline.md` + `docs/theory/`。
+`docs/planning/paper-outline.md` + `docs/experiment-notes/`。
+实验笔记用于确认 Exp 的计算约定与依赖，不作为正式论文理论的成文依据。
 输出唯一写入 `docs/planning/experiment-map.md`，不在根目录或其他位置创建副本。
 若项目尚无文档导航，按 preset README 的固定布局创建 `docs/README.md`。
 
-输出文件是派生产物，不是口径来源。不要修改大纲、理论档、代码或实验数据，除非用户明确要求。
+输出文件是派生产物，不是口径来源。不要修改大纲、实验笔记、代码或实验数据，除非用户明确要求。
 
 ## 输出语言
 
@@ -32,7 +33,7 @@ description: Number paper data products with stable Dxx IDs and split a paper ou
 ## 步骤
 
 1. 清点并编号论文数据：人类写大纲时不会刻意给数据编号，所以这步由 skill 主动做。通读大纲，找出全部论文数据产品（含附录项、图注项），按正文出场顺序编 D01、D02…，向用户确认编号表后，把 `[Dxx]` 标签回写到大纲对应条目（一张图一号，多图条目按 ID 约定拆号）。方法类、中间类产物不编号；实验过程中看的诊断图不进大纲编号，由各 spec 以 `diag_` 前缀自行管理（非入库、不进 Coverage）。
-2. 通读理论目录，理清任务间的数据依赖：谁生产公共数据，谁消费公共数据。
+2. 通读实验笔记目录，理清任务间的数据依赖：谁生产公共数据，谁消费公共数据。
 3. 识别公共数据并编号中间数据：被两个及以上任务使用的数据，立 `shared-xx` 实验；只被一个任务使用的数据（如读出标定矩阵），留在消费实验内部，不单独成实验。所有中间数据按出场顺序编 S01、S02…（含 shared 产出、实验间传递的参数与比特、实验自含的标定矩阵）。
 4. 划分实验并编号：`shared-01…` 放公共数据（无对应正文图），`exp01…` 按正文出场顺序放任务。
 5. 写拆分文件：顶部放 Data Products、Coverage、Intermediates 三张总表；每实验只写依赖与产出，论文结果引 Dxx，中间数据引 Sxx，不写“第几节第几项”这类位置引用，不写中文数据名。

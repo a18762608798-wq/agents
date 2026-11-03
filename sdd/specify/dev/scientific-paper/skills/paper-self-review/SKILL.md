@@ -1,133 +1,38 @@
 ---
 name: paper-self-review
-description: Automatically review an academic paper using the NeurIPS review form with three reviewer personas, ensemble scoring, and reflection refinement. Extracts text from PDF, runs structured review, and outputs actionable feedback. Use when the user wants to review a paper before submission or get feedback on a draft.
-argument-hint: [pdf-or-tex-file]
+description: 按论文目标 venue、现有大纲和真实证据评审稿件，检查理论依据、实验一致性、引文、完整性和表达，并给出可执行意见。支持 LaTeX 或 PDF；不以 Paper spec、固定章节清单或预设评分阈值作为必需条件。
 ---
 
-# Self-Review
+# Paper Self Review
 
-Review an academic paper using a structured review form with multiple reviewer personas.
+先读 ../paper-writing-section/references/writing-policy.md。
 
-## Input
+## 输入与环境
 
-- `$ARGUMENTS` — Path to PDF file or `.tex` file
+读取用户指定的稿件或 PDF、论文大纲、目标 venue，以及与核心论述相关的 Exp 记录和文献核验记录。
+无需 Paper spec、plan、tasks 或 feature。评审范围由当前请求确定，不自动扩展成整篇或多代理任务。
 
-## Preconditions
+项目有 CondaPkg.toml 时，使用项目 CondaPkg 解释器，不创建 venv 或使用系统 pip。
+PDF 解析需要已安装的 PyMuPDF；缺依赖应明确报告，不能声称已读 PDF。
+可使用 scripts/extract_pdf_text.py 和 scripts/parse_pdf_sections.py。
+若结构解析返回零章节，使用文本提取并对照 LaTeX，不把解析失败当作论文缺章的证据。
 
-- Use the project's configured Python environment. If the project has
-  `CondaPkg.toml`, do not create a virtualenv and do not use system `pip`.
-- PDF review requires PyMuPDF. Add this dependency to the project root
-  `CondaPkg.toml` when absent:
+## 评审重点
 
-  ```toml
-  [deps]
-  pymupdf = ""
-  ```
+- 实验数字、图、数据和结论是否可追溯到实际 Exp 产物；定义及归一化是否一致。
+- 理论段落是否说明对象、假设、适用范围和关键推导。
+- 引用是否有全文核验记录，实际论述是否超出来源所支持的范围。
+- 实验简记是否被直接扩写成论文，遗漏定义、依据、近似或限制。
+- 本项目的构造和推导是否与文献既有结论区分；符号转换是否保持等价。
+- 核心论证是否连贯，图表是否真正支撑相关主张。
+- 完整性以论文大纲、稿件类型和 venue 为准，不强制独立 Related Work 或固定三段式。
+- 缺件和推测是否明确；不把现有 tex、PDF 或 BibTeX 文件的存在当作完成证明。
 
-- Resolve the project environment before running the scripts:
+## 输出
 
-  ```bash
-  julia --project=. --startup-file=no -e 'using CondaPkg; CondaPkg.resolve()'
-  ```
+按严重程度列出问题、具体位置、依据和建议处理方式。
+分别说明实验层问题、来源或理论问题和可以直接修改的写作问题。
+评分、多人视角和 references/review-form.md 仅在用户或 venue 需要时使用，
+不把接收预测或固定分数包装成事实，也不默认启动子代理。
 
-- Run the scripts with the project interpreter, normally
-  `.CondaPkg/.pixi/envs/default/bin/python`. If PyMuPDF cannot be imported,
-  stop and report the missing dependency; do not claim that PDF review ran.
-
-## Scripts
-
-### Extract text from PDF
-```bash
-python .pi/skills/paper-self-review/scripts/extract_pdf_text.py paper.pdf --output paper_text.txt
-python .pi/skills/paper-self-review/scripts/extract_pdf_text.py paper.pdf --format markdown
-```
-
-Tries pymupdf4llm (best) → pymupdf → pypdf. PyMuPDF is the required
-baseline; the other backends are optional fallbacks. Verify it with:
-
-```bash
-.CondaPkg/.pixi/envs/default/bin/python -c 'import fitz; print(fitz.__doc__)'
-```
-
-### Parse PDF into structured sections
-```bash
-python .pi/skills/paper-self-review/scripts/parse_pdf_sections.py \
-  --pdf paper.pdf --output sections.json
-```
-
-Extracts title (via font size), section headings, and section text. Requires PyMuPDF.
-Key flags: `--format text`, `--verbose`
-
-If the parser returns zero sections or cannot identify headings reliably,
-fall back to `extract_pdf_text.py` and review the extracted text together
-with the source `.tex`. Record the fallback in the review report; do not
-interpret a zero-section JSON as proof that the paper has no sections.
-
-## Workflow
-
-### Step 1: Load Paper
-- If PDF: use `extract_pdf_text.py` to extract text
-- If `.tex`: read the LaTeX source directly
-
-### Step 2: Three-Persona Review
-Run three independent reviews using different personas (from `references/review-form.md`):
-
-1. **Harsh but fair reviewer**: Expects good experiments that lead to insights
-2. **Harsh and critical reviewer**: Looking for impactful ideas in the field
-3. **Open-minded reviewer**: Looking for novel ideas not proposed before
-
-For each persona, generate a review following the NeurIPS review JSON format in `references/review-form.md`.
-
-### Step 3: Reflection Refinement (up to 3 rounds per reviewer)
-After each review, apply the reflection prompt: re-evaluate accuracy and soundness, refine if needed. Stop when "I am done".
-
-### Step 4: Aggregate
-- Combine all three reviews
-- Average numerical scores (round to nearest integer)
-- Synthesize a meta-review finding consensus
-- Weight scores using AgentLaboratory weights: Overall (1.0), Contribution (0.4), Presentation (0.2), others (0.1 each)
-
-### Step 5: Actionable Report
-
-Output format:
-```
-## Review Summary
-- **Overall Score**: X/10 (Weighted: Y/10)
-- **Decision**: Accept / Reject
-- **Confidence**: Z/5
-
-## Strengths (consensus across reviewers)
-1. ...
-2. ...
-
-## Weaknesses (consensus across reviewers)
-1. ...
-2. ...
-
-## Questions for Authors
-1. ...
-
-## Specific Suggestions for Improvement
-1. [Section X, Page Y]: ...
-2. [Section Z, Page W]: ...
-
-## Score Breakdown
-| Dimension | R1 | R2 | R3 | Avg |
-|-----------|----|----|-----|-----|
-| Overall | ... | ... | ... | ... |
-| Contribution | ... | ... | ... | ... |
-| ... | ... | ... | ... | ... |
-```
-
-## References
-
-- NeurIPS review form, scoring weights, personas, reflection prompts: `references/review-form.md`
-- PDF text extraction: `scripts/extract_pdf_text.py`
-
-## Missing Sections Check
-You MUST verify that all required sections are present: Abstract, Introduction, Methods/Approach, Experiments/Results, Discussion/Conclusion. Reduce scores if any are missing.
-
-## Related Skills
-- Upstream: [paper-compilation](../paper-compilation/)
-- Downstream: [paper-revision](../paper-revision/), [rebuttal-writing](../rebuttal-writing/)
-- See also: [slide-generation](../slide-generation/)
+由 paper-revision 按意见修改后，复核受影响内容；不强制无限轮评审或重复无关检查。

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Install this preset's complete font dependency bundle without overwriting local changes.
+# Install this skill bundle's complete font dependency bundle without overwriting local changes.
 set -euo pipefail
 
 if (( $# > 1 )); then
@@ -7,21 +7,21 @@ if (( $# > 1 )); then
     exit 2
 fi
 
-PRESET_ROOT="$(CDPATH='' cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+BUNDLE_ROOT="$(CDPATH='' cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 PROJECT_ROOT="${1:-$PWD}"
 if [[ ! -d "$PROJECT_ROOT" ]]; then
     printf 'Project root does not exist: %s\n' "$PROJECT_ROOT" >&2
     exit 1
 fi
 PROJECT_ROOT="$(CDPATH='' cd -- "$PROJECT_ROOT" && pwd)"
-SOURCE_DIR="$PRESET_ROOT/assets/fonts/noto-serif-cjk"
+SOURCE_DIR="$BUNDLE_ROOT/assets/fonts/noto-serif-cjk"
 TARGET_DIR="$PROJECT_ROOT/assets/fonts/noto-serif-cjk"
 FILES=(NotoSerifCJKsc-Regular.otf NotoSerifCJKsc-Bold.otf LICENSE)
 
 # Preflight every file before creating directories or copying anything.
 for name in "${FILES[@]}"; do
     if [[ ! -f "$SOURCE_DIR/$name" ]]; then
-        printf 'Missing preset dependency: %s\n' "$SOURCE_DIR/$name" >&2
+        printf 'Missing skill bundle dependency: %s\n' "$SOURCE_DIR/$name" >&2
         exit 1
     fi
     if [[ -e "$TARGET_DIR/$name" || -L "$TARGET_DIR/$name" ]]; then
