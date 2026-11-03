@@ -1,6 +1,7 @@
 # Per-Section Writing Tips
 
-> Extracted verbatim from AI-Scientist (`perform_writeup.py`) and AgentLaboratory (`papersolver.py`).
+> Adapted from AI-Scientist (`perform_writeup.py`) and AgentLaboratory (`papersolver.py`).
+> Use the relevant tips with `writing-policy.md`; these are not a mandatory section checklist.
 
 ## Abstract
 - TL;DR of the paper
@@ -17,12 +18,11 @@
 - Why is this hard?
 - How do we solve it (i.e. our contribution!)
 - How do we verify that we solved it (e.g. Experiments and results)
-- New trend: specifically list your contributions as bullet points
-- Extra space? Future work!
+- State the contributions in the form that best fits the argument; bullet points are optional.
 
 ## Related Work
 - Academic siblings of our work, i.e. alternative attempts in literature at trying to solve the same problem.
-- Goal is to "Compare and contrast" - how does their approach differ in either assumptions or method? If their method is applicable to our Problem Setting I expect a comparison in the experimental section. If not, there needs to be a clear statement why a given method is not applicable.
+- Compare relevant assumptions, methods, and results. Explain a restriction when it matters to the comparison; do not require an applicability disclaimer for every cited method. Missing experimental comparisons are research needs to assess, not results to invent.
 - Note: Just describing what another paper is doing is not enough. We need to compare and contrast.
 
 ## Background
@@ -47,9 +47,10 @@
 - Make sure you clearly and numerically report experimental results in the results section.
 - If results exist: compares to baselines and includes statistics and confidence intervals.
 - If results exist: includes ablation studies to show that specific parts of the method are relevant.
-- Discusses limitations of the method.
-- Make sure to include all the results from the experiments, and include all relevant figures.
+- Explain substantive limitations where they affect interpretation, or when the venue explicitly requires them. Preserve informative scientific qualifications without adding a fixed number of self-limiting sentences or repeated defensive evaluations.
+- Select the results and figures needed for the paper's argument; retain their actual values, uncertainty, and statistical scope.
 
 ## Discussion / Conclusion
 - Brief recap of the entire paper.
+- Keep result summaries consistent with the latest formal products and with the abstract, introduction, and captions.
 - To keep going with the analogy, you can think of future work as (potential) academic offspring.

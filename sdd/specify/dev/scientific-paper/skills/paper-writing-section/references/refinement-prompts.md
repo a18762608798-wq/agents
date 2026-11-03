@@ -1,6 +1,6 @@
 # Two-Pass Refinement Prompts
 
-> Extracted verbatim from AI-Scientist `perform_writeup.py`.
+> Adapted from AI-Scientist `perform_writeup.py`; apply `writing-policy.md` first.
 
 ## Error Checklist
 
@@ -10,20 +10,31 @@ When refining any section, check for these specific errors:
 - LaTeX syntax errors
 - Numerical results that do not come from explicit experiments and logs
 - Repeatedly defined figure labels
-- References to papers that are not in the .bib file, DO NOT ADD ANY NEW CITATIONS!
+- References missing from the bibliography or unsupported by the source; add new citations only after source verification.
 - Unnecessary verbosity or repetition, unclear text
-- Results or insights in the `notes.txt` that have not yet been included
+- Result summaries that differ from the latest formal data products or their statistical scope
 - Any relevant figures that have not yet been included in the text
 - Closing any `\begin{figure}` with a `\end{figure}` and `\begin{table}` with a `\end{table}`, etc.
 - Duplicate headers, e.g. duplicated `\section{Introduction}` or `\end{document}`
 - Unescaped symbols, e.g. `shakespeare_char` should be `shakespeare\_char` in text
 - Incorrect closing of environments, e.g. `</end{figure}>` instead of `\end{figure}`
 
+## Scientific Qualifications and Tone
+
+Retain assumptions, applicability conditions, statistical definitions, and
+substantive limitations that affect interpretation. Self-limitation can convey
+essential information; it is not inherently defensive. Remove repeated
+self-disqualification that adds no necessary fact, rather than removing all
+negations. Do not impose a quota of caveats or require a drawback for every
+cited method. Keep actual results and uncertainty accurate, and place internal
+verification notes in the review record. Synchronize result changes across
+the abstract, introduction, results, conclusion, and captions.
+
 ## Pass 1: Error Correction
 
 ```
 Great job! Now criticize and refine only the {section} that you just wrote.
-Make this complete in this pass, do not leave any placeholders.
+Complete the supported edits and record any missing evidence separately.
 
 Pay particular attention to fixing any errors such as:
 [error checklist above]
@@ -34,7 +45,7 @@ Pay particular attention to fixing any errors such as:
 ```
 Criticize and refine the {section} only. Recall the advice:
 {tips for this section}
-Make this complete in this pass, do not leave any placeholders.
+Complete the supported edits and record any missing evidence separately.
 
 Pay attention to how it fits in with the rest of the paper.
 Identify any redundancies (e.g. repeated figures or repeated text), if there are any, decide where in the paper things should be cut.
@@ -52,12 +63,11 @@ Please fill in the {section} of the writeup. Some tips are provided below:
 {per_section_tips[section]}
 
 Be sure to use \cite or \citet where relevant, referring to the works provided in the file.
-Do not cite anything that is not already in references.bib. Do not add any new entries to this.
+Use verified entries in references.bib; verify and bind any new sources before citing them.
 
-Keep the experimental results (figures and tables) only in the Results section, and make sure that any captions are filled in.
-In this pass, do not reference anything in later sections of the paper.
+Place results and figures according to the existing outline and complete their captions.
 
-Before every paragraph, please include a brief description of what you plan to write in that paragraph in a comment.
+Use planning comments only when useful for the current task; do not require one per paragraph.
 ```
 
 ## Related Work Sketch (before citation harvesting)

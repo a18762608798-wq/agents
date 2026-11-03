@@ -6,6 +6,10 @@ description: Handle LaTeX formatting, templates, and styling for academic papers
 # LaTeX Formatting
 
 Set up and manage LaTeX formatting for academic papers.
+For prose, first read `../paper-writing-section/references/writing-policy.md`:
+retain informative scientific qualifications and remove repetitive defensive wording.
+Prose-only changes normally need TeX checks and compilation; inspect the manuscript
+PDF only when requested, when it is the only input, or for a concrete layout issue.
 
 Read `docs/README.md` for fixed paths. The manuscript belongs in `docs/paper/`,
 planning in `docs/planning/`, dashboards in `docs/status/`, and bundled CJK

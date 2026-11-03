@@ -26,6 +26,8 @@ description: 撰写或修改论文的 Abstract、Introduction、理论背景、M
 ## 写作与修订
 
 - 章节范围和论证主线服从现有论文大纲；一般改写直接改正文。
+- 保留有信息量的科学限定，去除重复防御性措辞；按 writing-policy 判断，不按否定词批量删句。
+- 不设自我限制句配额；结果更新时核对摘要、引言、结论和图注中的旧表述。
 - 按需读取 references/section-tips.md，不强制每段加计划注释。
 - Related Work 读取 references/related-work-prompts.md，按主题比较方法、结论与本文位置。
 - PRA/APS 稿件按需读取 ../paper-latex-formatting/references/pra-writing-style.md。
@@ -39,6 +41,7 @@ description: 撰写或修改论文的 Abstract、Introduction、理论背景、M
 输出项目指定的 LaTeX 章节或修订后的正文，遵守项目公式与 venue 排版约定。
 检查实验数字的来源、定义和假设、文献支撑位置、符号等价关系以及图文一致性。
 检查引用和交叉引用；待办必须与最终可提交状态明确区分。
+措辞修改默认以 TeX 核对和编译完成验证；本稿 PDF 检查按共同 writing-policy 按需进行。
 
 按需使用 paper-zotero-hunter、paper-figure-layout、paper-latex-formatting、
 paper-self-review 和 paper-revision；编译由 agent 直接执行。

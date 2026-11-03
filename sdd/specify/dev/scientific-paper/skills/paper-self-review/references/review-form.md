@@ -2,6 +2,12 @@
 
 > Extracted verbatim from AI-Scientist `perform_review.py`.
 
+This is an optional NeurIPS-oriented review template, not a PRA publication
+requirement or a default manuscript section checklist. Use it only when requested
+or required by the target venue. Its limitations question does not prescribe
+self-limiting sentences in the paper: apply the common writing policy to
+distinguish informative scientific scope from repetitive defensive wording.
+
 ## Review Form Instructions
 
 Below is a description of the questions you will be asked on the review form for each paper and some guidelines on what to consider when answering these questions.

@@ -3,6 +3,8 @@
 Source: 15 PRA quantum-computing papers (2021–2026) in `tmp-pra-style`
 plus APS official guides. Formatting (REVTeX class, floats, length) lives in
 `pra-notes.md` / `pra-figures.md`; this file is **wording and argument moves only**.
+Corpus patterns are optional examples, not APS requirements or sentence quotas.
+Apply `../../paper-writing-section/references/writing-policy.md` when revising prose.
 
 ## Corpus (evidence base)
 
@@ -25,14 +27,22 @@ Borrowed (ideas only, nothing installed): `academic-paper` Style Calibration
 throat-clearing, sentence shape); `latex-paper-en` low-friction module router
 + de-AI editing; `nature-polishing` manifest router (adapted to PRA axes below).
 
+Official criteria, checked 2026-11-03:
+[PRA referee guidelines](https://journals.aps.org/pra/referees/guidelines-for-referees)
+ask whether models and approximations are justified, conclusions are supported,
+and presentation is clear, concise, and sufficiently comprehensive.
+The [author guidelines](https://journals.aps.org/pra/authors) also require relevant
+literature context. Neither page prescribes a quota of self-limiting sentences;
+the prose guidance below is an editorial interpretation of those criteria.
+
 ## Core voice rule
 
 Own work = active `we`. Literature / textbook facts = passive or impersonal.
-`claim` is banned (0/15 papers use it for own results).
-Ladder: `show / demonstrate / propose / introduce / find / observe` for own
-contributions; `suggest` only for genuinely tentative readings (2/15 papers);
-`may / might / could / typically / likely / nearly / almost` form the closed
-hedging set — never `maybe / perhaps`.
+Choose verbs by what the work establishes: `prove` for a proof,
+`propose / introduce` for a construction, `find / observe` for reported results.
+Use `suggest / may / might / could` when an interpretation is actually tentative.
+Word frequencies in this small corpus do not justify a banned-word list or
+mechanically hedging a supported result.
 
 Examples from corpus:
 `We propose a general framework...` / `We resolve this issue by demonstrating...`
@@ -40,7 +50,9 @@ Examples from corpus:
 vs `where it is shown how noise-scaling can enhance...` /
 `it is evident that the noise power...` / `has been studied / observed / implemented`.
 
-## Abstract: 5–9 sentences, fixed moves
+## Abstract: possible moves
+
+Use only the moves needed for the actual result; sentence count and order are flexible.
 
 1. Domain endorsement (1): `X has become a cornerstone / dominates / is a central topic`.
 2. Gap (1–2): `while empirically observed, ... have not been defined` /
@@ -55,12 +67,12 @@ vs `where it is shown how noise-scaling can enhance...` /
 6. Optional: byproduct (`may be of independent interest`) or forward look
    (`will be a crucial tool...`), one sentence max. Single paragraph.
 
-## Introduction: five moves, fixed order
+## Introduction: possible moves
 
 1. Broad background (importance, 1 para).
-2. Specific technique definition with 3–5 named citations, each with a drawback
-   (`yields satisfactory results, however, it requires...` /
-   `only applicable in the case of...` / `has been determined by trial and error`).
+2. Define the relevant techniques and compare their assumptions, methods, and results.
+   Include a drawback when it explains the research question; each citation does
+   not need a drawback or a statement that its method was not adopted.
 3. Gap sentence — pick one template:
    `While its main idea is rather simple, the full potential... has not been uncovered` /
    `have been primarily investigated under the assumption of...` /
@@ -70,11 +82,11 @@ vs `where it is shown how noise-scaling can enhance...` /
    `Here we` is rare in PRA (2 hits / 5 methods papers); prefer `In this work`.
 5. Roadmap (`The paper is organized as follows. / In the following, we first... Next... We then...` +
    `The reader who is already familiar with... could directly jump to Sec. IV`).
-   5–8 paragraphs, 90–180 words each. End roadmap without hype; save significance for Abstract.
+   Adapt paragraph count and order to the argument. End the roadmap without hype.
 
 ## Tense
 
-Present for claims and definitions (`We show / is defined / converges to... for epsilon->0`).
+Present for claims and definitions (`We show / is defined / converges to...` as $\epsilon\to0$).
 Past only for completed procedures and figure lines
 (`was performed / was measured / is shown by a dashed line`).
 Experimental setup: past (`The pulses used were 50 ns long`).
@@ -82,13 +94,19 @@ Never switch mid-paragraph by accident; time switch marks function change.
 
 ## Precision without naked numbers
 
-Every improvement carries its condition, not a bare percent:
+Identify the object, metric, uncertainty, and material conditions of a reported improvement.
+State shared conditions in definitions or methods rather than repeating a caveat
+after every number; keep a key condition in the abstract if its omission would
+change how the result is read. Possible conditions include:
 `in the presence of time-correlated noise / for arbitrary circuits / for small errors` /
 `under a unified PEC protocol / below the hardware level` /
 `without requiring previous characterization / on current quantum hardware / on average` /
 `ranging from purely Markovian to non-Markovian`.
-Uncertainty in formulas (`Var[...]`, `bias`, `fidelity`, `epsilon in [0,1]`), not chatty percents.
-Quantum triple for conclusions: quality metric (`overlap / fidelity / infidelity / residual energy / distance`) + scaling (`O(1/n^4) / O(b^{-n}) / exponentially close`) + system size (`n=17 / N=8->24 / up to 5 qubits, 11 layers / 8192 shots`).
+Use the relevant estimator, bias, variance, or confidence interval, with symbols
+defined; for example, $\epsilon\in[0,1]$.
+Report a quality metric (`overlap / fidelity / residual energy / distance`),
+scaling when established (for example, $O(n^{-4})$), and the relevant system
+size or sampling budget (for example, $N=8$ to $24$, or $8192$ shots).
 
 ## Equations and references
 
@@ -106,24 +124,31 @@ Postposed / parenthetical dominates; fronted `Fig. X shows` is rare (≤1× in 1
 `As schematically shown in Fig. 1, ...` / `The results are reported in Fig. 3` /
 `is shown in Fig. 1` / `(see Fig. 1)` / `In Fig. 3(f) we observe that...` /
 `Experimental results are shown in Fig. 2(d)`.
-Captions start `FIG. X.`; theory captions short (`Example for Richardson extrapolation with n=3`);
+Captions start `FIG. X.`; theory captions short (for example, Richardson extrapolation with $n=3$);
 experiment captions long (device name + panel enumeration).
 Explain every figure line in text (`dashed horizontal line`, `blue/grey = unmitigated`).
 After formulas add one plain sentence: `In other words, ...` / `That is, ...` /
 `Specifically, we consider...` — every dense derivation gets a paraphrase.
 
-## Transitions and caveats (PRA fingerprint)
+## Transitions, scientific scope, and limitations
 
 `However` every paper (3–19×); `Moreover` = parallel contribution,
 `Furthermore` = deeper derivation, `In contrast` = method comparison,
 `Notably / In particular` = special-case emphasis. Mid-sentence `..., however, ...` allowed.
-Every paper carries 1–2 self-limiting sentences:
-`only feasible for no more than 4 noise levels` /
-`only applicable in the case of...` / `does not necessarily improve with larger n` /
-`can be applied only for phase estimation`.
-Grade claims: `show` (proven) > `demonstrate` (experimental) > `observe` (numerical) >
-`argue / conjecture` (unproven: `we show existence of approximate... and conjecture exact...`).
-Never present numerics as proof (`cross verified numerically`, `works for almost every...`).
+Scientific qualifications supply assumptions, applicability conditions, statistical
+scope, or substantive limitations that affect interpretation. Keep them where
+the argument needs them. A precise restriction can be essential information;
+self-limitation is not synonymous with defensive wording.
+
+Defensive wording adds repeated self-disqualification without necessary new
+information, often through generic `does not prove / does not guarantee` sentences
+after the relevant conditions have already been stated. Revise by meaning, not
+by deleting all negations or all limitations. Preserve actual negative findings.
+There is no required number of self-limiting sentences and no reason to append
+an unused-method disclaimer to every technical paragraph.
+
+Distinguish proof, numerical evidence, measured results, and conjecture by their
+actual content. These are different kinds of support, not a fixed verb hierarchy.
 
 ## Theory vs experiment tracks
 
@@ -147,7 +172,7 @@ before drafting (soft guide; venue rules win).
 
 ## Anti-patterns (reject)
 
-- `claim` for own results; `maybe / perhaps`; bare percents without conditions.
+- Generic hedging or repeated self-disqualification; numbers with an unclear metric or scope.
 - `Here we show` in every paragraph (PRA uses it ≤2×/paper).
 - Fronted `Fig. X shows` chains; unpunctuated equations; `where`-less symbol dumps.
 - Numbers as proof (`Theorem` without proof, numerics called `proof`).
@@ -161,3 +186,5 @@ before drafting (soft guide; venue rules win).
 wording (abstract/intro/captions), not just class options.
 `paper-writing-section`: Section Tips give the skeleton; this file gives the PRA voice.
 When both apply, skeleton first, voice second, refinement checklist last.
+The common writing policy and the actual scientific content take precedence
+over corpus-derived templates.

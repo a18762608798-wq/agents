@@ -6,6 +6,7 @@
 - 下载：<https://github.com/pingdotgg/t3code/releases/latest>
 - 官方安装文档：<https://github.com/pingdotgg/t3code/blob/main/docs/user/install.md>
 - 日常命令、关闭方式、SSH 和公式设置：[usage.md](./usage.md)
+- T3 Code 账号、T3 Connect 与跨电脑连接：[t3-connect.md](./t3-connect.md)
 
 ## 本机安装
 
@@ -31,4 +32,4 @@ command -v t3
 t3 --version
 ```
 
-日常启动、配对、Codex 登录检查见 [usage.md](./usage.md)。
+日常启动、配对、Codex 登录检查见 [usage.md](./usage.md)。跨电脑连接使用 T3 Connect，见 [t3-connect.md](./t3-connect.md)。
