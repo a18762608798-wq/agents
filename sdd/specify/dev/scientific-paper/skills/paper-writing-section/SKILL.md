@@ -41,6 +41,7 @@ description: 撰写或修改论文的 Abstract、Introduction、理论背景、M
 输出项目指定的 LaTeX 章节或修订后的正文，遵守项目公式与 venue 排版约定。
 检查实验数字的来源、定义和假设、文献支撑位置、符号等价关系以及图文一致性。
 检查引用和交叉引用；待办必须与最终可提交状态明确区分。
+新增来源或被引论述范围变化时更新对应的核验条目；没有文献支撑变化的措辞或排版修改不更新引用记录。
 措辞修改默认以 TeX 核对和编译完成验证；本稿 PDF 检查按共同 writing-policy 按需进行。
 
 按需使用 paper-zotero-hunter、paper-figure-layout、paper-latex-formatting、
