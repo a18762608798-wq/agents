@@ -38,7 +38,7 @@ Checks: word count, required sections, TODO markers, anonymization, mismatched e
 
 ### Validate citations and references
 ```bash
-python .agents/skills/paper-zotero-hunter/scripts/validate_citations.py \
+python .agents/skills/paper-gamma-hunter/scripts/validate_citations.py \
   --tex docs/paper/main.tex --bib docs/paper/references.bib --check-figures
 ```
 
@@ -82,6 +82,6 @@ plotting fonts and embedded PDF fonts; do not assume a silent fallback matches.
 
 ## Related Skills
 - Writing: [paper-writing-section](../paper-writing-section/)
-- Citations: [paper-zotero-hunter](../paper-zotero-hunter/)
+- Citations: [paper-gamma-hunter](../paper-gamma-hunter/)
 - Figure placement: [paper-figure-layout](../paper-figure-layout/)
 - Compile directly with the project's configured tools; no compilation skill is required.

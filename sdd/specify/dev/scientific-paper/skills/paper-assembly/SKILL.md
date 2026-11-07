@@ -21,7 +21,7 @@ description: 按用户当前需要协调已有论文大纲、Exp 产物和独立
    明确影响到哪些段落；缺件不阻止无关内容继续写作。
    文献证据缺口更新对应的来源条目，其他缺件在本轮回复中说明，不自动创建论文总工作日志；
    科学限定在稿件对应位置说明，不转写成反复防御性评价。
-3. 理论或背景成文前，安排 paper-zotero-hunter 做文献发现与全文核验；
+3. 理论或背景成文前，安排 paper-gamma-hunter 做文献发现与全文核验；
    然后由 paper-writing-section 组织论证并核对 Exp 约定。
 4. 按需调用 paper-figure-layout 和 paper-latex-formatting；
    从真实产物读取图表，不让 Paper 技能自行制造实验结果。

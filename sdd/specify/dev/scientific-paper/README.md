@@ -45,7 +45,7 @@ PRA 样本中的行文习惯作为参考，不冒充 APS 的正式出版要求�
 | 技能 | 用途 |
 | --- | --- |
 | `paper-writing-section` | 直接撰写或修改章节与理论论证 |
-| `paper-zotero-hunter` | 从计划论述发现文献，全文核验后绑定引用 |
+| `paper-gamma-hunter` | 从计划论述发现文献，经 Gamma 全文核验后绑定引用 |
 | `paper-figure-layout` | LaTeX 图表位置与组合布局 |
 | `paper-latex-formatting` | 模板、格式、字体与编译前检查 |
 | `paper-self-review` | 根据现有大纲、目标 venue 和真实证据评审稿件 |
@@ -75,8 +75,10 @@ bash "$paper_source/scripts/install-fonts.sh" .
 技能包版本记录在 `skills/VERSION`。更新领域技能不切换 Exp preset 优先级，
 也不通过 `specify integration upgrade` 生成 Paper 命令。
 
-文献相关任务需要可用的 Zotero MCP 与 `zotero-paper-hunter` /
-`zotero-book-hunter`；库内检索直接使用 Zotero 搜索。
+文献相关任务需要可用的 Gamma MCP 与 `gamma-paper-hunter` /
+`gamma-book-hunter`；库内检索直接使用 Gamma MCP 的检索与阅读工具。
+工作区、目录绑定及既有 Page 映射优先读取项目 `docs/paper/library.json`
+与可选的 `docs/paper/gamma-page-map.json`，不回退到旧 Zotero 流程。
 这些依赖只在对应任务需要时使用，排版等独立任务不要求先完成文献流水线。
 
 ## 工程与字体

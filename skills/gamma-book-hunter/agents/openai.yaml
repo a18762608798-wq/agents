@@ -1,0 +1,3 @@
+interface:
+  display_name: "Gamma 书籍猎手"
+  short_description: "查找教材、专著与讲义，核实版本和 ISBN 后导入 Gamma 文库"

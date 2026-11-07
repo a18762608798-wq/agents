@@ -1,7 +1,7 @@
 ---
 name: find-skills
 disable-model-invocation: true
-description: 当用户提出"怎么实现 X"、"帮我找一个 X 的技能"、"有没有能做 X 的技能"等问题，或表达想要扩展能力的意图时，帮助用户发现和安装 agent 技能。当用户寻找可能以可安装技能形式存在的功能时，应使用此 skill。安装前，根据硬编码的技能路径选择物理安装目录。如果没有明确的目录要求，优先选择 OpenCode，其次 Claude Code。
+description: 当用户提出"怎么实现 X"、"帮我找一个 X 的技能"、"有没有能做 X 的技能"等问题，或表达想要扩展能力的意图时，帮助用户发现和安装 agent 技能。当用户寻找可能以可安装技能形式存在的功能时，应使用此 skill。所有技能统一安装到用户级 `~/.agents/skills/` 目录；若技能无法在该目录工作，报告不兼容而非安装。
 ---
 
 # 查找技能
@@ -71,26 +71,22 @@ npx skills find [query] [--owner <owner>]
 1. **安装量** — 优先选择安装量 1K+ 的技能。对安装量低于 100 的技能需谨慎对待。
 2. **来源信誉** — 官方来源（`vercel-labs`、`anthropics`、`microsoft`）比不知名作者更值得信赖。
 3. **GitHub stars** — 检查源仓库。来自 star 数低于 100 的仓库的技能应持怀疑态度。
-4. **安装路径** — 检查 `SKILL.md`、脚本和配置文件中是否有硬编码的、特定于 agent 的路径。
+4. **安装兼容性** — 检查 `SKILL.md`、脚本和配置文件是否硬编码了其他 agent 的专属路径、命令、钩子或行为。
 
-留意以下路径：
+统一安装到用户级共享目录：
 
 ```text
-~/.config/opencode/skills/
-~/.claude/skills/
+~/.agents/skills/
 ```
 
 遵循以下规则：
 
-* 如果操作命令或脚本硬编码了 `~/.config/opencode/skills/`，则为 `opencode` 安装。
-* 如果操作命令或脚本硬编码了 `~/.claude/skills/`，则为 `claude-code` 安装。
-* 如果技能仅使用相对路径或可移植路径，则为 `opencode` 安装。
-* 如果两个目录同样受支持，优先选择 `opencode`，其次 `claude-code`。
+* 使用相对路径或可移植路径的技能，一律安装到 `~/.agents/skills/`。
+* 如果操作命令或脚本硬编码了 `~/.config/opencode/skills/`、`~/.claude/skills/` 等其他 agent 专属目录，视为与共享目录冲突，报告冲突而非自动安装。
 * 仅在 README 安装示例中提及的路径不视为操作层面的硬编码。
-* 如果操作路径存在冲突，应报告冲突而非自动安装。
-* 如果技能强依赖于 Codex 特有的路径、命令、钩子或行为，且无法通过 OpenCode 或 Claude 兼容目录工作，则不要安装。报告该技能与当前目标环境不兼容。
+* 如果技能强依赖于其他 agent 特有的命令、钩子或行为，且无法在共享技能目录中工作，则不要安装。报告该技能与当前目标环境不兼容。
 
-所选的 `--agent` 值控制物理安装目录，并不一定决定用户将使用哪个 agent 来加载该技能。
+`npx skills` 的 `--agent codex --global` 会把文件放到 `~/.agents/skills/`；固定使用该参数是为了指定物理安装目录，不决定最终由哪个 agent 加载技能。
 
 ### 第 5 步：向用户展示选项
 
@@ -98,7 +94,7 @@ npx skills find [query] [--owner <owner>]
 
 1. 技能名称及其功能
 2. 安装量和来源
-3. 选定的安装目标及原因
+3. 统一安装目录 `~/.agents/skills/` 及兼容性结论
 4. 用户可以运行的安装命令
 5. 在 skills.sh 上了解更多信息的链接
 
@@ -109,14 +105,14 @@ npx skills find [query] [--owner <owner>]
 Vercel Engineering 的 React 和 Next.js 性能优化指南。
 （安装量：18.5 万）
 
-未发现特定于 agent 的安装路径，因此优先选择 OpenCode 全局目录。
+未发现与其他 agent 专属目录冲突的安装路径，因此按统一规则安装到用户级共享目录 `~/.agents/skills/`。
 
 安装命令：
 
 npx skills add vercel-labs/agent-skills \
   --skill react-best-practices \
   --global \
-  --agent opencode \
+  --agent codex \
   --copy \
   --yes
 
@@ -124,12 +120,12 @@ npx skills add vercel-labs/agent-skills \
 https://skills.sh/vercel-labs/agent-skills/react-best-practices
 ```
 
-如果技能需要 Codex 且无法通过受支持的目录使用，按以下方式报告：
+如果技能需要其他 agent 且无法在共享目录使用，按以下方式报告：
 
 ```text
-此技能强依赖于 Codex 专属功能，无法通过当前的 OpenCode 环境可靠使用。
+此技能强依赖于其他 agent 的专属功能，无法通过 `~/.agents/skills/` 共享目录可靠使用。
 
-Codex 专属依赖：
+不兼容依赖：
 <描述所需的路径、命令、钩子或行为>
 
 该技能未被安装。
@@ -137,31 +133,20 @@ Codex 专属依赖：
 
 ### 第 6 步：提供安装
 
-如果用户决定继续，使用路径检查阶段选定的目标来安装技能。
+如果用户决定继续，统一安装到用户级共享目录 `~/.agents/skills/`。
 
-**OpenCode** — 当不需要特定 agent 路径时的默认选择：
-
-```bash
-npx skills add <owner/repo> \
-  --skill <skill-name> \
-  --global \
-  --agent opencode \
-  --copy \
-  --yes
-```
-
-**Claude Code** — 当技能在操作层面硬编码了 `~/.claude/skills/` 时：
+**统一安装命令** — 使用 `--agent codex`，让 `skills` CLI 把文件放到 `~/.agents/skills/`：
 
 ```bash
 npx skills add <owner/repo> \
   --skill <skill-name> \
   --global \
-  --agent claude-code \
+  --agent codex \
   --copy \
   --yes
 ```
 
-`--global` 标志表示在用户级别安装，`--copy` 将文件物理放置在所选 agent 目录中，`--yes` 跳过确认提示。
+`--global` 标志表示在用户级别安装，`--copy` 将文件物理放置在 `~/.agents/skills/` 中，`--yes` 跳过确认提示。
 
 不要使用以下这种含义模糊的命令：
 
@@ -169,9 +154,9 @@ npx skills add <owner/repo> \
 npx skills add <owner/repo@skill> -g -y
 ```
 
-务必明确指定所选的 `--agent` 和 `--skill`。
+务必明确指定 `--skill` 和 `--global`，并固定使用 `--agent codex`。
 
-当技能需要 Codex 特有的行为且无法通过 OpenCode 或 Claude 兼容目录工作时，不要安装。
+当技能需要其他 agent 特有的行为且无法在 `~/.agents/skills/` 共享目录工作时，不要安装。
 
 ## 常见技能分类
 
@@ -192,9 +177,9 @@ npx skills add <owner/repo@skill> -g -y
 1. **使用具体的关键字**："react testing" 比仅用 "testing" 更好
 2. **尝试替代词**：如果 "deploy" 找不到，试试 "deployment" 或 "ci-cd"
 3. **关注热门来源**：很多技能来自 `vercel-labs/agent-skills` 或 `ComposioHQ/awesome-claude-skills`
-4. **检查安装路径**：优先选择操作层面硬编码路径所要求的目录
-5. **默认使用 OpenCode**：当技能可移植时，优先选择 OpenCode 全局目录
-6. **拒绝仅限 Codex 的技能**：如果技能离开 Codex 特有行为就无法运行，报告不兼容而非安装
+4. **检查兼容性**：确认技能没有硬编码其他 agent 专属目录
+5. **统一安装位置**：可移植技能一律安装到 `~/.agents/skills/`
+6. **拒绝不兼容技能**：无法在共享目录工作的技能报告不兼容而非安装
 
 ## 未找到技能时
 

@@ -9,9 +9,11 @@ description: 根据任务描述为 Zotero 文库查缺补漏找论文并自动�
 
 ## 前置条件
 
-- 文献发现优先学术 API 与 `curl`，需要页面交互、动态内容或页面核实时默认使用 `agent-browser` CLI。先加载 `agent-browser` skill，再读取 `agent-browser skills get core`；启动前 `agent-browser doctor --offline --quick` 必须无 fail。
+- 启动本机浏览器时优先使用系统 Chrome：先检查 command -v google-chrome，存在则为新 agent-browser 会话显式设置 --executable-path 为该命令路径；不存在再使用当前用户缓存。当前 dell 用户的 agent-browser 默认配置也已指向 /usr/bin/google-chrome。APS 下载器会自行按该顺序发现浏览器，不要写死缓存版本号。各 Linux 用户使用独立资料目录；附着已有 CDP 会话时沿用其浏览器，不重启其他会话。
+
+- 文献发现优先学术 API 与 `curl`，需要页面交互、动态内容或页面核实时统一使用 `agent-browser` CLI。先加载 `agent-browser` skill，再读取 `agent-browser skills get core`；启动前 `agent-browser doctor --offline --quick` 必须无 fail。
 - 每次任务生成并记住独立会话名（如 `paper-hunter-<任务唯一ID>`），每条浏览器命令显式传入同一个 `--session`，禁止用默认会话。单次 Bash 调用中的 `export` 不保证在后续工具调用中保留。遵守 snapshot-and-ref 规范：页面变化后重新 snapshot，任务完成后仅关闭本任务会话。
-- Playwright MCP 仅用于用户明确指定或确需 Playwright API、跨浏览器验证等专项能力的任务；跨浏览器验证先确认对应浏览器已安装、已配置。agent-browser 失败时先诊断，不自动切换；确需换后端时先说明原因并确认登录状态、标签页和进度的迁移方式。第 3、4 步默认按 agent-browser 方言执行；专项任务改用 MCP 时先核实实际工具参数，不照搬 CLI 参数。
+- `agent-browser` 操作失败时先诊断；无法恢复时报告原因及当前进度。登录失效、访问限制或验证码按对应问题处理，不通过更换浏览器工具重试。第 3、4 步的页面交互按已加载的 `agent-browser` 指令执行。
 
 - zotero-mcp 可用(Zotero desktop 运行中)。任何 `Connection refused` 先提示用户开启 Zotero,不硬闯。
 - 结果解析:zotero-mcp 工具返回的是人类可读文本,不是 JSON(如 `Collection key: \`XXXXXXXX\``,`Item key: \`XXXXXXXX\``)。不许 `JSON.parse` 整个结果,key 一律用文本匹配(如 `key: ([A-Z0-9]{8})`)提取;取不到 key 就把原文贴出来人工看,不许猜 key。
@@ -58,7 +60,10 @@ description: 根据任务描述为 Zotero 文库查缺补漏找论文并自动�
    - 会话级门禁整个会话只跑一次并记住结论:`bash licensed-access/gate.sh`;非 0 则本会话所有论文跳过本条。
    - 有 DOI 才试,无 DOI(只有 arXiv ID/标题)直接跳过;目前只支持 APS(`10.1103` 前缀),其他前缀一律跳过(路由表见 README)。
    - 调用:`node licensed-access/aps_download.mjs <DOI> /tmp/<doi末段>.pdf`。成功则带着本地 PDF 继续第 3 步建条目,再按第 5 步"PDF与条目分离"路径 attach。
-   - 纪律:串行,每次调用间隔 ≥15 秒;exit 3/4 → 本会话剩余论文全部跳过本条;exit 2/5 → 仅本篇跳过。失败当无事发生,继续第 3 步。
+   - 浏览器由下载器自动发现：优先 CHROME_BIN 和系统命令，其次当前 Linux 用户的 agent-browser、Puppeteer、Playwright 缓存。DISPLAY 未设置时只自动选择唯一的本机 X 显示器；详见 licensed-access/README.md 的检查命令。各 Linux 用户使用独立资料目录，不搬动缓存或共用登录态。
+   - 后台代理可继续运行。下载器仅清理自己的子进程代理变量并让浏览器直连；TUN 模式还须确认 APS 域名的实际分流为 DIRECT，不能把清变量当作绕过 TUN。
+   - 用户已授权普通真人验证勾选时，允许在可见页面上点击一次该复选框并等待结果；不反复点击或刷新，不解图片/文字验证码。一次勾选后仍未通过，再按 exit 3 停止本会话订阅尝试。
+   - 纪律:串行,每次调用间隔至少 15 秒;exit 3/4 → 本会话剩余论文全部跳过本条;exit 2/5 → 仅本篇跳过。下载器会验证 PDF 前三页的 DOI/标题；via=subscription 表示已识别海南大学访问横幅且已取得目标 PDF，缺少横幅不能自行断言订阅生效。失败记录原因，不把下载失败描述成无订阅。
 3. 无 OA 无订阅:先拿元数据——有 DOI 用 `zotero_add_by_doi`(天然带 CrossRef 元数据),只有 arXiv ID 用 `zotero_add_by_url(https://arxiv.org/abs/<id>)`。
 4. 按顺序走 sci-hub 镜像,先 `https://sci-hub.jp/`(中文"你是机器人吗"点"不是"即过,目前无验证码),再 `https://sci-hub.box/`:搜 DOI → 过"机器人确认" → DDoS-Guard 弹窗用 frame 上下文 JS 触发 checkbox → 图片验证码截图裁剪放大后人工识读(把候选字符报出来,是一次性的,每次刷新) → 文本框用真实按键(`keyboard type`,不用 `fill`)输入 → Verify → 文章页 `snapshot -u` 取 storage 直链下载。注意 Verify 按钮可能专防自动化点不动,此时收手让人手动过,不要硬绕。
 5. 下载后必验:读 PDF 第一页文本,标题与目标条目对不上就丢弃,不许挂错附件。

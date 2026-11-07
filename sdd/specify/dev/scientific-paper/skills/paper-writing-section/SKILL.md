@@ -16,7 +16,7 @@ description: 撰写或修改论文的 Abstract、Introduction、理论背景、M
 ## 写作前的理论与文献准备
 
 1. 列出这一节需要解释的概念、理论结论、方法来源和适用假设。
-2. 缺少参考文献时调用 paper-zotero-hunter；发现候选走 zotero-paper-hunter。
+2. 缺少参考文献时调用 paper-gamma-hunter；发现候选走 gamma-paper-hunter。
    在相关技术段落成文之前，读取全文并确认它支持计划表述，而非写完后补装饰性引用。
 3. 依已核验来源独立组织定义、解释与必要推导，核对符号、归一化、边界条件和实验实现。
    正确公式可以保留；重写的目标是补足依据与论证，不是机械更换符号。
@@ -44,5 +44,5 @@ description: 撰写或修改论文的 Abstract、Introduction、理论背景、M
 新增来源或被引论述范围变化时更新对应的核验条目；没有文献支撑变化的措辞或排版修改不更新引用记录。
 措辞修改默认以 TeX 核对和编译完成验证；本稿 PDF 检查按共同 writing-policy 按需进行。
 
-按需使用 paper-zotero-hunter、paper-figure-layout、paper-latex-formatting、
+按需使用 paper-gamma-hunter、paper-figure-layout、paper-latex-formatting、
 paper-self-review 和 paper-revision；编译由 agent 直接执行。

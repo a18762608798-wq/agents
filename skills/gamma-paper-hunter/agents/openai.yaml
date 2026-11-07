@@ -1,0 +1,3 @@
+interface:
+  display_name: "Gamma 论文猎手"
+  short_description: "按研究任务找论文、获取全文，去重后归档到指定 Gamma 工作区"
