@@ -49,15 +49,23 @@ CONFIG_ROOTS = {".agents", ".codex", ".config", ".pi", ".t3"}
 
 
 def is_excluded(path):
-    return any(s in path + "/" for s in EXCLUDE_SUBSTRINGS)
+    candidates = (os.path.abspath(path), os.path.realpath(path))
+    return any(s in candidate + "/" for candidate in candidates for s in EXCLUDE_SUBSTRINGS)
 
 
 def discover(root, no_exclude=False):
     repos = []
     root = os.path.abspath(root)
+    seen_dirs = set()
     if is_work_repo(root):
         repos.append(root)
-    for dirpath, dirnames, _ in os.walk(root, followlinks=False):
+    # 跟随目录符号链接(例如 ~/projects -> /srv/projects), 用真实路径防止循环和重复。
+    for dirpath, dirnames, _ in os.walk(root, followlinks=True):
+        real_dir = os.path.realpath(dirpath)
+        if real_dir in seen_dirs:
+            dirnames[:] = []
+            continue
+        seen_dirs.add(real_dir)
         # 不进入 .git 内部
         if ".git" in dirnames:
             dirnames.remove(".git")
@@ -75,14 +83,18 @@ def discover(root, no_exclude=False):
         # 当前目录本身已在上面处理, walk 会逐层检查子目录
         for d in list(dirnames):
             full = os.path.join(dirpath, d)
+            if os.path.realpath(full) in seen_dirs:
+                dirnames.remove(d)
+                continue
             if is_work_repo(full):
                 repos.append(full)
         # 不要用 os.scandir 重复处理; 继续 walk 即可发现嵌套仓库
     # 去重保序
     seen, uniq = set(), []
     for r in repos:
-        if r not in seen:
-            seen.add(r)
+        key = os.path.realpath(r)
+        if key not in seen:
+            seen.add(key)
             uniq.append(r)
     return sorted(uniq)
 
