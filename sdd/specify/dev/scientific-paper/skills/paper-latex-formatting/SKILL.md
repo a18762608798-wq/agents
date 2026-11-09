@@ -11,7 +11,15 @@ retain informative scientific qualifications and remove repetitive defensive wor
 Prose-only changes normally need TeX checks and compilation; inspect the manuscript
 PDF only when requested, when it is the only input, or for a concrete layout issue.
 
-Read `docs/README.md` for fixed paths. The manuscript belongs in `docs/paper/`,
+Read `docs/README.md` for fixed paths before creating or adapting a template.
+Reuse the existing figure products in `figs/<feature>/`; both manuscript languages
+reference the same files. Resolve image paths from the actual compilation directory
+(`../../figs/<feature>/<figure>.pdf` when compiling from `docs/paper/`).
+Keep template defaults, directory examples, and generated files consistent with the
+project path contract; correct conflicting examples instead of creating another
+figure directory, copying figure assets, or asking permission for routine template fixes.
+Set `\graphicspath` only for real, needed directories confirmed by that contract.
+The manuscript belongs in `docs/paper/`,
 planning in `docs/planning/`, dashboards in `docs/status/`, and bundled CJK
 fonts with LICENSE in `assets/fonts/noto-serif-cjk/`. Do not create root-level
 copies. The Chinese template loads fonts by file path from `docs/paper/`;
@@ -67,7 +75,8 @@ Runs checks then applies clean_latex.py fixes, writing to `main_fixed.tex`.
 
 ## Action: `setup`
 Create `docs/paper/` and main.tex for the specified venue. Use the template
-from `references/venue-templates.md`. For the Chinese twin, ensure both OTFs
+from `references/venue-templates.md`, adapting all example paths to the project
+contract; create directories only when they are needed. For the Chinese twin, ensure both OTFs
 and the upstream LICENSE exist in `assets/fonts/noto-serif-cjk/` and compile
 from `docs/paper/` with xelatex. Keep these file paths in generated templates.
 
@@ -77,7 +86,9 @@ Fix common LaTeX issues: unescaped special chars, math mode errors, float placem
 ## Action: `check`
 Run `latex_checker.py` for pre-submission validation. Check page count,
 anonymization, required sections, TODO markers, figure links, and file-based
-CJK font paths / LICENSE. If figures were regenerated, also verify actual
+CJK font paths / LICENSE. Check `\includegraphics` and any `\graphicspath`
+against the compilation directory and the existing figure products; remove obsolete
+search paths and reconcile conflicting template examples. If figures were regenerated, also verify actual
 plotting fonts and embedded PDF fonts; do not assume a silent fallback matches.
 
 ## Related Skills

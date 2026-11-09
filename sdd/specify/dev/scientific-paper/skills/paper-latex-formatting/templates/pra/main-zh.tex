@@ -1,6 +1,6 @@
 %% PRA 中文版模板 (REVTeX 4.2 + xeCJK)
 %%
-%% 与 templates/pra/main.tex 同结构，共用 figures/ 与 references.bib。
+%% 与 templates/pra/main.tex 共用 references.bib 和 docs/README.md 指定的原始图文件。
 %% 必须用 xelatex 编译 (latexmk -xelatex -bibtex)；pdflatex 不支持 CJK。
 %% 用途：归档 / 内读；投稿用英文版 main.tex。
 \documentclass[aps,pra,preprint,groupedaddress]{revtex4-2}
@@ -12,7 +12,8 @@
   ItalicFont=NotoSerifCJKsc-Regular.otf]{NotoSerifCJKsc-Regular.otf}
 \setCJKmonofont[Path=../../assets/fonts/noto-serif-cjk/]{NotoSerifCJKsc-Regular.otf}
 
-\graphicspath{{figures/}}
+% 图文件沿用项目 figs/<feature>/；从 docs/paper/ 使用 ../../figs/<feature>/...。
+% 中英文稿引用同一文件，不为模板另建图片副本目录。
 
 \begin{document}
 
@@ -39,7 +40,7 @@
 \section{结论}
 
 % \begin{figure}
-% \includegraphics[width=\columnwidth]{}%
+% \includegraphics[width=\columnwidth]{../../figs/<feature>/<figure>.pdf}%
 % \caption{\label{}}
 % \end{figure}
 

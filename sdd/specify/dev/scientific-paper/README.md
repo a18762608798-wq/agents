@@ -89,6 +89,8 @@ bash "$paper_source/scripts/install-fonts.sh" .
 
 以项目 `docs/README.md` 为路径约定入口；稿件位于 `docs/paper/`，
 规划位于 `docs/planning/`，派生看板位于 `docs/status/`。
+图文件复用 `figs/<feature>/` 的现有产物；从 `docs/paper/` 使用 `../../figs/<feature>/...` 引用，
+中英文稿共用同一份图。模板、目录树和说明中的默认路径须与项目契约一致，不另建图片副本目录。
 论文看板只反映图与数据的就绪度，不证明正文、引用或正式论证完成。
 
 保留 `skills/`、`assets/fonts/`、`scripts/install-fonts.sh` 与 README。

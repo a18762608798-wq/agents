@@ -20,11 +20,12 @@
   official APS REVTeX 4.2 `apstemplate.tex` (default
   `\documentclass[aps,pra,reprint,groupedaddress]{revtex4-2}`).
   Copy to `docs/paper/main.tex`, pair with `docs/paper/references.bib`
-  (`\bibliography{references}`) and `docs/paper/figures/`.
+  (`\bibliography{references}`); reuse the figure products in `figs/<feature>/`
+  according to `docs/README.md`, without a manuscript-local figure copy.
 - `templates/pra/main-zh.tex` — Chinese twin of the above
   (REVTeX + xeCJK, file-based Noto Serif CJK SC). Copy to
-  `docs/paper/main-zh.tex`, shares `figures/` and `references.bib`
-  with the English version. MUST compile with xelatex
+  `docs/paper/main-zh.tex`, shares `references.bib` and the existing
+  `figs/<feature>/` products with the English version. MUST compile with xelatex
   (`latexmk -xelatex -bibtex`); for archiving/reading, submission
   stays English-only. Compile from `docs/paper/`; the template loads
   `../../assets/fonts/noto-serif-cjk/NotoSerifCJKsc-Regular.otf` and
@@ -37,7 +38,12 @@
 
 ## Standard Project Structure
 
-Read `docs/README.md` for the project path contract. Planning files live in
+Read `docs/README.md` for the project path contract. Template defaults and this
+example must follow that contract. Figure products stay in `figs/<feature>/`;
+from `docs/paper/`, reference them explicitly as
+`\includegraphics{../../figs/<feature>/<figure>.pdf}`. Add `\graphicspath`
+only when an existing, needed search directory has been confirmed; do not create
+a second figure directory to satisfy a template default. Planning files live in
 `docs/planning/`, dashboards in `docs/status/`, and bundled CJK fonts with
 LICENSE in `assets/fonts/noto-serif-cjk/`. Do not create duplicate planning
 files, HTML pages, or font files in the root. User-supplied Times New Roman
@@ -49,22 +55,18 @@ bundle's `scripts/install-fonts.sh <project-root>` before setting up templates.
 Existing embedded-font PDFs do not require plotting fonts just to compile the paper.
 
 ```
-docs/paper/
-├── main.tex
-├── references.bib
-├── sections/
-│   ├── abstract.tex
-│   ├── introduction.tex
-│   ├── related_work.tex
-│   ├── background.tex
-│   ├── methods.tex
-│   ├── experiments.tex
-│   ├── results.tex
-│   └── conclusion.tex
-├── figures/
-├── tables/
-└── appendix/
-    └── appendix.tex
+project-root/
+├── docs/paper/
+│   ├── main.tex
+│   ├── main-zh.tex
+│   ├── references.bib
+│   ├── sections/
+│   ├── tables/
+│   └── appendix/
+└── figs/
+    └── <feature>/
+        ├── <figure>.pdf
+        └── <figure>.png
 ```
 
 ## Essential Packages (always include)

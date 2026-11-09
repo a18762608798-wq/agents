@@ -19,8 +19,10 @@
 %\documentclass[aps,pra,preprint,groupedaddress]{revtex4-2}
 %\documentclass[aps,pra,preprint,superscriptaddress]{revtex4-2}
 
-% Figures live in figures/ next to this file (docs/paper layout).
-\graphicspath{{figures/}}
+% Figure products follow docs/README.md and remain in figs/<feature>/.
+% Compile from docs/paper/ and use explicit ../../figs/<feature>/... paths.
+% Both language versions reference the same files; no local figure copy is needed.
+\usepackage{graphicx}
 
 % Choosing the journal automatically selects the APS BibTeX style,
 % so leave this commented unless overriding.
@@ -72,7 +74,7 @@
 
 % Figures as floats; figure* spans the full page width in two-column.
 % \begin{figure}
-% \includegraphics[width=\columnwidth]{fig1}%
+% \includegraphics[width=\columnwidth]{../../figs/<feature>/<figure>.pdf}%
 % \caption{\label{fig:fig1}}
 % \end{figure}
 

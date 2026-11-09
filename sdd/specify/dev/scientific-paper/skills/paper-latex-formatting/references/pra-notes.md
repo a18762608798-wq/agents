@@ -64,7 +64,10 @@ no footnote, no warning). Same for `\email` placement habits.
 ## Bilingual output (project convention)
 
 - English `main.tex` (submission) + Chinese `main-zh.tex`
-  (archiving/reading) share `figures/` and `references.bib`.
+  (archiving/reading) share `references.bib` and the existing figure products
+  at the paths specified by `docs/README.md` (`figs/<feature>/` in this project).
+  Compile from `docs/paper/` with explicit `../../figs/<feature>/...` image paths;
+  keep templates and examples aligned with that contract, without a local figure copy.
 - The Chinese twin needs xeCJK + a CJK font and MUST build with
   xelatex; keep section/label keys parallel (`fig:D01` etc.) so
   cross-checking EN/ZH is trivial.
