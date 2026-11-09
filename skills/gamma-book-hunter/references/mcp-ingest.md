@@ -36,7 +36,8 @@
 
 - `create_page(title, folders=[已有目录ID])` 创建文本 Page；`create_subpage(title, parent_page_id)` 创建文本子页。需要多个既有目录时可在创建阶段明确传入。
 - `save_paper(folder=路径或ID)` 会创建缺失目录，并保留原有其他分支的归档；祖先目录可能被更具体的子目录取代。相同已有 PDF 可用它补一处归档。
-- `move_page(page_ids=[...], folder=路径或ID)` 为顶层 Page 设置新的归档，替换已有目录归属；不能重复调用模拟 Zotero 多 collection。对已有 Page 若会丢失其他归档，保留原归档并报告，或先补安全的 MCP 能力。子页继承最外层 Page 的目录。
+- 同一 Page 可归入多个目录，目录归属无主次；复用已有 Page 与 PDF，不因目录增加而复制实体。
+- `move_page(page_ids=[...], folder=路径或ID)` 按当前目录上下文归档，保留当前目录之外的归属；路径相对当前目录解析，`folder=""` 归入当前目录，在库根则移出所有目录。需归入多个目录时按工具说明逐目录调用，写后复核目标及应保留的归属。子页继承最外层 Page 的目录。
 - `label_page(page_ids=[...], add=[...])` 按名称增量添加标签，可自动建立缺少的标签；省略 `remove` 保留原标签。
 - `create_block(parent_id=PageID, content=...)` 只添加必要的来源/用途说明。属性不能用这类笔记替代。不要传本机路径冒充上传。
 - 先解析 MCP 的 `structuredContent`，缺失时读文本，不猜 Page ID。每次写入都需确认返回结果；超时先读取实际状态再重试。测试用隔离工作区，不往生产库制造测试文献。

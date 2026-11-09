@@ -1,7 +1,7 @@
 ---
 name: git-push-all
 disable-model-invocation: true
-description: 批量推送当前目录下所有 git 仓库（含当前目录本身），自动 git add、中文 commit、git push。仅在用户明确指定本 skill（说出 git-push-all、要求调用该 skill）或明确下令批量推送全部仓库时触发；日常单个仓库的 commit/push、含糊的同步请求一律不得触发。
+description: 批量处理当前目录下所有 git 仓库（含当前目录本身），自动 git add、中文 commit；有远端的仓库再 git push，无远端的仓库只 commit。仅在用户明确指定本 skill（说出 git-push-all、要求调用该 skill）或明确下令批量推送全部仓库时触发；日常单个仓库的 commit/push、含糊的同步请求一律不得触发。
 ---
 
 # Git 批量推送 Skill
@@ -10,7 +10,7 @@ description: 批量推送当前目录下所有 git 仓库（含当前目录本�
 
 递归发现当前目录下的所有 git 仓库（含当前目录本身），对每个仓库执行
 `git add -A` → 中文自动 commit → `git push`，无变更则跳过，失败则继续并汇总报告。
-没有配置远程仓库（`git remote` 为空）的仓库不需要 push，直接跳过（不 commit 也不 push）。
+没有配置远程仓库（`git remote` 为空）的仓库仍然正常 commit，只是跳过 push。
 全自动模式，不逐个确认。
 
 ## 触发条件（严格显式）
@@ -46,13 +46,14 @@ python3 <skill-path>/scripts/push_all.py --root <当前目录绝对路径> --dis
 对每个仓库按顺序执行（不要并行 push，避免 SSH 限流）：
 
 1. `git -C <repo> status --porcelain` 为空 → 记为 `clean-skip`，直接下一个。
-2. `git -C <repo> remote` 为空 → 该仓库没有远程仓库，不需要 push，记为 `no-remote-skip`，不 commit 也不 push（避免产生推不出去的本地提交堆积）。
+2. 检查 `git -C <repo> remote`，记住该仓库是否有远端；无远端不应提前跳过。
 3. `git -C <repo> add -A`（尊重 `.gitignore`，不要用 `git add .` 加指定文件之外的逻辑，不要 `git reset`）。
 4. 按下方规范生成中文 commit message 并 `git -C <repo> commit -m "<msg>"`。
-5. `git -C <repo> push`。若因无上游分支失败（`no upstream`），则执行一次 `git -C <repo> push -u origin HEAD` 重试。其他失败不重试。
-6. 绝不执行 `push --force` / `-f`、`reset --hard`、`stash drop`、`clean -fd`，除非用户在本次请求中明确写出这些词。
+5. 有远端才执行 `git -C <repo> push`。若因无上游分支失败（`no upstream`），则执行一次 `git -C <repo> push -u origin HEAD` 重试。其他失败不重试。
+6. 无远端仓库提交成功后记为 `已提交未推送`，不执行 push，也不视为失败。
+7. 绝不执行 `push --force` / `-f`、`reset --hard`、`stash drop`、`clean -fd`，除非用户在本次请求中明确写出这些词。
 
-推荐直接运行脚本完成 2–5 步：
+推荐直接运行脚本完成 2–6 步：
 
 ```bash
 python3 <skill-path>/scripts/push_all.py --root <当前目录绝对路径>
@@ -85,15 +86,15 @@ python3 <skill-path>/scripts/push_all.py --root <当前目录绝对路径>
 |------|------|------|
 | `/home/dell` | 已推送 | 更新: 同步 Neovim 与 opencode 配置（共 12 个文件） |
 | `/home/dell/sync/foo` | 跳过 | 工作区干净 |
-| `/home/dell/tmp/bar` | 跳过 | 无远程仓库，无需 push |
+| `/home/dell/tmp/bar` | 已提交未推送 | 无远程仓库，仅完成本地提交 |
 | `/home/dell/sync/baz` | 失败 | push 被拒绝：...（首行错误） |
 
-最后给出总数：成功 X / 跳过 Y / 失败 Z。失败仓库给出下一步建议（先 pull、解决冲突、检查 SSH），不要擅自修复后强推。
+最后给出总数：已推送 X / 已提交未推送 Y / 跳过 Z / 失败 W。失败仓库给出下一步建议（先 pull、解决冲突、检查 SSH），不要擅自修复后强推。
 
 ## 注意事项
 
 - 当前目录是家目录大仓库（如 `~/` 本身就是 git）时很常见，不要抱怨文件多，只按流程处理。
 - 大输出时用 `git status --porcelain` 和 `--stat` 判断，不要 `cat` 整个 diff。
 - push 需要网络/SSH，超时或认证失败记为失败并继续，不要循环重试。
-- 没有远程仓库的仓库不需要 push，这是正常跳过、不是失败，不要提示用户去加 remote。
+- 没有远程仓库的仓库要照常 commit，只是不 push；这是正常结果、不是失败，不要提示用户去加 remote。
 - 用户已选择全自动不确认：不要逐仓库问"是否提交"；只在最后汇总报告。

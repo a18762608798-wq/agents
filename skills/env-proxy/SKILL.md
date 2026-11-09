@@ -54,6 +54,7 @@ unset all_proxy ALL_PROXY no_proxy NO_PROXY
 
 - 当前会话的 bash 是持久 shell，设置后对本会话后续所有命令生效，无需重复设置。
 - 设置后所有 bash 网络操作都走代理；本地/内网服务若需直连，确认 `no_proxy` 是否覆盖，或临时关闭代理。
+- 访问校园订阅文献时，不要只按代理开/关判断出口。Mihomo TUN 会透明接管默认路由和 DNS；先用 `ip route get 1.1.1.1` 检查，再用 `curl --interface <校园IP>` 复测。详细命令见 `~/.agents/skills/gamma-paper-hunter/references/campus-access.md`。
 - 默认端口基于 Clash Party：混合 7890、SOCKS 7891、HTTP 7892。其他代理软件端口可能不同（如 Clash Verge 默认 7897），使用前先确认实际端口。
 - `socks5h` 表示域名也交给代理端解析，通常比 `socks5` 更适合代理访问。
 - git 等部分工具不读取 `http_proxy`，如需代理请单独配置（如 `git config --global http.proxy`）。

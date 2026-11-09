@@ -53,7 +53,7 @@ node licensed-access/aps_download.mjs <DOI> /tmp/<文件名>.pdf; echo "exit=$?"
     node licensed-access/aps_download.mjs --check
     node licensed-access/aps_download.mjs --prepare
 
-DISPLAY 未设置时自动寻找 /tmp/.X11-unix 中唯一的显示器；多个显示器时通过 APS_DISPLAY 指定。资料目录默认为当前用户的 ~/.local/share/zotero-paper-hunter/aps-chrome，可用 APS_PROFILE 指定；不会删除 Singleton 锁或关闭其他浏览器。
+DISPLAY 未设置时自动寻找 /tmp/.X11-unix 中唯一的显示器；多个显示器时通过 APS_DISPLAY 指定。资料目录默认为当前用户的 ~/.local/share/gamma-paper-hunter/aps-chrome，可用 APS_PROFILE 指定；不会删除 Singleton 锁或关闭其他浏览器。
 
 系统 Chrome 若具有 root 所有且不可被普通用户改写的 SUID 沙箱，默认保留沙箱；用户缓存版缺少该能力且 Ubuntu/Mint 限制未特权用户命名空间时，才为自己的浏览器添加 --no-sandbox。APS_NO_SANDBOX=0 可强制保留沙箱，APS_NO_SANDBOX=1 可显式启用兼容参数。不修改系统的 AppArmor 或代理配置。
 

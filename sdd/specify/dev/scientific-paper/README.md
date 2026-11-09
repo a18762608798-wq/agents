@@ -82,7 +82,8 @@ bash "$paper_source/scripts/install-fonts.sh" .
 文献相关任务需要可用的 Gamma MCP 与 `gamma-paper-hunter` /
 `gamma-book-hunter`；库内检索直接使用 Gamma MCP 的检索与阅读工具。
 工作区、目录绑定及既有 Page 映射优先读取项目 `docs/paper/library.json`
-与可选的 `docs/paper/gamma-page-map.json`，不回退到旧 Zotero 流程。
+与可选的 `docs/paper/gamma-page-map.json`。
+已有 Page 与 PDF 复用；同一 Page 的多个目录归属无主次，引用按工作区与 Page ID 定位。
 这些依赖只在对应任务需要时使用，排版等独立任务不要求先完成文献流水线。
 
 ## 工程与字体

@@ -21,7 +21,7 @@ try {
 }
 const env = { ...directEnvironment(), DISPLAY };
 const PROFILE = process.env.APS_PROFILE ||
-  path.join(os.homedir(), ".local/share/zotero-paper-hunter/aps-chrome");
+  path.join(os.homedir(), ".local/share/gamma-paper-hunter/aps-chrome");
 const SESSION = "hunter-aps-" + process.pid + "-" + randomUUID().slice(0, 8);
 const sandboxArgs = needsNoSandbox(process.env, CHROME) ? ["--no-sandbox"] : [];
 if (args[0] === "--check") {

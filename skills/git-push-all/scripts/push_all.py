@@ -6,6 +6,7 @@
 
 --discover-only: 只列出仓库, 不做任何修改。
 --no-push: add + commit 但不 push (冒烟测试用)。
+无远程仓库的仓库仍会 add + commit, 只是不执行 push。
 输出: JSON 摘要到 stdout。
 """
 import argparse
@@ -135,9 +136,7 @@ def process_repo(repo, no_push=False):
         res.update(result="跳过", detail="工作区干净")
         return res
     rem = run_git(repo, "remote")
-    if rem.returncode == 0 and not rem.stdout.strip():
-        res.update(result="跳过", detail="无远程仓库，无需 push，未提交")
-        return res
+    has_remote = rem.returncode == 0 and bool(rem.stdout.strip())
     ad = run_git(repo, "add", "-A")
     if ad.returncode != 0:
         res.update(result="失败", detail=f"add 失败: {ad.stderr.strip()[:200]}")
@@ -163,6 +162,9 @@ def process_repo(repo, no_push=False):
     headline = msg.splitlines()[0]
     if no_push:
         res.update(result="已提交未推送", detail=headline)
+        return res
+    if not has_remote:
+        res.update(result="已提交未推送", detail=headline + "（无远程仓库）")
         return res
     ps = run_git(repo, "push", timeout=180)
     if ps.returncode == 0:
@@ -200,6 +202,7 @@ def main():
         "root": root,
         "total": len(results),
         "pushed": sum(1 for r in results if r["result"] == "已推送"),
+        "committed": sum(1 for r in results if r["result"] == "已提交未推送"),
         "skipped": sum(1 for r in results if r["result"].startswith("跳过")),
         "failed": sum(1 for r in results if r["result"] == "失败"),
         "results": results,

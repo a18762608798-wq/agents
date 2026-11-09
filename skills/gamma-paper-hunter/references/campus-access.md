@@ -1,4 +1,75 @@
-# 海南大学 APS 订阅下载
+# 海南大学校园访问与 APS 订阅下载
+
+先判断请求是否真的从校园出口发出，再判断学校有没有订阅。代理或 Mihomo TUN 开启时，默认路由和 DNS 可能都指向本机代理；出版商返回付费页、登录页或只给元数据，不能直接解释为“学校无权限”。
+
+## 1. 判断当前出口
+
+```bash
+env | grep -iE '^(http|https|all|no)_proxy=' || true
+ip route get 1.1.1.1
+resolvectl status
+ip -4 -brief addr show
+```
+
+本机 2026-11-10 实测：无线接口 `wlxfc221c1000c2` 有校园 IPv4 `10.17.149.255/21`，校园 DNS 为 `210.37.40.4/5`；默认请求可能显示经 `Mihomo` 和 `198.18.x`。地址会随 DHCP 变化，不硬编码，按上一步重新读取。
+
+发现默认路由是 Mihomo 时，用校园源地址测试到校园 DNS 的连通性；不要直接按域名访问出版商，因为 DNS 可能仍返回 `198.18.x`：
+
+```bash
+CAMPUS_IP=$(ip -4 -brief addr show wlxfc221c1000c2 | awk '{print $3}' | cut -d/ -f1)
+curl --noproxy '*' --interface "$CAMPUS_IP" -sSIL --max-time 10 'http://210.37.40.4/'
+```
+
+返回校园服务器响应（例如 404）即可确认源地址路由可用；超时则报告网络路径未验证，不猜订阅状态。访问出版商仍需下一步的真实地址和 `--resolve`。
+
+## 2. 解析真实地址
+
+Mihomo 可能劫持 DNS，查询校园 DNS 也会得到 `198.18.x` 假地址。使用代理侧 DoH 取真实 A 记录，再把地址传给校园直连的 `--resolve`：
+
+```bash
+SPRINGER_IP=$(curl -sS --max-time 20 -H 'accept: application/dns-json' \
+  'https://cloudflare-dns.com/dns-query?name=link.springer.com&type=A' \
+  | jq -r '.Answer[] | select(.type==1) | .data' | head -1)
+IDP_IP=$(curl -sS --max-time 20 -H 'accept: application/dns-json' \
+  'https://cloudflare-dns.com/dns-query?name=idp.springer.com&type=A' \
+  | jq -r '.Answer[] | select(.type==1) | .data' | head -1)
+```
+
+不要用 `198.18.x` 地址做校园直连。
+
+## 3. Springer 验证示例
+
+先读文章页并保存 cookie，检查 `Open Access`、`Download PDF`、`Access this article` 或订阅横幅：
+
+```bash
+curl --noproxy '*' --interface "$CAMPUS_IP" \
+  --resolve link.springer.com:443:"$SPRINGER_IP" \
+  --resolve idp.springer.com:443:"$IDP_IP" \
+  -sSL --max-time 30 -A 'Mozilla/5.0' \
+  -c /tmp/springer.cookies -b /tmp/springer.cookies \
+  -o /tmp/article.html \
+  'https://link.springer.com/article/<DOI>'
+
+grep -oiE 'Download PDF|Open Access|Access this article|Buy article' /tmp/article.html | sort -u
+```
+
+页面确认可访问后，再下载 PDF 并用 `file`、`pdfinfo` 和正文前 3 页核对标题、作者、DOI：
+
+```bash
+curl --noproxy '*' --interface "$CAMPUS_IP" \
+  --resolve link.springer.com:443:"$SPRINGER_IP" \
+  -sSL --max-time 60 -A 'Mozilla/5.0' \
+  -b /tmp/springer.cookies -c /tmp/springer.cookies \
+  -o /tmp/article.pdf \
+  'https://link.springer.com/content/pdf/<DOI>.pdf'
+
+file /tmp/article.pdf
+pdfinfo /tmp/article.pdf
+```
+
+只有文章页或访问横幅确认校园授权，或文章明确标为 Open Access 时，才记录为合法全文来源。需要登录、验证码或购买时停止；不要尝试绕过访问控制。
+
+## 4. 海南大学 APS 订阅下载
 
 使用本 skill 自带的校园订阅下载器，只处理全文下载，不涉及任何文献库入库流程。先检查目录存在，读取其中 `README.md`：
 
