@@ -43,6 +43,9 @@ EXCLUDE_SUBSTRINGS = (
     "/node_modules/", "/.mozilla/", "/.npm/", "/.nvm/",
 )
 
+# 家目录中的个人配置仓库；仍排除其内部隐藏缓存和插件目录。
+CONFIG_ROOTS = {".agents", ".codex", ".config", ".pi", ".t3"}
+
 
 def is_excluded(path):
     return any(s in path + "/" for s in EXCLUDE_SUBSTRINGS)
@@ -66,7 +69,7 @@ def discover(root, no_exclude=False):
                     continue
                 # 默认跳过一切隐藏目录(.cache/.local/.config/…), 只保留 root 本身。
                 # 用户真正的项目仓库一般不在隐藏目录里; 需要时用 --no-exclude 全扫。
-                if d.startswith("."):
+                if d.startswith(".") and not (dirpath == root and d in CONFIG_ROOTS):
                     dirnames.remove(d)
         # 当前目录本身已在上面处理, walk 会逐层检查子目录
         for d in list(dirnames):

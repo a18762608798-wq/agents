@@ -38,7 +38,7 @@ python3 <skill-path>/scripts/push_all.py --root <当前目录绝对路径> --dis
 - 递归扫描 `<root>` 下所有子目录中含 `.git/` 的目录。
 - 遇到嵌套仓库时，父仓库和子仓库都保留（各算一个）。
 - 跳过 `.git/` 目录内部，不进入裸仓库（`HEAD` + `objects/` 但无工作区的不处理，标记为跳过）。
-- 默认跳过隐藏目录（`.` 开头，如 `.cache/`、`.local/`、`.config/` 下的子仓库）和缓存/插件目录（`node_modules`、`__pycache__`、`.julia/`、`nvim/lazy/` 等），避免在家目录误推几十个只读第三方仓库。如需全量扫描，加 `--no-exclude`。
+- 默认扫描根目录下的 `.agents/`、`.codex/`、`.config/`、`.pi/`、`.t3/`，包括其中的配置仓库；其他隐藏目录及配置目录内部的隐藏目录默认跳过。缓存、回收站和插件目录（如 `.local/`、`node_modules`、`__pycache__`、`.julia/`、`nvim/lazy/`）仍跳过，避免误推第三方仓库。如需全量扫描，加 `--no-exclude`。
 - 权限不足或损坏的目录记为失败，不中断。
 
 ### 2. 逐仓库处理
