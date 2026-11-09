@@ -23,6 +23,7 @@ description: 按用户当前需要协调已有论文大纲、Exp 产物和独立
    科学限定在稿件对应位置说明，不转写成反复防御性评价。
 3. 理论或背景成文前，安排 paper-gamma-hunter 做文献发现与全文核验；
    然后由 paper-writing-section 组织论证并核对 Exp 约定。
+   跨章节整理时按共同 writing-policy 检查首次定义和全篇记号一致性，联动摘要、附录、图表注及中英文稿；常见概念从简。
 4. 按需调用 paper-figure-layout 和 paper-latex-formatting；
    从真实产物读取图表，不让 Paper 技能自行制造实验结果。
 5. 用户要求评审或当前交付确有需要时，使用 paper-self-review 和 paper-revision。

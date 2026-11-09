@@ -1,15 +1,15 @@
 # 海南大学 APS 订阅下载
 
-复用本机已验证的 Zotero hunter 下载器，**只使用下载部分，不调用它的 Zotero 入库流程**。先检查目录存在，读取其中 `README.md`：
+使用本 skill 自带的校园订阅下载器，只处理全文下载，不涉及任何文献库入库流程。先检查目录存在，读取其中 `README.md`：
 
-`~/.agents/skills/zotero-paper-hunter/licensed-access/`
+`~/.agents/skills/gamma-paper-hunter/licensed-access/`
 
-当前支持 APS DOI（`10.1103`）；没有安装或环境检查失败时报告，不假装已尝试校园订阅。
+当前支持 APS DOI（`10.1103`）；目录缺失或环境检查失败时报告，不假装已尝试校园订阅。
 
 ```bash
-bash ~/.agents/skills/zotero-paper-hunter/licensed-access/gate.sh
-node ~/.agents/skills/zotero-paper-hunter/licensed-access/aps_download.mjs --check
-node ~/.agents/skills/zotero-paper-hunter/licensed-access/aps_download.mjs '<DOI>' '<本任务临时目录>/article.pdf'
+bash ~/.agents/skills/gamma-paper-hunter/licensed-access/gate.sh
+node ~/.agents/skills/gamma-paper-hunter/licensed-access/aps_download.mjs --check
+node ~/.agents/skills/gamma-paper-hunter/licensed-access/aps_download.mjs '<DOI>' '<本任务临时目录>/article.pdf'
 ```
 
 - 门禁每会话一次，非 0 则本会话跳过订阅分支。网络地址仅是辅助信号；成功的目标 PDF 与海南大学访问横幅才是订阅证据。

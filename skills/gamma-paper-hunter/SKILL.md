@@ -1,6 +1,6 @@
 ---
 name: gamma-paper-hunter
-description: 按研究任务查缺、找论文、获取全文并去重入库 Gamma。当用户明确要求给 Gamma 搜论文、配参考文献或导入指定论文时使用；经 Gamma MCP 归档到主题 paper/inbox，填写原生文献属性。只检索 Gamma 已有文献不走 hunter；书籍和讲义走 gamma-book-hunter；入库 Zotero 走对应 Zotero hunter。
+description: 按研究任务查缺、找论文、获取全文并去重入库 Gamma。当用户明确要求给 Gamma 搜论文、配参考文献或导入指定论文时使用；经 Gamma MCP 归档到主题 paper/inbox，填写原生文献属性。只检索 Gamma 已有文献不走 hunter；书籍和讲义走 gamma-book-hunter。
 ---
 
 # Gamma 论文猎手
@@ -26,7 +26,7 @@ description: 按研究任务查缺、找论文、获取全文并去重入库 Gam
 
 1. 出版商开放获取、arXiv、作者公开稿或机构仓储。可先下载到本任务独立临时目录，检查文件类型并读前 3 页，确认标题、作者、DOI 对应目标；不要把 HTML 验证页当 PDF。
 2. 无开放全文时，使用 [海南大学 APS 订阅下载](references/campus-access.md)。后台代理开启不等于校园请求要走代理。当前可复用的下载器仅支持 APS，不把其他出版商当作已支持。
-3. 无 OA、订阅未成功时，可沿用 Zotero hunter 的 sci-hub 补充来源；只做本次所需的低量尝试，遇访问限制按当前会话浏览器规则处理，失败保留准确元数据条目并注明无全文。不要把失败解释为“学校无订阅”。
+3. 无 OA、订阅未成功时，可尝试 sci-hub 补充来源；只做本次所需的低量尝试，遇访问限制按当前会话浏览器规则处理，失败保留准确元数据条目并注明无全文。不要把失败解释为“学校无订阅”。
 
 需要网页交互时遵循当前会话的浏览器工具规则；允许使用 `agent-browser` 时先加载其 skill，检查运行环境，使用独立命名会话。优先系统 `google-chrome`，每个 Linux 用户保留自己的资料目录，不接管别人的浏览器。
 
