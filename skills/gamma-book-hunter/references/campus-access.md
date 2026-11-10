@@ -52,5 +52,5 @@ WebVPN 只在直连和 CARSI 都不成功时使用，并记录实际原因。不
 
 - 校园无线接口绑定后公网出口为 `202.100.214.101`（海口电信），不是 TUN 的海外节点。
 - T&F `An Introduction to the Bootstrap`（DOI `10.1201/9780429246593`）在该出口仍显示 `You do not have access to this content currently`；另一本 CRC 书也相同。
-- T&F 机构接口返回 1671 个机构，搜索 `Hainan`/`海南` 无结果，CARSI 暂不可用。
-- 因此这不是“忘了绕 TUN”，而是 T&F 试用 IP 白名单或学校配置未生效；可请图书馆核对校园 NAT 出口。WebVPN 是仍需短信二次认证的后备路径。
+- CARSI 门户有海南大学，且能完成学校 IdP 登录；但 T&F eBooks 的“访问资源”跳转最终返回 `ENTITY_ID_NOT_AVAILABLE`，说明 T&F 没有登记该 IdP 实体。T&F 自己的机构接口返回 1671 个机构，搜索 `Hainan`/`海南` 也无结果。
+- 因此这不是“忘了绕 TUN”：校园直连 IP 未被 T&F 授权，CARSI 实体也未在 T&F 配置。可请图书馆核对校园 NAT 出口和 CARSI/T&F 实体配置；WebVPN 是仍需二次认证的后备路径。

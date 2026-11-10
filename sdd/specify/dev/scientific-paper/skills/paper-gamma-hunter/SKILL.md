@@ -16,7 +16,8 @@ description: 从论文大纲、拟写章节、理论问题或已有草稿出发�
 - 用 `list_folders` / `list_pages` 核实目录，跟随分页。只检索已有文献时用 Gamma `search_library`、`list_pages(title_contains=...)`，再用 `read_page` / `cite` 核对；搜索是字面匹配，不是语义检索。
 - 查缺和找论文使用 `gamma-paper-hunter`；找书、教材、讲义使用 `gamma-book-hunter`。传递已确认的工作区和目录；遵循它们的去重、全文获取、原生属性与标签约定。
 - 文献操作统一经 Gamma MCP；必要能力不可用时报告具体缺口，暂停依赖它的入库和核验。
-- 已有 Page 与 PDF 复用；同一 Page 可归入多个目录，目录归属无主次。候选通常进入配置中的 `paper_inbox`，书籍进入 `book_folder`。仅需引用既有 Page 时按工作区与 Page ID 定位，不必重新归档。
+- 已有 Page 与 PDF 复用；同一 Page 可归入多个目录，目录归属无主次。新增论文和书籍进入项目配置指定的目标目录；目录布局由 `docs/paper/library.json` 的 `layout` 或项目约定决定（例如 `layout: flat` 时直接位于主题根），不自行假设 `paper/inbox`、`book` 等子目录。仅需引用既有 Page 时按工作区与 Page ID 定位，不必重新归档。
+- Gamma 目标目录与 `references.bib` 保存文献准备全集，正文引用是其子集；未在正文 `\cite` 的条目可以保留在库和映射中，编译后的 `.bbl` 只包含实际引用条目。报告数量时分别说明“库/映射条目数”和“正文 cite key 数”，不强制三者相等；清理未引用条目前先确认是否与其他论文共享。
 - 需要调整归档时，按当前 `move_page` 工具的目录上下文语义执行，并复核目标目录及应保留的归属。未经本次任务要求，不改已有 Page 的归档、元数据、标签和批注。
 
 ## harvest：从问题或计划论述发现候选

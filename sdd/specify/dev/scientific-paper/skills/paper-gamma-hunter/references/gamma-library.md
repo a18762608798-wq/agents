@@ -21,18 +21,18 @@
   "workspace_name": "<工作区名称>",
   "root_folder_id": "<既有项目目录ID>",
   "root_folder_path": "<主题根>",
-  "paper_inbox": "<主题根>/paper/inbox",
-  "book_folder": "<主题根>/book",
+  "layout": "<项目布局，如 flat>",
   "bibliography": "docs/paper/references.bib",
   "verification_index": "docs/paper/citation-verification.md",
   "page_map": "docs/paper/gamma-page-map.json"
 }
 ```
 
-已有文献可能直接在主题根；搜索时包括其子目录。inbox/book 是新增内容的目标路径，
-不要求为了完成只读检查建立空目录。ID 与路径不一致时先核对重命名或移动，不能选一个静默覆盖。
+已有文献可能直接在主题根；搜索时包括其子目录。目录布局由项目配置决定：`layout: flat` 表示所有 Page 直接位于主题根，不建立 `paper/inbox` 或 `book` 子目录；未声明布局时沿用既有目录结构，不自行新增层级。不要求为了完成只读检查建立空目录。ID 与路径不一致时先核对重命名或移动，不能选一个静默覆盖。
 项目绑定不会同步到全局 hunter 配置；调用时传递这一上下文。
-目录用于组织文献，同一 Page 可有多个目录归属且无主次；上述目录绑定是项目检索与新增入库的目标，不给 Page 指定主目录。共享文献复用已有 Page 与 PDF，引用身份由工作区与 Page ID 确定。
+同一 Page 可有多个目录归属且无主次；上述目标目录是项目检索与新增入库的目标，不给 Page 指定主目录。共享文献复用已有 Page 与 PDF，引用身份由工作区与 Page ID 确定。
+
+Gamma 目标目录、`gamma-page-map.json` 和 `references.bib` 是文献准备全集，正文引用只是其中的子集。库中可以有已读、已映射但尚未在正文 `\cite` 的候选条目；BibTeX 编译后的 `.bbl` 只写入实际引用条目。因此“Gamma Page 数”“映射条目数”“正文 cite key 数”可以不同，报告时必须分别标明。清理未引用条目之前先核对其他论文的共享归属，不把未引用直接等同于可删除。
 
 ## 读取与引用
 
